@@ -57,7 +57,7 @@ Without it, your editor falls back to its bundled TypeScript 5 and may report di
 ```bash
 cp .env.example .env  # Setup your env variables
 pnpm install          # Install dependencies
-pnpm dk:init          # Start Docker containers (PostgreSQL, MinIO, Maildev)
+pnpm dk:init          # Start Docker containers (PostgreSQL, S3-compatible storage, Maildev)
 pnpm db:init          # Push the Prisma schema and seed the database
 ```
 
