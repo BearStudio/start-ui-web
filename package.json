@@ -160,17 +160,5 @@
   },
   "engines": {
     "node": ">=22"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@parcel/watcher",
-      "@prisma/client",
-      "@prisma/engines",
-      "@tailwindcss/oxide",
-      "esbuild",
-      "lefthook",
-      "prisma",
-      "sharp"
-    ]
   }
 }
