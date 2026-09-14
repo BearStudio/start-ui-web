@@ -5,3 +5,8 @@ allowBuilds:
   esbuild: true
   lefthook: true
   prisma: true
+  '@parcel/watcher': true
+  '@tailwindcss/oxide': true
+  sharp: true
+engineStrict: true
+sideEffectsCache: false
