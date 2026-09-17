@@ -160,6 +160,13 @@ VITE_ENV_EMOJI="🔬"
 VITE_ENV_COLOR="teal"
 ```
 
+## Demo mode
+
+> [!WARNING]
+> Demo mode disables authentication security (mocked OTP 000000, seeded accounts). Only enable on a public demo with disposable seed data. Never enable on a deployment with real users.
+
+Set `VITE_IS_DEMO="true"` only for a public demo running a production build with disposable seed data (e.g. `admin@admin.com` / `user@user.com` logging in with code `000000`). Real email sending is disabled in demo mode.
+
 ## FAQ
 
 <details><summary><strong>git detect a lot of changes inside my <code>.husky</code> folder</strong></summary>
