@@ -17,6 +17,7 @@ import { envClient } from '@/env/client';
 import { authClient } from '@/features/auth/client';
 import { AUTH_SIGNUP_ENABLED } from '@/features/auth/config';
 import { useMascot } from '@/features/auth/mascot';
+import { getSafeRedirect } from '@/features/auth/utils';
 import { FormFieldsLogin, zFormFieldsLogin } from '@/features/auth/schema';
 import { LoginEmailHint } from '@/features/devtools/login-hint';
 
@@ -35,7 +36,7 @@ export default function PageLogin({
     mutationFn: async (
       provider: Parameters<typeof authClient.signIn.social>[0]['provider']
     ) => {
-      const callbackURL = search.redirect ?? '/';
+      const callbackURL = getSafeRedirect(search.redirect);
       let response;
       try {
         response = await authClient.signIn.social({
