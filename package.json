@@ -129,11 +129,12 @@
     "@tailwindcss/postcss": "4.1.18",
     "@tanstack/eslint-plugin-query": "5.91.4",
     "@tanstack/eslint-plugin-router": "1.161.4",
+    "@types/node": "24.13.5",
     "@types/react": "19.2.10",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "5.1.2",
-    "@vitest/browser": "4.0.18",
-    "@vitest/browser-playwright": "4.0.18",
+    "@vitest/browser": "4.1.11",
+    "@vitest/browser-playwright": "4.1.11",
     "@vueless/storybook-dark-mode": "10.0.7",
     "babel-plugin-react-compiler": "1.0.0",
     "cpy": "12.1.0",
@@ -154,7 +155,7 @@
     "typescript": "7.0.2",
     "vite": "7.3.5",
     "vite-tsconfig-paths": "6.0.5",
-    "vitest": "4.1.0",
+    "vitest": "4.1.11",
     "vitest-browser-react": "2.0.4"
   },
   "engines": {
