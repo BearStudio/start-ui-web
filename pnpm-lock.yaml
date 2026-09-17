@@ -123,8 +123,8 @@ importers:
         specifier: npm:nitro-nightly@3.0.1-20260219-081345-4df7aab2
         version: nitro-nightly@3.0.1-20260219-081345-4df7aab2(dotenv@17.4.2)(giget@2.0.0)(jiti@2.6.1)(rollup@4.63.3)(vite@7.3.5(@types/node@22.20.3)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.23.13)(yaml@2.9.1))
       nodemailer:
-        specifier: 8.0.5
-        version: 8.0.5
+        specifier: 10.0.10
+        version: 10.0.10
       pino:
         specifier: 10.3.0
         version: 10.3.0
@@ -210,9 +210,6 @@ importers:
       '@tanstack/eslint-plugin-router':
         specifier: 1.161.4
         version: 1.161.4(eslint@9.39.5(jiti@2.6.1)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@7.0.2)
-      '@types/nodemailer':
-        specifier: 8.0.1
-        version: 8.0.1
       '@types/react':
         specifier: 19.2.10
         version: 19.2.10
@@ -2361,9 +2358,6 @@ packages:
   '@types/node@22.20.3':
     resolution: {integrity: sha512-DZmzkmwHzXrLPAXPyKNDzlIwMMUZCVacoD25ywdy5YTKGbOx/2ld+Q38Im2zJ0vBuZP5Prd3VZutKZyXwkOS8A==}
 
-  '@types/nodemailer@8.0.1':
-    resolution: {integrity: sha512-PxpaInm8V1JQDd4j0ds5HfvWQk8JupS1C0Picb96QJsrrRDjBH+DlK7L4ZdNSqNULhiZRQHc40nLVShaGxXAMw==}
-
   '@types/react-dom@19.2.3':
     resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
     peerDependencies:
@@ -4161,9 +4155,9 @@ packages:
     resolution: {integrity: sha512-mIrE/Cw9y+9Au6dS5vDKDhQza9YvG6w+ZrS6X+ZzA7yFW/soAeaups4Qzn1bL6g5FVy8WtP79+0j82oPIbqRjQ==}
     engines: {node: '>=18'}
 
-  nodemailer@8.0.5:
-    resolution: {integrity: sha512-0PF8Yb1yZuQfQbq+5/pZJrtF6WQcjTd5/S4JOHs9PGFxuTqoB/icwuB44pOdURHJbRKX1PPoJZtY7R4VUoCC8w==}
-    engines: {node: '>=6.0.0'}
+  nodemailer@10.0.10:
+    resolution: {integrity: sha512-He9XskOFms62SyAKkLu8CcGcYHAo+BSHSsORI8s4PJH8qZgZY4L4lDfvyN0twvmbpyG+eGrxpyBlskj9d9rJ8A==}
+    engines: {node: '>=20.0.0'}
 
   normalize-package-data@2.5.0:
     resolution: {integrity: sha512-/5CMN3T0R4XTj4DcGaexo+roZSdSFW/0AOOTROrjxzCG1wrWXEsGbRKevjlIL+ZDE4sZlJr5ED4YW0yqmkK+eA==}
@@ -7143,10 +7137,7 @@ snapshots:
   '@types/node@22.20.3':
     dependencies:
       undici-types: 6.21.0
-
-  '@types/nodemailer@8.0.1':
-    dependencies:
-      '@types/node': 22.20.3
+    optional: true
 
   '@types/react-dom@19.2.3(@types/react@19.2.10)':
     dependencies:
@@ -8939,7 +8930,7 @@ snapshots:
 
   node-releases@2.0.55: {}
 
-  nodemailer@8.0.5: {}
+  nodemailer@10.0.10: {}
 
   normalize-package-data@2.5.0:
     dependencies:
@@ -9912,7 +9903,8 @@ snapshots:
       has-symbols: 1.1.0
       which-boxed-primitive: 1.1.1
 
-  undici-types@6.21.0: {}
+  undici-types@6.21.0:
+    optional: true
 
   undici@7.29.1: {}
 
