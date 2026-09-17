@@ -27,6 +27,28 @@ export const isSafeRedirectPath = (redirect: unknown): redirect is string => {
 };
 
 /**
+ * Normalize a `redirect` search param before validation.
+ * `GuardAuthenticated` stores `location.href` (an absolute same-origin URL),
+ * which `isSafeRedirectPath` would otherwise reject. Strip an absolute
+ * `http(s)` URL down to its path + search + hash so legit same-origin
+ * redirects survive validation. The host is dropped, so cross-origin values
+ * degrade to a same-origin path, and `getSafeRedirect` double-guards
+ * downstream. Non-`http(s)` values are returned untouched so the allowlist
+ * still rejects them.
+ */
+export const normalizeRedirectParam = (redirect: string): string => {
+  try {
+    const url = new URL(redirect);
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      return redirect;
+    }
+    return `${url.pathname}${url.search}${url.hash}`;
+  } catch {
+    return redirect;
+  }
+};
+
+/**
  * Sanitize a `redirect` search param into a safe same-origin path.
  * Accepts relative paths (`/app?tab=1`) and absolute same-origin URLs
  * (as stored by `GuardAuthenticated` via `location.href`), and falls back

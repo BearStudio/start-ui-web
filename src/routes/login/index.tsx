@@ -5,13 +5,19 @@ import { z } from 'zod';
 import { PageError } from '@/components/errors/page-error';
 
 import PageLogin from '@/features/auth/page-login';
-import { isSafeRedirectPath } from '@/features/auth/utils';
+import {
+  isSafeRedirectPath,
+  normalizeRedirectParam,
+} from '@/features/auth/utils';
 
 export const Route = createFileRoute('/login/')({
   component: RouteComponent,
   validateSearch: zodValidator(
     z.object({
-      redirect: fallback(z.string().refine(isSafeRedirectPath), '/').optional(),
+      redirect: fallback(
+        z.string().transform(normalizeRedirectParam).refine(isSafeRedirectPath),
+        '/'
+      ).optional(),
     })
   ),
   errorComponent: () => <PageError type="error-boundary" />,

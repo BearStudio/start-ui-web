@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
+import { z } from 'zod';
 
-import { getSafeRedirect, isSafeRedirectPath } from '@/features/auth/utils';
+import {
+  getSafeRedirect,
+  isSafeRedirectPath,
+  normalizeRedirectParam,
+} from '@/features/auth/utils';
 
 describe('isSafeRedirectPath', () => {
   it('accepts same-origin paths', () => {
@@ -33,5 +38,48 @@ describe('getSafeRedirect', () => {
     expect(getSafeRedirect('https://evil.example/')).toBe('/');
     expect(getSafeRedirect('//evil.example/app')).toBe('/');
     expect(getSafeRedirect('/\\evil.example')).toBe('/');
+  });
+});
+
+describe('normalizeRedirectParam', () => {
+  it('strips same-origin absolute URLs to path', () => {
+    expect(normalizeRedirectParam('http://localhost:3000/app')).toBe('/app');
+  });
+
+  it('preserves query and hash', () => {
+    expect(normalizeRedirectParam('http://localhost:3000/app?a=1#s')).toBe(
+      '/app?a=1#s'
+    );
+  });
+
+  it('strips host from cross-origin URLs', () => {
+    expect(normalizeRedirectParam('https://evil.example/phish')).toBe('/phish');
+  });
+
+  it('passes relative paths through', () => {
+    expect(normalizeRedirectParam('/app')).toBe('/app');
+  });
+
+  it('leaves unsafe values untouched for the allowlist to reject', () => {
+    expect(normalizeRedirectParam('javascript:alert(1)')).toBe(
+      'javascript:alert(1)'
+    );
+    expect(normalizeRedirectParam('//evil.com/x')).toBe('//evil.com/x');
+    expect(normalizeRedirectParam('/\\evil.example')).toBe('/\\evil.example');
+  });
+
+  it('composes with isSafeRedirectPath in validateSearch semantics', () => {
+    const schema = z
+      .string()
+      .transform(normalizeRedirectParam)
+      .refine(isSafeRedirectPath);
+    expect(schema.safeParse('http://localhost:3000/app').success).toBe(true);
+    const parsed = schema.safeParse('http://localhost:3000/app?a=1#s');
+    expect(parsed.success).toBe(true);
+    if (parsed.success) {
+      expect(parsed.data).toBe('/app?a=1#s');
+    }
+    expect(schema.safeParse('javascript:alert(1)').success).toBe(false);
+    expect(schema.safeParse('//evil.com/x').success).toBe(false);
   });
 });
