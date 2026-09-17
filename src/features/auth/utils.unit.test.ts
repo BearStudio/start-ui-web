@@ -25,6 +25,10 @@ describe('getSafeRedirect', () => {
     expect(getSafeRedirect(undefined)).toBe('/');
   });
 
+  it('preserves hash fragments', () => {
+    expect(getSafeRedirect('/app#section')).toBe('/app#section');
+  });
+
   it('falls back to / for external or malformed redirects', () => {
     expect(getSafeRedirect('https://evil.example/')).toBe('/');
     expect(getSafeRedirect('//evil.example/app')).toBe('/');

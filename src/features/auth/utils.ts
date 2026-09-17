@@ -75,6 +75,7 @@ export const useRedirectAfterLogin = () => {
             replace: true,
             to: redirectUrl.pathname,
             search: Object.fromEntries(redirectUrl.searchParams),
+            ...(redirectUrl.hash ? { hash: redirectUrl.hash.slice(1) } : {}),
           });
         } catch {
           router.navigate({
