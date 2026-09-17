@@ -1,6 +1,5 @@
 import { render } from '@react-email/render';
-import nodemailer from 'nodemailer';
-import type { MailOptions } from 'nodemailer/lib/sendmail-transport';
+import nodemailer, { type SendMailOptions } from 'nodemailer';
 import { ReactElement } from 'react';
 
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
@@ -14,8 +13,8 @@ const transport = nodemailer.createTransport(envServer.EMAIL_SERVER);
 export const sendEmail = async ({
   template,
   ...options
-}: Omit<MailOptions, 'html'> &
-  Required<Pick<MailOptions, 'subject'>> & { template: ReactElement }) => {
+}: Omit<SendMailOptions, 'html'> &
+  Required<Pick<SendMailOptions, 'subject'>> & { template: ReactElement }) => {
   if (envClient.VITE_IS_DEMO) {
     return;
   }
