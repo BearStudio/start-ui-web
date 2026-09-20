@@ -109,14 +109,10 @@ describe('login route schema rejects external redirects', () => {
     ).toBe(false);
   });
 
-  it('accepts same-origin absolute URLs (as stored by GuardAuthenticated)', () => {
-    const result = loginRedirectSchema.safeParse(
-      'http://localhost:3000/app?tab=1#s'
-    );
-    expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.data).toBe('/app?tab=1#s');
-    }
+  it('rejects absolute URLs even if same-origin', () => {
+    expect(
+      loginRedirectSchema.safeParse('http://localhost:3000/app?tab=1#s').success
+    ).toBe(false);
   });
 
   it('accepts relative paths', () => {
