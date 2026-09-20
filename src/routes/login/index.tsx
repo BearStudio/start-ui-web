@@ -15,7 +15,14 @@ export const Route = createFileRoute('/login/')({
   validateSearch: zodValidator(
     z.object({
       redirect: fallback(
-        z.string().transform(normalizeRedirectParam).refine(isSafeRedirectPath),
+        z
+          .string()
+          .refine(
+            (v) => !v.includes('://'),
+            'External redirect URLs are not allowed'
+          )
+          .transform(normalizeRedirectParam)
+          .refine(isSafeRedirectPath),
         '/'
       ).optional(),
     })
@@ -23,6 +30,7 @@ export const Route = createFileRoute('/login/')({
   errorComponent: () => <PageError type="error-boundary" />,
 });
 
+/** Renders the login page, passing validated search params to PageLogin. */
 function RouteComponent() {
   const search = Route.useSearch();
   return <PageLogin search={search} />;

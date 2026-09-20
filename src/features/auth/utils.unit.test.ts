@@ -83,3 +83,44 @@ describe('normalizeRedirectParam', () => {
     expect(schema.safeParse('//evil.com/x').success).toBe(false);
   });
 });
+
+/**
+ * Regression test for #774: the login route's `validateSearch` schema must
+ * reject raw redirect values containing `://` (external URLs) *before*
+ * `normalizeRedirectParam` converts them to same-origin paths.
+ */
+describe('login route schema rejects external redirects', () => {
+  /** Mirrors the login route's `validateSearch` chain. */
+  const loginRedirectSchema = z
+    .string()
+    .refine((v) => !v.includes('://'), 'External redirect URLs are not allowed')
+    .transform(normalizeRedirectParam)
+    .refine(isSafeRedirectPath);
+
+  it('rejects external URLs with :// before normalization', () => {
+    expect(
+      loginRedirectSchema.safeParse('https://evil.example/phish').success
+    ).toBe(false);
+    expect(
+      loginRedirectSchema.safeParse('http://evil.example/phish').success
+    ).toBe(false);
+    expect(
+      loginRedirectSchema.safeParse('ftp://evil.example/file').success
+    ).toBe(false);
+  });
+
+  it('accepts same-origin absolute URLs (as stored by GuardAuthenticated)', () => {
+    const result = loginRedirectSchema.safeParse(
+      'http://localhost:3000/app?tab=1#s'
+    );
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data).toBe('/app?tab=1#s');
+    }
+  });
+
+  it('accepts relative paths', () => {
+    expect(loginRedirectSchema.safeParse('/app').success).toBe(true);
+    expect(loginRedirectSchema.safeParse('/').success).toBe(true);
+  });
+});

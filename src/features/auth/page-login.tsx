@@ -25,6 +25,11 @@ const I18N_KEY_PAGE_PREFIX = AUTH_SIGNUP_ENABLED
   ? ('auth:pageLoginWithSignUp' as const)
   : ('auth:pageLogin' as const);
 
+/**
+ * Login page component.
+ * Renders the login form and handles social/email authentication,
+ * using `getSafeRedirect` to sanitize the post-login redirect path.
+ */
 export default function PageLogin({
   search,
 }: {
