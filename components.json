@@ -17,5 +17,6 @@
     "lib": "@/lib/tailwind",
     "hooks": "@/hooks"
   },
-  "iconLibrary": "lucide"
+  "iconLibrary": "lucide",
+  "rtl": true
 }

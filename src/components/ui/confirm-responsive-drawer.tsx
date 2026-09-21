@@ -73,13 +73,18 @@ export const ConfirmResponsiveDrawer = (props: {
       {childrenWithOnOpen}
       <ResponsiveDrawer
         open={isOpen}
-        onOpenChange={(isOpen) => {
-          if (isOpen) {
+        onOpenChange={(isOpenChange, eventDetails) => {
+          if (isPending && eventDetails.reason === 'escape-key') {
+            return;
+          }
+
+          if (isOpenChange) {
             open();
             return;
           }
           handleCancel();
         }}
+        disablePointerDismissal={isPending}
       >
         <ResponsiveDrawerContent
           hideCloseButton
@@ -100,7 +105,13 @@ export const ConfirmResponsiveDrawer = (props: {
           </ResponsiveDrawerHeader>
           <ResponsiveDrawerFooter>
             <ResponsiveDrawerClose
-              render={<Button variant="secondary" className="max-sm:w-full" />}
+              render={
+                <Button
+                  variant="secondary"
+                  disabled={isPending}
+                  className="max-sm:w-full"
+                />
+              }
             >
               {props.cancelText ??
                 t('components:confirmResponsiveDrawer.cancelText')}
