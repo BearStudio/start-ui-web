@@ -1,6 +1,6 @@
-import { render } from '@react-email/render';
 import nodemailer, { type SendMailOptions } from 'nodemailer';
 import { ReactElement } from 'react';
+import { render } from 'react-email';
 
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
