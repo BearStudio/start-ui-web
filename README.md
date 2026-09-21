@@ -73,8 +73,56 @@ pnpm dk:start # Only if your Docker containers are not running
 pnpm dev
 ```
 
+## Docker image
 
+The `Dockerfile` builds a production image of the app. It is based on the
+official [pnpm image](https://github.com/pnpm/pnpm/pkgs/container/pnpm), which
+also installs the Node runtime. The Node major version is pinned by the
+`NODE_VERSION` build argument (default `24`).
 
+Only the `VITE_*` variables are needed at build time, because they are inlined
+in the client bundle. Server variables (`DATABASE_URL`, `AUTH_SECRET`, `EMAIL_*`,
+`S3_*`...) are **not** build arguments: they are read at runtime from the
+container environment, so they never end up in the image layers.
+
+Build the image:
+
+```bash
+docker build -t start-ui-web \
+  --build-arg VITE_BASE_URL="http://localhost:3000" \
+  --build-arg VITE_S3_BUCKET_PUBLIC_URL="http://localhost:7070/default" \
+  --build-arg VITE_ENV_NAME="DOCKER" \
+  --build-arg VITE_ENV_EMOJI="🐋" \
+  --build-arg VITE_ENV_COLOR="blue" \
+  .
+```
+
+Run it, passing the server variables. With the local Docker Compose stack
+running (`pnpm dk:start`), the container can reach the services through the
+compose network using their service names (`postgres`, `s3`, `maildev`):
+
+```bash
+docker run -d --name start-ui-web -p 3000:3000 \
+  --network start-ui-web_default \
+  -e DATABASE_URL="postgres://startui:startui@postgres:5432/startui" \
+  -e AUTH_SECRET="change-me" \
+  -e EMAIL_SERVER="smtp://username:password@maildev:1025" \
+  -e EMAIL_FROM="Start UI <noreply@example.com>" \
+  -e S3_HOST="s3:7070" \
+  -e S3_ACCESS_KEY_ID="startui-access-key" \
+  -e S3_SECRET_ACCESS_KEY="startui-secret-key" \
+  -e S3_SECURE=false \
+  -e S3_FORCE_PATH_STYLE=true \
+  start-ui-web
+```
+
+> [!NOTE]
+> The `start-ui-web_default` network is created by Docker Compose. Outside of
+> the compose stack, omit `--network` and point the variables at your own
+> services. You can also use `--env-file` instead of individual `-e` flags.
+
+The container runs as the unprivileged `node` user, listens on port `3000`
+and exposes a Docker `HEALTHCHECK`.
 
 ### Emails in development
 
