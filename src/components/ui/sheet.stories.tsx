@@ -34,3 +34,35 @@ export function SheetDemo() {
     </Sheet>
   );
 }
+
+const SIDES = [
+  'inline-start',
+  'inline-end',
+  'left',
+  'right',
+  'top',
+  'bottom',
+] as const;
+
+export function Sides() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {SIDES.map((side) => (
+        <Sheet key={side}>
+          <SheetTrigger render={<Button variant="secondary">{side}</Button>} />
+          <SheetContent side={side}>
+            <SheetHeader>
+              <SheetTitle>Side: {side}</SheetTitle>
+              <SheetDescription>
+                Physical sides stay put, inline sides follow the text direction.
+              </SheetDescription>
+            </SheetHeader>
+            <SheetFooter>
+              <SheetClose render={<Button>Close</Button>} />
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
+      ))}
+    </div>
+  );
+}

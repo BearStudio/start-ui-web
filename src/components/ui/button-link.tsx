@@ -13,7 +13,7 @@ function ButtonLink({
   size,
   ...props
 }: VariantProps<typeof buttonVariants> &
-  ComponentProps<'a'> &
+  Omit<ComponentProps<'a'>, 'disabled'> &
   LinkProps & { className?: string }) {
   return (
     <Link

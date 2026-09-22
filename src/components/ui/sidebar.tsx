@@ -213,7 +213,7 @@ function Sidebar({
               '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
             } as React.CSSProperties
           }
-          side={side}
+          side={side === 'left' ? 'inline-start' : 'inline-end'}
         >
           <SheetHeader className="sr-only">
             <SheetTitle>{t('components:sidebar.title')}</SheetTitle>
