@@ -1,4 +1,5 @@
 import { Dialog as SheetPrimitive } from '@base-ui/react/dialog';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { XIcon } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -36,16 +37,44 @@ function SheetOverlay({ className, ...props }: SheetPrimitive.Backdrop.Props) {
   );
 }
 
+/**
+ * `left` / `right` are physical sides. `inline-start` / `inline-end` follow
+ * the writing direction (`inline-end` is the right side in LTR and the left
+ * side in RTL), which is what most sheets want.
+ */
+const sheetContentVariants = cva(
+  'fixed z-50 flex flex-col gap-4 bg-popover bg-clip-padding text-sm text-popover-foreground shadow-lg transition duration-200 ease-in-out data-ending-style:opacity-0 data-starting-style:opacity-0',
+  {
+    variants: {
+      side: {
+        top: 'inset-x-0 top-0 h-auto border-b data-ending-style:-translate-y-10 data-starting-style:-translate-y-10',
+        bottom:
+          'inset-x-0 bottom-0 h-auto border-t data-ending-style:translate-y-10 data-starting-style:translate-y-10',
+        left: 'inset-y-0 left-0 h-full w-3/4 border-r data-ending-style:-translate-x-10 data-starting-style:-translate-x-10 sm:max-w-sm',
+        right:
+          'inset-y-0 right-0 h-full w-3/4 border-l data-ending-style:translate-x-10 data-starting-style:translate-x-10 sm:max-w-sm',
+        'inline-start':
+          'inset-y-0 start-0 h-full w-3/4 border-e data-ending-style:-translate-x-10 data-starting-style:-translate-x-10 sm:max-w-sm rtl:data-ending-style:translate-x-10 rtl:data-starting-style:translate-x-10',
+        'inline-end':
+          'inset-y-0 end-0 h-full w-3/4 border-s data-ending-style:translate-x-10 data-starting-style:translate-x-10 sm:max-w-sm rtl:data-ending-style:-translate-x-10 rtl:data-starting-style:-translate-x-10',
+      },
+    },
+    defaultVariants: {
+      side: 'inline-end',
+    },
+  }
+);
+
 function SheetContent({
   className,
   children,
-  side = 'right',
+  side = 'inline-end',
   showCloseButton = true,
   ...props
-}: SheetPrimitive.Popup.Props & {
-  side?: 'top' | 'right' | 'bottom' | 'left';
-  showCloseButton?: boolean;
-}) {
+}: SheetPrimitive.Popup.Props &
+  VariantProps<typeof sheetContentVariants> & {
+    showCloseButton?: boolean;
+  }) {
   const { t } = useTranslation(['components']);
 
   return (
@@ -54,10 +83,7 @@ function SheetContent({
       <SheetPrimitive.Popup
         data-slot="sheet-content"
         data-side={side}
-        className={cn(
-          'fixed z-50 flex flex-col gap-4 bg-background bg-clip-padding text-sm shadow-lg transition duration-200 ease-in-out data-ending-style:opacity-0 data-starting-style:opacity-0 data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:h-auto data-[side=bottom]:border-t data-[side=bottom]:data-ending-style:translate-y-[2.5rem] data-[side=bottom]:data-starting-style:translate-y-[2.5rem] data-[side=left]:inset-y-0 data-[side=left]:left-0 data-[side=left]:h-full data-[side=left]:w-3/4 data-[side=left]:border-r data-[side=left]:data-ending-style:translate-x-[-2.5rem] data-[side=left]:data-starting-style:translate-x-[-2.5rem] data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-3/4 data-[side=right]:border-l data-[side=right]:data-ending-style:translate-x-[2.5rem] data-[side=right]:data-starting-style:translate-x-[2.5rem] data-[side=top]:inset-x-0 data-[side=top]:top-0 data-[side=top]:h-auto data-[side=top]:border-b data-[side=top]:data-ending-style:translate-y-[-2.5rem] data-[side=top]:data-starting-style:translate-y-[-2.5rem] data-[side=left]:sm:max-w-sm data-[side=right]:sm:max-w-sm',
-          className
-        )}
+        className={cn(sheetContentVariants({ side }), className)}
         initialFocus
         {...props}
       >
@@ -68,14 +94,14 @@ function SheetContent({
             render={
               <Button
                 variant="ghost"
-                className="absolute top-4 right-4"
+                className="absolute end-3 top-3"
                 size="icon-sm"
-              />
+              >
+                <XIcon />
+                <span className="sr-only">{t('components:sheet.close')}</span>
+              </Button>
             }
-          >
-            <XIcon />
-            <span className="sr-only">{t('components:sheet.close')}</span>
-          </SheetPrimitive.Close>
+          />
         )}
       </SheetPrimitive.Popup>
     </SheetPortal>
@@ -86,7 +112,7 @@ function SheetHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="sheet-header"
-      className={cn('flex flex-col gap-1.5 p-4', className)}
+      className={cn('flex flex-col gap-0.5 p-4', className)}
       {...props}
     />
   );
@@ -106,7 +132,7 @@ function SheetTitle({ className, ...props }: SheetPrimitive.Title.Props) {
   return (
     <SheetPrimitive.Title
       data-slot="sheet-title"
-      className={cn('font-medium text-foreground', className)}
+      className={cn('text-base font-medium text-foreground', className)}
       {...props}
     />
   );
