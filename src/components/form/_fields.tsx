@@ -3,6 +3,7 @@ import { FieldCheckboxGroup } from './field-checkbox-group';
 import { FieldCombobox } from './field-combobox';
 import { FieldComboboxMultiple } from './field-combobox-multiple';
 import { FieldDate } from './field-date';
+import { FieldNestedCheckboxGroup } from './field-nested-checkbox-group';
 import { FieldNumber } from './field-number';
 import { FieldOtp } from './field-otp';
 import { FieldRadioGroup } from './field-radio-group';
@@ -24,6 +25,7 @@ export const fieldComponents = {
   date: FieldDate,
   checkbox: FieldCheckbox,
   'checkbox-group': FieldCheckboxGroup,
+  'nested-checkbox-group': FieldNestedCheckboxGroup,
   'radio-group': FieldRadioGroup,
   'upload-input': FieldUploadInput,
 } as const;
