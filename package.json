@@ -108,7 +108,7 @@
     "react-i18next": "16.5.4",
     "react-merge-refs": "3.0.2",
     "react-textarea-autosize": "8.5.9",
-    "react-use-disclosure": "9.0.0",
+    "react-use-disclosure": "12.0.1",
     "remeda": "2.33.4",
     "sonner": "2.0.7",
     "tailwind-merge": "3.4.0",
