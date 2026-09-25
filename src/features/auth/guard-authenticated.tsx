@@ -31,7 +31,7 @@ export const GuardAuthenticated = ({
       to: '/login',
       replace: true,
       search: {
-        redirect: location.href,
+        redirect: location.pathname + location.search + location.hash,
       },
     });
   }, [router, session.isPending, session.data?.user, session.error]);

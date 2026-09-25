@@ -5,6 +5,75 @@ import { authClient } from '@/features/auth/client';
 import { Role } from '@/features/auth/permissions';
 import { useSession } from '@/features/auth/use-session';
 
+/**
+ * Allowlist for post-login redirects: same-origin paths only.
+ * Rejects absolute URLs (`://`), protocol-relative URLs (`//`) and
+ * backslashes (which browsers may normalize into path separators).
+ */
+export const isSafeRedirectPath = (redirect: unknown): redirect is string => {
+  if (typeof redirect !== 'string' || redirect.length === 0) {
+    return false;
+  }
+  if (!redirect.startsWith('/')) {
+    return false;
+  }
+  if (redirect.startsWith('//')) {
+    return false;
+  }
+  if (redirect.includes('://') || redirect.includes('\\')) {
+    return false;
+  }
+  return true;
+};
+
+/**
+ * Normalize a `redirect` search param before validation.
+ * Strip an absolute `http(s)` URL down to its path + search + hash so
+ * any leftover same-origin absolute URL degrades to a same-origin path.
+ * Non-`http(s)` values are returned untouched so the allowlist still
+ * rejects them. Defense-in-depth: the login route schema already rejects
+ * raw `://` values before this runs.
+ */
+export const normalizeRedirectParam = (redirect: string): string => {
+  try {
+    const url = new URL(redirect);
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      return redirect;
+    }
+    return `${url.pathname}${url.search}${url.hash}`;
+  } catch {
+    return redirect;
+  }
+};
+
+/**
+ * Sanitize a `redirect` search param into a safe same-origin path.
+ * Accepts relative paths (`/app?tab=1`) and falls back to `/` for
+ * anything else — without throwing.
+ */
+export const getSafeRedirect = (redirect: unknown): string => {
+  if (typeof redirect !== 'string' || redirect.length === 0) {
+    return '/';
+  }
+  if (redirect.includes('\\')) {
+    return '/';
+  }
+  try {
+    const base =
+      typeof window !== 'undefined' && window.location?.origin
+        ? window.location.origin
+        : 'http://localhost';
+    const url = new URL(redirect, base);
+    if (url.origin !== new URL(base).origin) {
+      return '/';
+    }
+    const safePath = `${url.pathname}${url.search}${url.hash}`;
+    return isSafeRedirectPath(safePath) ? safePath : '/';
+  } catch {
+    return '/';
+  }
+};
+
 export const useRedirectAfterLogin = () => {
   const search = useSearch({ strict: false });
   const router = useRouter();
@@ -18,12 +87,21 @@ export const useRedirectAfterLogin = () => {
       }
 
       if (searchRedirect) {
-        const redirectUrl = new URL(searchRedirect);
-        router.navigate({
-          replace: true,
-          to: redirectUrl.pathname,
-          search: Object.fromEntries(redirectUrl.searchParams),
-        });
+        const safeRedirect = getSafeRedirect(searchRedirect);
+        try {
+          const redirectUrl = new URL(safeRedirect, window.location.origin);
+          router.navigate({
+            replace: true,
+            to: redirectUrl.pathname,
+            search: Object.fromEntries(redirectUrl.searchParams),
+            ...(redirectUrl.hash ? { hash: redirectUrl.hash.slice(1) } : {}),
+          });
+        } catch {
+          router.navigate({
+            replace: true,
+            to: '/',
+          });
+        }
         return;
       }
 
