@@ -24,6 +24,7 @@ WORKDIR /app
 FROM base AS deps
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY prisma.config.ts ./
 COPY prisma/schema.prisma ./prisma/
 
 # --ignore-scripts skips the postinstall (prisma generate + build info) and the
@@ -62,9 +63,8 @@ RUN node ./run-jiti ./src/features/build-info/script-to-generate-json.ts \
   && ./node_modules/.bin/vite build
 
 # ------------------------------------------------------------------------------
-# Runner: minimal runtime image. Same Debian release and glibc as the builder
-# (required by the Prisma engine binaries), with the exact Node binary that
-# built the app. Nitro traces the server dependencies it needs into
+# Runner: minimal runtime image. Same Debian release and glibc as the builder,
+# with the exact Node binary that built the app. Nitro traces the server dependencies it needs into
 # .output/server/node_modules, so the full node_modules is not required.
 # ------------------------------------------------------------------------------
 FROM debian:trixie-slim AS runner

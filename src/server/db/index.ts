@@ -1,3 +1,5 @@
+import { PrismaPg } from '@prisma/adapter-pg';
+
 import { envServer } from '@/env/server';
 import { timingStore } from '@/server/timing-store';
 
@@ -12,8 +14,14 @@ const levels = {
   fatal: ['error'],
 } satisfies Record<string, ('query' | 'error' | 'warn' | 'info')[]>;
 
+const CONNECTION_TIME_MILLIS = 10_000;
+
 function createPrisma() {
   return new PrismaClient({
+    adapter: new PrismaPg({
+      connectionString: envServer.DATABASE_URL,
+      connectionTimeoutMillis: CONNECTION_TIME_MILLIS,
+    }),
     log: levels[envServer.LOGGER_LEVEL],
   }).$extends({
     name: 'server-timing',
