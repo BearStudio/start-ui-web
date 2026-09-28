@@ -20,7 +20,7 @@ export const TemplateLoginCode = (props: {
     >
       <Container className="mx-auto max-w-120 px-4 py-10">
         <EmailHeader />
-        <Section className="px-2 py-4">
+        <Section className="p-2">
           <Heading className="text-text mt-0 mb-2 p-0 text-[22px] leading-7 font-semibold tracking-[-0.02em]">
             {i18n.t('emails:loginCode.title')}
           </Heading>
