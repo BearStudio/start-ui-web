@@ -1,6 +1,6 @@
 import { Column, Hr, Img, Link, Row, Section } from 'react-email';
 
-import { emailAssetSrc } from '@/emails/_components/email-assets';
+import { emailAssetSrc } from '@/emails/utils';
 
 export const EmailFooter = () => {
   return (

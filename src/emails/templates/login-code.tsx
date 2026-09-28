@@ -2,9 +2,9 @@ import { Container, Heading, Section, Text } from 'react-email';
 
 import i18n from '@/lib/i18n';
 
-import { EmailFooter } from '@/emails/_components/email-footer';
-import { EmailHeader } from '@/emails/_components/email-header';
-import { EmailLayout } from '@/emails/_components/email-layout';
+import { EmailFooter } from '@/emails/components/email-footer';
+import { EmailHeader } from '@/emails/components/email-header';
+import { EmailLayout } from '@/emails/components/email-layout';
 import { AUTH_EMAIL_OTP_EXPIRATION_IN_MINUTES } from '@/features/auth/otp';
 
 export const TemplateLoginCode = (props: {
