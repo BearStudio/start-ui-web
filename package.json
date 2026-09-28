@@ -57,7 +57,8 @@
     "db:init": "pnpm db:push && pnpm db:seed",
     "db:push": "dotenv -- prisma db push && pnpm gen:prisma",
     "db:ui": "dotenv -- prisma studio",
-    "db:seed": "dotenv -- cross-env node ./run-jiti ./prisma/seed/index.ts"
+    "db:seed": "dotenv -- cross-env node ./run-jiti ./prisma/seed/index.ts",
+    "email:dev": "email dev --dir src/emails/templates --port 3001"
   },
   "dependencies": {
     "@base-ui/react": "1.8.0",
@@ -121,6 +122,7 @@
   "devDependencies": {
     "@faker-js/faker": "10.5.0",
     "@playwright/test": "1.60.0",
+    "@react-email/ui": "6.9.5",
     "@storybook/addon-a11y": "10.6.0",
     "@storybook/addon-docs": "10.6.0",
     "@storybook/react-vite": "10.6.0",

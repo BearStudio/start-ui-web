@@ -136,18 +136,13 @@ The maildev UI is available at [localhost:1080](http://localhost:1080) (port con
 
 Emails templates are built with `react-email` components in the `src/emails` folder.
 
-You can preview an email template at `http://localhost:3000/api/dev/email/{template}` where `{template}` is the name of the template file in the `src/emails/templates` folder.
+Run the react-email preview server (port **3001**, separate from the Vite app on 3000):
 
-Example: [Login Code](http://localhost:3000/api/dev/email/login-code)
+```bash
+pnpm email:dev
+```
 
-##### Email translation preview
-
-Add the language in the preview url like `http://localhost:3000/api/dev/email/{template}?language={language}` where `{language}` is the language key (`en`, `fr`, ...)
-
-#### Email props preview
-
-You can add search params to the preview url to pass as props to the template.
-`http://localhost:3000/api/dev/email/{template}/?{propsName}={propsValue}`
+Open [http://localhost:3001](http://localhost:3001) to browse templates under `src/emails/templates`. Each template can define `PreviewProps` on the default export for realistic fixtures (language, OTP code, and so on). Use the preview toolbar **Props** tab to tweak props live without changing the template source.
 
 ### OpenAPI Documentation for the API
 

@@ -9,54 +9,38 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AppRouteRouteImport } from './routes/app/route'
-import { Route as LoginRouteRouteImport } from './routes/login/route'
 import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as ManagerRouteRouteImport } from './routes/manager/route'
-import { Route as ApiUploadRouteImport } from './routes/api/upload'
-import { Route as AppIndexRouteImport } from './routes/app/index'
-import { Route as LoginIndexRouteImport } from './routes/login/index'
+import { Route as LoginRouteRouteImport } from './routes/login/route'
+import { Route as AppRouteRouteImport } from './routes/app/route'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as ManagerIndexRouteImport } from './routes/manager/index'
-import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
-import { Route as ApiOpenapiAppRouteImport } from './routes/api/openapi/app'
-import { Route as ApiOpenapiAuthRouteImport } from './routes/api/openapi/auth'
-import { Route as ApiRestSplatRouteImport } from './routes/api/rest.$'
-import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
-import { Route as AppAccountIndexRouteImport } from './routes/app/account.index'
-import { Route as AppBooksIndexRouteImport } from './routes/app/books/index'
-import { Route as LoginErrorIndexRouteImport } from './routes/login/error.index'
-import { Route as LoginVerifyIndexRouteImport } from './routes/login/verify.index'
-import { Route as ManagerAccountIndexRouteImport } from './routes/manager/account.index'
-import { Route as ManagerBooksIndexRouteImport } from './routes/manager/books/index'
-import { Route as ManagerDashboardIndexRouteImport } from './routes/manager/dashboard.index'
+import { Route as LoginIndexRouteImport } from './routes/login/index'
+import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as ApiUploadRouteImport } from './routes/api/upload'
 import { Route as ManagerUsersIndexRouteImport } from './routes/manager/users/index'
-import { Route as ApiDevEmailTemplateRouteImport } from './routes/api/dev.email.$template'
-import { Route as ApiOpenapiAppSchemaRouteImport } from './routes/api/openapi/app.schema'
-import { Route as ApiOpenapiAuthSchemaRouteImport } from './routes/api/openapi/auth.schema'
-import { Route as AppBooksIdIndexRouteImport } from './routes/app/books/$id.index'
-import { Route as ManagerBooksIdIndexRouteImport } from './routes/manager/books/$id.index'
-import { Route as ManagerBooksNewIndexRouteImport } from './routes/manager/books/new.index'
-import { Route as ManagerUsersIdIndexRouteImport } from './routes/manager/users/$id.index'
+import { Route as ManagerDashboardIndexRouteImport } from './routes/manager/dashboard.index'
+import { Route as ManagerBooksIndexRouteImport } from './routes/manager/books/index'
+import { Route as ManagerAccountIndexRouteImport } from './routes/manager/account.index'
+import { Route as LoginVerifyIndexRouteImport } from './routes/login/verify.index'
+import { Route as LoginErrorIndexRouteImport } from './routes/login/error.index'
+import { Route as AppBooksIndexRouteImport } from './routes/app/books/index'
+import { Route as AppAccountIndexRouteImport } from './routes/app/account.index'
+import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
+import { Route as ApiRestSplatRouteImport } from './routes/api/rest.$'
+import { Route as ApiOpenapiAuthRouteImport } from './routes/api/openapi/auth'
+import { Route as ApiOpenapiAppRouteImport } from './routes/api/openapi/app'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 import { Route as ManagerUsersNewIndexRouteImport } from './routes/manager/users/new.index'
-import { Route as ManagerBooksIdUpdateIndexRouteImport } from './routes/manager/books/$id.update.index'
+import { Route as ManagerUsersIdIndexRouteImport } from './routes/manager/users/$id.index'
+import { Route as ManagerBooksNewIndexRouteImport } from './routes/manager/books/new.index'
+import { Route as ManagerBooksIdIndexRouteImport } from './routes/manager/books/$id.index'
+import { Route as AppBooksIdIndexRouteImport } from './routes/app/books/$id.index'
+import { Route as ApiOpenapiAuthSchemaRouteImport } from './routes/api/openapi/auth.schema'
+import { Route as ApiOpenapiAppSchemaRouteImport } from './routes/api/openapi/app.schema'
 import { Route as ManagerUsersIdUpdateIndexRouteImport } from './routes/manager/users/$id.update.index'
+import { Route as ManagerBooksIdUpdateIndexRouteImport } from './routes/manager/books/$id.update.index'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppRouteRoute = AppRouteRouteImport.update({
-  id: '/app',
-  path: '/app',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRouteRoute = LoginRouteRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LogoutRoute = LogoutRouteImport.update({
   id: '/logout',
   path: '/logout',
@@ -67,79 +51,44 @@ const ManagerRouteRoute = ManagerRouteRouteImport.update({
   path: '/manager',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiUploadRoute = ApiUploadRouteImport.update({
-  id: '/api/upload',
-  path: '/api/upload',
+const LoginRouteRoute = LoginRouteRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppIndexRoute = AppIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AppRouteRoute,
+const AppRouteRoute = AppRouteRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const LoginIndexRoute = LoginIndexRouteImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => LoginRouteRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ManagerIndexRoute = ManagerIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ManagerRouteRoute,
 } as any)
-const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
-  id: '/api/auth/$',
-  path: '/api/auth/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiOpenapiAppRoute = ApiOpenapiAppRouteImport.update({
-  id: '/api/openapi/app',
-  path: '/api/openapi/app',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiOpenapiAuthRoute = ApiOpenapiAuthRouteImport.update({
-  id: '/api/openapi/auth',
-  path: '/api/openapi/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiRestSplatRoute = ApiRestSplatRouteImport.update({
-  id: '/api/rest/$',
-  path: '/api/rest/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
-  id: '/api/rpc/$',
-  path: '/api/rpc/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppAccountIndexRoute = AppAccountIndexRouteImport.update({
-  id: '/account/',
-  path: '/account/',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-const AppBooksIndexRoute = AppBooksIndexRouteImport.update({
-  id: '/books/',
-  path: '/books/',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-const LoginErrorIndexRoute = LoginErrorIndexRouteImport.update({
-  id: '/error/',
-  path: '/error/',
+const LoginIndexRoute = LoginIndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => LoginRouteRoute,
 } as any)
-const LoginVerifyIndexRoute = LoginVerifyIndexRouteImport.update({
-  id: '/verify/',
-  path: '/verify/',
-  getParentRoute: () => LoginRouteRoute,
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRouteRoute,
 } as any)
-const ManagerAccountIndexRoute = ManagerAccountIndexRouteImport.update({
-  id: '/account/',
-  path: '/account/',
-  getParentRoute: () => ManagerRouteRoute,
+const ApiUploadRoute = ApiUploadRouteImport.update({
+  id: '/api/upload',
+  path: '/api/upload',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const ManagerBooksIndexRoute = ManagerBooksIndexRouteImport.update({
-  id: '/books/',
-  path: '/books/',
+const ManagerUsersIndexRoute = ManagerUsersIndexRouteImport.update({
+  id: '/users/',
+  path: '/users/',
   getParentRoute: () => ManagerRouteRoute,
 } as any)
 const ManagerDashboardIndexRoute = ManagerDashboardIndexRouteImport.update({
@@ -147,39 +96,64 @@ const ManagerDashboardIndexRoute = ManagerDashboardIndexRouteImport.update({
   path: '/dashboard/',
   getParentRoute: () => ManagerRouteRoute,
 } as any)
-const ManagerUsersIndexRoute = ManagerUsersIndexRouteImport.update({
-  id: '/users/',
-  path: '/users/',
+const ManagerBooksIndexRoute = ManagerBooksIndexRouteImport.update({
+  id: '/books/',
+  path: '/books/',
   getParentRoute: () => ManagerRouteRoute,
 } as any)
-const ApiDevEmailTemplateRoute = ApiDevEmailTemplateRouteImport.update({
-  id: '/api/dev/email/$template',
-  path: '/api/dev/email/$template',
-  getParentRoute: () => rootRouteImport,
+const ManagerAccountIndexRoute = ManagerAccountIndexRouteImport.update({
+  id: '/account/',
+  path: '/account/',
+  getParentRoute: () => ManagerRouteRoute,
 } as any)
-const ApiOpenapiAppSchemaRoute = ApiOpenapiAppSchemaRouteImport.update({
-  id: '/schema',
-  path: '/schema',
-  getParentRoute: () => ApiOpenapiAppRoute,
+const LoginVerifyIndexRoute = LoginVerifyIndexRouteImport.update({
+  id: '/verify/',
+  path: '/verify/',
+  getParentRoute: () => LoginRouteRoute,
 } as any)
-const ApiOpenapiAuthSchemaRoute = ApiOpenapiAuthSchemaRouteImport.update({
-  id: '/schema',
-  path: '/schema',
-  getParentRoute: () => ApiOpenapiAuthRoute,
+const LoginErrorIndexRoute = LoginErrorIndexRouteImport.update({
+  id: '/error/',
+  path: '/error/',
+  getParentRoute: () => LoginRouteRoute,
 } as any)
-const AppBooksIdIndexRoute = AppBooksIdIndexRouteImport.update({
-  id: '/books/$id/',
-  path: '/books/$id/',
+const AppBooksIndexRoute = AppBooksIndexRouteImport.update({
+  id: '/books/',
+  path: '/books/',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const ManagerBooksIdIndexRoute = ManagerBooksIdIndexRouteImport.update({
-  id: '/books/$id/',
-  path: '/books/$id/',
-  getParentRoute: () => ManagerRouteRoute,
+const AppAccountIndexRoute = AppAccountIndexRouteImport.update({
+  id: '/account/',
+  path: '/account/',
+  getParentRoute: () => AppRouteRoute,
 } as any)
-const ManagerBooksNewIndexRoute = ManagerBooksNewIndexRouteImport.update({
-  id: '/books/new/',
-  path: '/books/new/',
+const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
+  id: '/api/rpc/$',
+  path: '/api/rpc/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRestSplatRoute = ApiRestSplatRouteImport.update({
+  id: '/api/rest/$',
+  path: '/api/rest/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiOpenapiAuthRoute = ApiOpenapiAuthRouteImport.update({
+  id: '/api/openapi/auth',
+  path: '/api/openapi/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiOpenapiAppRoute = ApiOpenapiAppRouteImport.update({
+  id: '/api/openapi/app',
+  path: '/api/openapi/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ManagerUsersNewIndexRoute = ManagerUsersNewIndexRouteImport.update({
+  id: '/users/new/',
+  path: '/users/new/',
   getParentRoute: () => ManagerRouteRoute,
 } as any)
 const ManagerUsersIdIndexRoute = ManagerUsersIdIndexRouteImport.update({
@@ -187,21 +161,41 @@ const ManagerUsersIdIndexRoute = ManagerUsersIdIndexRouteImport.update({
   path: '/users/$id/',
   getParentRoute: () => ManagerRouteRoute,
 } as any)
-const ManagerUsersNewIndexRoute = ManagerUsersNewIndexRouteImport.update({
-  id: '/users/new/',
-  path: '/users/new/',
+const ManagerBooksNewIndexRoute = ManagerBooksNewIndexRouteImport.update({
+  id: '/books/new/',
+  path: '/books/new/',
   getParentRoute: () => ManagerRouteRoute,
 } as any)
-const ManagerBooksIdUpdateIndexRoute =
-  ManagerBooksIdUpdateIndexRouteImport.update({
-    id: '/books/$id/update/',
-    path: '/books/$id/update/',
-    getParentRoute: () => ManagerRouteRoute,
-  } as any)
+const ManagerBooksIdIndexRoute = ManagerBooksIdIndexRouteImport.update({
+  id: '/books/$id/',
+  path: '/books/$id/',
+  getParentRoute: () => ManagerRouteRoute,
+} as any)
+const AppBooksIdIndexRoute = AppBooksIdIndexRouteImport.update({
+  id: '/books/$id/',
+  path: '/books/$id/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const ApiOpenapiAuthSchemaRoute = ApiOpenapiAuthSchemaRouteImport.update({
+  id: '/schema',
+  path: '/schema',
+  getParentRoute: () => ApiOpenapiAuthRoute,
+} as any)
+const ApiOpenapiAppSchemaRoute = ApiOpenapiAppSchemaRouteImport.update({
+  id: '/schema',
+  path: '/schema',
+  getParentRoute: () => ApiOpenapiAppRoute,
+} as any)
 const ManagerUsersIdUpdateIndexRoute =
   ManagerUsersIdUpdateIndexRouteImport.update({
     id: '/users/$id/update/',
     path: '/users/$id/update/',
+    getParentRoute: () => ManagerRouteRoute,
+  } as any)
+const ManagerBooksIdUpdateIndexRoute =
+  ManagerBooksIdUpdateIndexRouteImport.update({
+    id: '/books/$id/update/',
+    path: '/books/$id/update/',
     getParentRoute: () => ManagerRouteRoute,
   } as any)
 
@@ -228,7 +222,6 @@ export interface FileRoutesByFullPath {
   '/manager/books/': typeof ManagerBooksIndexRoute
   '/manager/dashboard/': typeof ManagerDashboardIndexRoute
   '/manager/users/': typeof ManagerUsersIndexRoute
-  '/api/dev/email/$template': typeof ApiDevEmailTemplateRoute
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
   '/app/books/$id/': typeof AppBooksIdIndexRoute
@@ -259,7 +252,6 @@ export interface FileRoutesByTo {
   '/manager/books': typeof ManagerBooksIndexRoute
   '/manager/dashboard': typeof ManagerDashboardIndexRoute
   '/manager/users': typeof ManagerUsersIndexRoute
-  '/api/dev/email/$template': typeof ApiDevEmailTemplateRoute
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
   '/app/books/$id': typeof AppBooksIdIndexRoute
@@ -294,7 +286,6 @@ export interface FileRoutesById {
   '/manager/books/': typeof ManagerBooksIndexRoute
   '/manager/dashboard/': typeof ManagerDashboardIndexRoute
   '/manager/users/': typeof ManagerUsersIndexRoute
-  '/api/dev/email/$template': typeof ApiDevEmailTemplateRoute
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
   '/app/books/$id/': typeof AppBooksIdIndexRoute
@@ -330,7 +321,6 @@ export interface FileRouteTypes {
     | '/manager/books/'
     | '/manager/dashboard/'
     | '/manager/users/'
-    | '/api/dev/email/$template'
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
     | '/app/books/$id/'
@@ -361,7 +351,6 @@ export interface FileRouteTypes {
     | '/manager/books'
     | '/manager/dashboard'
     | '/manager/users'
-    | '/api/dev/email/$template'
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
     | '/app/books/$id'
@@ -395,7 +384,6 @@ export interface FileRouteTypes {
     | '/manager/books/'
     | '/manager/dashboard/'
     | '/manager/users/'
-    | '/api/dev/email/$template'
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
     | '/app/books/$id/'
@@ -419,32 +407,10 @@ export interface RootRouteChildren {
   ApiOpenapiAuthRoute: typeof ApiOpenapiAuthRouteWithChildren
   ApiRestSplatRoute: typeof ApiRestSplatRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
-  ApiDevEmailTemplateRoute: typeof ApiDevEmailTemplateRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/app': {
-      id: '/app'
-      path: '/app'
-      fullPath: '/app'
-      preLoaderRoute: typeof AppRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/logout': {
       id: '/logout'
       path: '/logout'
@@ -459,26 +425,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/upload': {
-      id: '/api/upload'
-      path: '/api/upload'
-      fullPath: '/api/upload'
-      preLoaderRoute: typeof ApiUploadRouteImport
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/app/': {
-      id: '/app/'
-      path: '/'
-      fullPath: '/app/'
-      preLoaderRoute: typeof AppIndexRouteImport
-      parentRoute: typeof AppRouteRoute
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/login/': {
-      id: '/login/'
+    '/': {
+      id: '/'
       path: '/'
-      fullPath: '/login/'
-      preLoaderRoute: typeof LoginIndexRouteImport
-      parentRoute: typeof LoginRouteRoute
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/manager/': {
       id: '/manager/'
@@ -487,81 +453,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
-    '/api/auth/$': {
-      id: '/api/auth/$'
-      path: '/api/auth/$'
-      fullPath: '/api/auth/$'
-      preLoaderRoute: typeof ApiAuthSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/openapi/app': {
-      id: '/api/openapi/app'
-      path: '/api/openapi/app'
-      fullPath: '/api/openapi/app'
-      preLoaderRoute: typeof ApiOpenapiAppRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/openapi/auth': {
-      id: '/api/openapi/auth'
-      path: '/api/openapi/auth'
-      fullPath: '/api/openapi/auth'
-      preLoaderRoute: typeof ApiOpenapiAuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/rest/$': {
-      id: '/api/rest/$'
-      path: '/api/rest/$'
-      fullPath: '/api/rest/$'
-      preLoaderRoute: typeof ApiRestSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/rpc/$': {
-      id: '/api/rpc/$'
-      path: '/api/rpc/$'
-      fullPath: '/api/rpc/$'
-      preLoaderRoute: typeof ApiRpcSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/app/account/': {
-      id: '/app/account/'
-      path: '/account'
-      fullPath: '/app/account/'
-      preLoaderRoute: typeof AppAccountIndexRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/app/books/': {
-      id: '/app/books/'
-      path: '/books'
-      fullPath: '/app/books/'
-      preLoaderRoute: typeof AppBooksIndexRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/login/error/': {
-      id: '/login/error/'
-      path: '/error'
-      fullPath: '/login/error/'
-      preLoaderRoute: typeof LoginErrorIndexRouteImport
+    '/login/': {
+      id: '/login/'
+      path: '/'
+      fullPath: '/login/'
+      preLoaderRoute: typeof LoginIndexRouteImport
       parentRoute: typeof LoginRouteRoute
     }
-    '/login/verify/': {
-      id: '/login/verify/'
-      path: '/verify'
-      fullPath: '/login/verify/'
-      preLoaderRoute: typeof LoginVerifyIndexRouteImport
-      parentRoute: typeof LoginRouteRoute
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRouteRoute
     }
-    '/manager/account/': {
-      id: '/manager/account/'
-      path: '/account'
-      fullPath: '/manager/account/'
-      preLoaderRoute: typeof ManagerAccountIndexRouteImport
-      parentRoute: typeof ManagerRouteRoute
+    '/api/upload': {
+      id: '/api/upload'
+      path: '/api/upload'
+      fullPath: '/api/upload'
+      preLoaderRoute: typeof ApiUploadRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/manager/books/': {
-      id: '/manager/books/'
-      path: '/books'
-      fullPath: '/manager/books/'
-      preLoaderRoute: typeof ManagerBooksIndexRouteImport
+    '/manager/users/': {
+      id: '/manager/users/'
+      path: '/users'
+      fullPath: '/manager/users/'
+      preLoaderRoute: typeof ManagerUsersIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
     '/manager/dashboard/': {
@@ -571,53 +488,88 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerDashboardIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
-    '/manager/users/': {
-      id: '/manager/users/'
-      path: '/users'
-      fullPath: '/manager/users/'
-      preLoaderRoute: typeof ManagerUsersIndexRouteImport
+    '/manager/books/': {
+      id: '/manager/books/'
+      path: '/books'
+      fullPath: '/manager/books/'
+      preLoaderRoute: typeof ManagerBooksIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
-    '/api/dev/email/$template': {
-      id: '/api/dev/email/$template'
-      path: '/api/dev/email/$template'
-      fullPath: '/api/dev/email/$template'
-      preLoaderRoute: typeof ApiDevEmailTemplateRouteImport
-      parentRoute: typeof rootRouteImport
+    '/manager/account/': {
+      id: '/manager/account/'
+      path: '/account'
+      fullPath: '/manager/account/'
+      preLoaderRoute: typeof ManagerAccountIndexRouteImport
+      parentRoute: typeof ManagerRouteRoute
     }
-    '/api/openapi/app/schema': {
-      id: '/api/openapi/app/schema'
-      path: '/schema'
-      fullPath: '/api/openapi/app/schema'
-      preLoaderRoute: typeof ApiOpenapiAppSchemaRouteImport
-      parentRoute: typeof ApiOpenapiAppRoute
+    '/login/verify/': {
+      id: '/login/verify/'
+      path: '/verify'
+      fullPath: '/login/verify/'
+      preLoaderRoute: typeof LoginVerifyIndexRouteImport
+      parentRoute: typeof LoginRouteRoute
     }
-    '/api/openapi/auth/schema': {
-      id: '/api/openapi/auth/schema'
-      path: '/schema'
-      fullPath: '/api/openapi/auth/schema'
-      preLoaderRoute: typeof ApiOpenapiAuthSchemaRouteImport
-      parentRoute: typeof ApiOpenapiAuthRoute
+    '/login/error/': {
+      id: '/login/error/'
+      path: '/error'
+      fullPath: '/login/error/'
+      preLoaderRoute: typeof LoginErrorIndexRouteImport
+      parentRoute: typeof LoginRouteRoute
     }
-    '/app/books/$id/': {
-      id: '/app/books/$id/'
-      path: '/books/$id'
-      fullPath: '/app/books/$id/'
-      preLoaderRoute: typeof AppBooksIdIndexRouteImport
+    '/app/books/': {
+      id: '/app/books/'
+      path: '/books'
+      fullPath: '/app/books/'
+      preLoaderRoute: typeof AppBooksIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/manager/books/$id/': {
-      id: '/manager/books/$id/'
-      path: '/books/$id'
-      fullPath: '/manager/books/$id/'
-      preLoaderRoute: typeof ManagerBooksIdIndexRouteImport
-      parentRoute: typeof ManagerRouteRoute
+    '/app/account/': {
+      id: '/app/account/'
+      path: '/account'
+      fullPath: '/app/account/'
+      preLoaderRoute: typeof AppAccountIndexRouteImport
+      parentRoute: typeof AppRouteRoute
     }
-    '/manager/books/new/': {
-      id: '/manager/books/new/'
-      path: '/books/new'
-      fullPath: '/manager/books/new/'
-      preLoaderRoute: typeof ManagerBooksNewIndexRouteImport
+    '/api/rpc/$': {
+      id: '/api/rpc/$'
+      path: '/api/rpc/$'
+      fullPath: '/api/rpc/$'
+      preLoaderRoute: typeof ApiRpcSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/rest/$': {
+      id: '/api/rest/$'
+      path: '/api/rest/$'
+      fullPath: '/api/rest/$'
+      preLoaderRoute: typeof ApiRestSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/openapi/auth': {
+      id: '/api/openapi/auth'
+      path: '/api/openapi/auth'
+      fullPath: '/api/openapi/auth'
+      preLoaderRoute: typeof ApiOpenapiAuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/openapi/app': {
+      id: '/api/openapi/app'
+      path: '/api/openapi/app'
+      fullPath: '/api/openapi/app'
+      preLoaderRoute: typeof ApiOpenapiAppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/manager/users/new/': {
+      id: '/manager/users/new/'
+      path: '/users/new'
+      fullPath: '/manager/users/new/'
+      preLoaderRoute: typeof ManagerUsersNewIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
     '/manager/users/$id/': {
@@ -627,11 +579,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerUsersIdIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
-    '/manager/users/new/': {
-      id: '/manager/users/new/'
-      path: '/users/new'
-      fullPath: '/manager/users/new/'
-      preLoaderRoute: typeof ManagerUsersNewIndexRouteImport
+    '/manager/books/new/': {
+      id: '/manager/books/new/'
+      path: '/books/new'
+      fullPath: '/manager/books/new/'
+      preLoaderRoute: typeof ManagerBooksNewIndexRouteImport
+      parentRoute: typeof ManagerRouteRoute
+    }
+    '/manager/books/$id/': {
+      id: '/manager/books/$id/'
+      path: '/books/$id'
+      fullPath: '/manager/books/$id/'
+      preLoaderRoute: typeof ManagerBooksIdIndexRouteImport
+      parentRoute: typeof ManagerRouteRoute
+    }
+    '/app/books/$id/': {
+      id: '/app/books/$id/'
+      path: '/books/$id'
+      fullPath: '/app/books/$id/'
+      preLoaderRoute: typeof AppBooksIdIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/api/openapi/auth/schema': {
+      id: '/api/openapi/auth/schema'
+      path: '/schema'
+      fullPath: '/api/openapi/auth/schema'
+      preLoaderRoute: typeof ApiOpenapiAuthSchemaRouteImport
+      parentRoute: typeof ApiOpenapiAuthRoute
+    }
+    '/api/openapi/app/schema': {
+      id: '/api/openapi/app/schema'
+      path: '/schema'
+      fullPath: '/api/openapi/app/schema'
+      preLoaderRoute: typeof ApiOpenapiAppSchemaRouteImport
+      parentRoute: typeof ApiOpenapiAppRoute
+    }
+    '/manager/users/$id/update/': {
+      id: '/manager/users/$id/update/'
+      path: '/users/$id/update'
+      fullPath: '/manager/users/$id/update/'
+      preLoaderRoute: typeof ManagerUsersIdUpdateIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
     '/manager/books/$id/update/': {
@@ -639,13 +626,6 @@ declare module '@tanstack/react-router' {
       path: '/books/$id/update'
       fullPath: '/manager/books/$id/update/'
       preLoaderRoute: typeof ManagerBooksIdUpdateIndexRouteImport
-      parentRoute: typeof ManagerRouteRoute
-    }
-    '/manager/users/$id/update/': {
-      id: '/manager/users/$id/update/'
-      path: '/users/$id/update'
-      fullPath: '/manager/users/$id/update/'
-      preLoaderRoute: typeof ManagerUsersIdUpdateIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
   }
@@ -753,7 +733,6 @@ const rootRouteChildren: RootRouteChildren = {
   ApiOpenapiAuthRoute: ApiOpenapiAuthRouteWithChildren,
   ApiRestSplatRoute: ApiRestSplatRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
-  ApiDevEmailTemplateRoute: ApiDevEmailTemplateRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
