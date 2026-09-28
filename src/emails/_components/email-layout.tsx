@@ -26,7 +26,7 @@ export const EmailLayout = ({
           <meta name="viewport" content="width=device-width" />
         </Head>
         <Preview>{preview}</Preview>
-        <Body className="bg-white font-sans">{children}</Body>
+        <Body className="bg-canvas m-0 font-sans">{children}</Body>
       </Tailwind>
     </Html>
   );

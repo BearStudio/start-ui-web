@@ -1,14 +1,15 @@
-import { Link, Section } from 'react-email';
+import { Hr, Link, Section } from 'react-email';
 
 export const EmailFooter = () => {
   return (
-    <Section className="text-text-muted text-xs leading-[22px]">
+    <Section className="text-text-muted px-2 pt-7 text-xs leading-5">
+      <Hr className="m-0 mb-5 border-solid border-border" />
       <Link
-        className="text-primary underline underline-offset-4"
+        className="text-text font-semibold no-underline"
         href="https://start-ui.com"
         target="_blank"
       >
-        <strong>Start UI</strong>
+        Start UI
       </Link>
       <br />
       Opinionated UI starters
