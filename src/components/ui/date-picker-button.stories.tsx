@@ -1,6 +1,6 @@
+import { DateRange } from '@daypicker/react';
 import dayjs from 'dayjs';
 import { useState } from 'react';
-import { DateRange } from 'react-day-picker';
 import { useDisclosure } from 'react-use-disclosure';
 import { isNullish } from 'remeda';
 
