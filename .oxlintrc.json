@@ -60,6 +60,7 @@
     "@tanstack/query/infinite-query-property-order": "error",
     "@tanstack/query/no-void-query-fn": "error",
     "@tanstack/query/mutation-property-order": "error",
+    "@tanstack/query/prefer-query-options": "error",
     "@tanstack/router/create-route-property-order": "warn",
     "@tanstack/router/route-param-names": "error",
     "sonarjs/cognitive-complexity": ["warn", 50],
