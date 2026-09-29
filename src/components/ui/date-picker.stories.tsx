@@ -24,6 +24,9 @@ export const Default = () => {
   return <DatePicker onChange={(value) => setDate(value)} value={date} />;
 };
 
+// Computed once: calling `new Date()` during render is impure
+const today = new Date();
+
 export const CalendarCustomization = () => {
   const [date, setDate] = useState<Date | null>();
 
@@ -32,8 +35,8 @@ export const CalendarCustomization = () => {
       onChange={(value) => setDate(value)}
       value={date}
       calendarProps={{
-        startMonth: new Date(),
-        endMonth: new Date(),
+        startMonth: today,
+        endMonth: today,
       }}
     />
   );
