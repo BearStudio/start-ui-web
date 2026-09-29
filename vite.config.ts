@@ -1,21 +1,24 @@
+import tailwindcss from '@tailwindcss/vite';
 import { devtools } from '@tanstack/devtools-vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
 import viteReact from '@vitejs/plugin-react';
 import { nitro } from 'nitro/vite';
 import { defineConfig, loadEnv } from 'vite';
-import tsConfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
   const env = loadEnv(mode, process.cwd(), 'VITE_');
   return {
+    resolve: {
+      tsconfigPaths: true,
+    },
     server: {
       port: env.VITE_PORT ? Number(env.VITE_PORT) : 3000,
       strictPort: true,
     },
     plugins: [
       devtools(),
-      tsConfigPaths(),
+      tailwindcss(),
       tanstackStart(),
       nitro({
         // Redirect to index.html, not '/storybook/': route rules ignore the
@@ -23,11 +26,8 @@ export default defineConfig(({ mode }) => {
         routeRules: { '/storybook': { redirect: '/storybook/index.html' } },
       }),
       // react's vite plugin must come after start's vite plugin
-      viteReact({
-        babel: {
-          plugins: ['babel-plugin-react-compiler'],
-        },
-      }),
+      // React Compiler through oxc-transform-react (Rust port, experimental)
+      viteReact({ compiler: true }),
     ],
   };
 });
