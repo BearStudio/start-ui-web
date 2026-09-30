@@ -49,6 +49,9 @@ export const Default = () => {
   );
 };
 
+// Computed once: calling `new Date()` during render is impure
+const today = new Date();
+
 export const CalendarCustomization = () => {
   const form = useForm(formOptions);
 
@@ -63,7 +66,7 @@ export const CalendarCustomization = () => {
             name="date"
             placeholder="DD/MM/YYYY"
             calendarProps={{
-              startMonth: new Date(),
+              startMonth: today,
             }}
           />
           <FormFieldHelper>Help</FormFieldHelper>

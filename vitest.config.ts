@@ -3,7 +3,8 @@ import { playwright } from '@vitest/browser-playwright';
 import path from 'node:path';
 import { defineConfig } from 'vitest/config';
 
-const resolve = (filePath: string) => path.resolve(__dirname, filePath);
+const resolve = (filePath: string) =>
+  path.resolve(import.meta.dirname, filePath);
 
 export default defineConfig({
   plugins: [react()],
@@ -28,9 +29,7 @@ export default defineConfig({
           ],
         },
         resolve: {
-          alias: {
-            '@': resolve('./src'),
-          },
+          tsconfigPaths: true,
         },
       },
       {
@@ -44,9 +43,7 @@ export default defineConfig({
           ],
         },
         resolve: {
-          alias: {
-            '@': resolve('./src'),
-          },
+          tsconfigPaths: true,
         },
       },
     ],
