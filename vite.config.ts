@@ -18,7 +18,9 @@ export default defineConfig(({ mode }) => {
       tsConfigPaths(),
       tanstackStart(),
       nitro({
-        routeRules: { '/storybook': { redirect: '/storybook/' } },
+        // Redirect to index.html, not '/storybook/': route rules ignore the
+        // trailing slash, so '/storybook/' would match again and loop
+        routeRules: { '/storybook': { redirect: '/storybook/index.html' } },
       }),
       // react's vite plugin must come after start's vite plugin
       viteReact({
