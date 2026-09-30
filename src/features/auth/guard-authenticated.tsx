@@ -37,7 +37,7 @@ export const GuardAuthenticated = ({
   }, [router, session.isPending, session.data?.user, session.error]);
 
   if (session.isPending) {
-    return <Spinner full className="opacity-60" />;
+    return <Spinner full />;
   }
 
   if (session.error && session.error.status > 0) {

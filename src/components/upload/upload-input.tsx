@@ -32,10 +32,10 @@ import type { UploadRoutes } from '@/routes/api/upload';
 
 const uploadInputVariants = cva(
   cn(
-    'flex w-full items-center gap-2 rounded-md border text-left text-xs transition-[color,box-shadow]',
+    'flex w-full items-center gap-2 rounded-md border text-left text-xs transition',
     'cursor-pointer',
     'hover:bg-accent/50',
-    'focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none',
+    'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none',
     'has-[[aria-invalid=true]]:border-destructive'
   ),
   {
@@ -268,7 +268,7 @@ export const UploadInput = ({
             ),
         isDragOver && 'border-solid border-ring bg-accent/50',
         uploadMutation.isError &&
-          'border-destructive ring-[3px] ring-destructive/20 dark:ring-destructive/40',
+          'border-destructive ring-3 ring-destructive/20 dark:ring-destructive/40',
         isDisabled && 'pointer-events-none opacity-50',
         className
       )}

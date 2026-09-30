@@ -139,26 +139,26 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
                       </div>
                     </DataListCell>
                     <DataListCell>
-                      <DataListText className="font-medium">
+                      <DataListText variant="strong">
                         <Link to="/manager/books/$id" params={{ id: item.id }}>
                           {item.title}
                           <span className="absolute inset-0" />
                         </Link>
                       </DataListText>
-                      <DataListText className="text-xs text-muted-foreground">
+                      <DataListText variant="caption">
                         {item.author}
                       </DataListText>
                     </DataListCell>
                     <DataListCell>
                       {item.genre && (
-                        <DataListText className="text-xs text-muted-foreground">
+                        <DataListText variant="caption">
                           {item.genre.name}
                         </DataListText>
                       )}
                     </DataListCell>
                     <DataListCell>
                       {item.publisher && (
-                        <DataListText className="text-xs text-muted-foreground">
+                        <DataListText variant="caption">
                           {item.publisher}
                         </DataListText>
                       )}
@@ -178,7 +178,7 @@ export const PageBooks = (props: { search: { searchTerm?: string } }) => {
                     </Button>
                   </DataListCell>
                   <DataListCell>
-                    <DataListText className="text-xs text-muted-foreground">
+                    <DataListText variant="caption">
                       {t('book:manager.list.showing', {
                         count: items.length,
                         total,

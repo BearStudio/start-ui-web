@@ -1,15 +1,33 @@
+import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
-function Card({ className, ...props }: React.ComponentProps<'div'>) {
+const cardVariants = cva(
+  'group/card flex flex-col rounded-lg border bg-card text-card-foreground',
+  {
+    variants: {
+      variant: {
+        default: 'gap-2 py-4',
+        flush: 'gap-0',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+    },
+  }
+);
+
+function Card({
+  className,
+  variant = 'default',
+  ...props
+}: React.ComponentProps<'div'> & VariantProps<typeof cardVariants>) {
   return (
     <div
       data-slot="card"
-      className={cn(
-        'flex flex-col gap-2 rounded-lg border bg-card py-4 text-card-foreground',
-        className
-      )}
+      data-variant={variant}
+      className={cn(cardVariants({ variant }), className)}
       {...props}
     />
   );
@@ -20,7 +38,7 @@ function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="card-header"
       className={cn(
-        '@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-4 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-4',
+        '@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-4 group-data-[variant=flush]/card:gap-y-0 group-data-[variant=flush]/card:py-4 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-4',
         className
       )}
       {...props}
