@@ -56,14 +56,7 @@ export function NavUser() {
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <SidebarMenuButton
-                size="lg"
-                className="data-open:bg-sidebar-accent data-open:text-sidebar-accent-foreground"
-              />
-            }
-          >
+          <DropdownMenuTrigger render={<SidebarMenuButton size="lg" />}>
             <Avatar className="size-8">
               <AvatarImage src={user.avatar} alt={user.name} />
               <AvatarFallback variant="boring" name={user.name ?? ''} />
@@ -74,22 +67,22 @@ export function NavUser() {
             <ChevronsUpDownIcon className="ml-auto size-4" />
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="min-w-56 rounded-lg"
+            className="min-w-56"
             side={isMobile ? 'bottom' : 'right'}
             align="end"
             sideOffset={4}
             finalFocus={false}
           >
             <DropdownMenuGroup>
-              <DropdownMenuLabel className="p-0 font-normal">
-                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+              <DropdownMenuLabel>
+                <div className="flex items-center gap-2 text-left text-sm">
                   <Avatar className="size-8">
                     <AvatarImage src={user.avatar} alt={user.name} />
                     <AvatarFallback variant="boring" name={user.name ?? ''} />
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">{user.name}</span>
-                    <span className="truncate text-xs text-muted-foreground">
+                    <span className="truncate text-xs font-normal text-muted-foreground">
                       {user.email}
                     </span>
                   </div>
@@ -171,11 +164,10 @@ export function NavUser() {
             </ConfirmSignOut>
             <DropdownMenuSeparator />
             <BuildInfoDrawer nativeButtonTrigger={false}>
-              <DropdownMenuItem
-                closeOnClick={false}
-                className="py-1 text-xs text-muted-foreground"
-              >
-                <BuildInfoVersion />
+              <DropdownMenuItem closeOnClick={false}>
+                <span className="text-xs text-muted-foreground">
+                  <BuildInfoVersion />
+                </span>
               </DropdownMenuItem>
             </BuildInfoDrawer>
           </DropdownMenuContent>

@@ -7,18 +7,10 @@ import { MAIN_NAV_LINKS, NavLinkItem } from '@/layout/app/main-nav-config';
 
 export const MainNavDesktop = () => {
   const { t } = useTranslation(['layout']);
-  const HEIGHT = 'calc(56px + env(safe-area-inset-top))';
   return (
     <div className="hidden md:flex">
-      <div
-        style={{
-          height: HEIGHT,
-        }}
-      />
-      <header
-        className="fixed top-0 right-0 left-0 flex items-center border-b border-b-neutral-200 bg-white pt-safe-top dark:border-b-neutral-800 dark:bg-neutral-900"
-        style={{ height: HEIGHT }}
-      >
+      <div className="h-main-nav-top" />
+      <header className="fixed top-0 right-0 left-0 flex h-main-nav-top items-center border-b border-b-neutral-200 bg-white pt-safe-top dark:border-b-neutral-800 dark:bg-neutral-900">
         <div className="mx-auto flex w-full max-w-4xl items-center justify-between px-4">
           <Link to="/app">
             <Logo className="w-24" />
@@ -37,18 +29,18 @@ export const MainNavDesktop = () => {
 };
 
 const Item = ({
-  icon: Icon,
+  icon: ItemIcon,
   iconActive,
   children,
   ...linkProps
 }: NavLinkItem) => {
-  const IconActive = iconActive ?? Icon;
+  const IconActive = iconActive ?? ItemIcon;
   return (
     <Link
       {...linkProps}
       className="flex items-center justify-center gap-2 rounded-md px-2.5 py-2 text-neutral-500 transition hover:bg-black/5 dark:text-neutral-400 dark:hover:bg-white/5 [&.active]:text-primary"
     >
-      <Icon className="size-4 opacity-60 in-[.active]:hidden" />
+      <ItemIcon className="size-4 opacity-60 in-[.active]:hidden" />
       <IconActive className="hidden size-4 in-[.active]:block" />
       <span className="text-sm font-medium">{children}</span>
     </Link>

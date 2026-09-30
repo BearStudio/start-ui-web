@@ -93,12 +93,12 @@ export function Calendar({
     'bg-accent [&>button]:bg-primary [&>button]:text-primary-foreground [&>button]:hover:bg-primary [&>button]:hover:text-primary-foreground';
   const _rangeStartClassName = cn(
     buttonRangeClassName,
-    'day-range-start rounded-s-md',
+    'rounded-s-md',
     props.classNames?.range_start
   );
   const _rangeEndClassName = cn(
     buttonRangeClassName,
-    'day-range-end rounded-e-md',
+    'rounded-e-md',
     props.classNames?.range_end
   );
   const _rangeMiddleClassName = cn(
@@ -114,7 +114,7 @@ export function Calendar({
     props.classNames?.today
   );
   const _outsideClassName = cn(
-    'day-outside text-muted-foreground opacity-80 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30',
+    'text-muted-foreground opacity-80 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30',
     props.classNames?.outside
   );
   const _disabledClassName = cn(
@@ -127,10 +127,12 @@ export function Calendar({
     <DayPicker
       locale={locale}
       showOutsideDays={showOutsideDays}
-      className={cn('p-3', className)}
-      style={{
-        width: 248.8 * (props.numberOfMonths ?? 1) + 'px',
-      }}
+      className={cn('w-(--calendar-width) p-3', className)}
+      style={
+        {
+          '--calendar-width': `${248.8 * (props.numberOfMonths ?? 1)}px`,
+        } as React.CSSProperties
+      }
       classNames={{
         months: _monthsClassName,
         month_caption: _monthCaptionClassName,
@@ -159,7 +161,7 @@ export function Calendar({
           props.classNames?.dropdowns
         ),
         dropdown: cn(
-          'cursor-inherit leading-inherit absolute inset-0 m-0 w-full appearance-none border-none p-0 opacity-0',
+          'absolute inset-0 m-0 w-full appearance-none border-none p-0 opacity-0',
           props.classNames?.dropdown
         ),
         dropdown_root: cn('relative', props.classNames?.dropdown_root),

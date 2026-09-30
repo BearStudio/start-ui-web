@@ -289,24 +289,21 @@ const UserSessions = (props: { userId: string }) => {
           .match('default', ({ items }) => (
             <>
               {items.map((item) => (
-                <DataListRow
-                  key={item.id}
-                  className="max-md:flex-col max-md:py-2 max-md:[&>div]:py-1"
-                >
+                <DataListRow key={item.id} stackOnMobile>
                   <DataListCell>
                     <DataListText>
                       {t('user:manager.detail.session', { token: item.token })}
                     </DataListText>
                   </DataListCell>
                   <DataListCell>
-                    <DataListText className="text-muted-foreground">
+                    <DataListText variant="muted">
                       {t('user:manager.detail.sessionUpdated', {
                         time: dayjs(item.updatedAt).fromNow(),
                       })}
                     </DataListText>
                   </DataListCell>
                   <DataListCell>
-                    <DataListText className="text-muted-foreground">
+                    <DataListText variant="muted">
                       {t('user:manager.detail.sessionExpires', {
                         time: dayjs().to(item.expiresAt),
                       })}
@@ -335,7 +332,7 @@ const UserSessions = (props: { userId: string }) => {
                   </Button>
                 </DataListCell>
                 <DataListCell>
-                  <DataListText className="text-xs text-muted-foreground">
+                  <DataListText variant="caption">
                     {t('user:manager.list.showing', {
                       count: items.length,
                       total: sessionsQuery.data?.pages[0]?.total,

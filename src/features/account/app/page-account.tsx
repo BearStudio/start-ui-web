@@ -27,8 +27,10 @@ export const PageAccount = () => {
           <UserCard />
           <DisplayPreferences />
           <BuildInfoDrawer>
-            <Button variant="ghost" size="xs" className="opacity-60">
-              <BuildInfoVersion />
+            <Button variant="ghost" size="xs">
+              <span className="opacity-60">
+                <BuildInfoVersion />
+              </span>
             </Button>
           </BuildInfoDrawer>
         </div>

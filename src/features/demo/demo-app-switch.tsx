@@ -44,15 +44,15 @@ export const DemoAppSwitch = () => {
 
   return (
     <div className="flex gap-4 max-xs:flex-col">
-      <Link to="/app" className="flex flex-1 flex-col" disabled={!hasAppAccess}>
-        <Card
-          className={cn(
-            'flex-1',
-            currentApp === 'app' &&
-              'ring-2 ring-offset-2 ring-offset-background',
-            !hasAppAccess && 'cursor-not-allowed'
-          )}
-        >
+      <Link
+        to="/app"
+        className={cn(
+          'flex flex-1 flex-col rounded-lg',
+          currentApp === 'app' && 'ring-2 ring-offset-2 ring-offset-background'
+        )}
+        disabled={!hasAppAccess}
+      >
+        <Card className={cn('flex-1', !hasAppAccess && 'cursor-not-allowed')}>
           <CardHeader>
             <div className="flex items-center gap-2">
               <CardTitle>{t('demo:appSwitch.app.title')}</CardTitle>
@@ -88,16 +88,15 @@ export const DemoAppSwitch = () => {
       </Link>
       <Link
         to="/manager"
-        className="flex flex-1 flex-col"
+        className={cn(
+          'flex flex-1 flex-col rounded-lg',
+          currentApp === 'manager' &&
+            'ring-2 ring-offset-2 ring-offset-background'
+        )}
         disabled={!hasManagerAccess}
       >
         <Card
-          className={cn(
-            'flex-1',
-            currentApp === 'manager' &&
-              'ring-2 ring-offset-2 ring-offset-background',
-            !hasManagerAccess && 'cursor-not-allowed'
-          )}
+          className={cn('flex-1', !hasManagerAccess && 'cursor-not-allowed')}
         >
           <CardHeader>
             <div className="flex items-center gap-2">

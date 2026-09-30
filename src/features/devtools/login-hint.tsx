@@ -35,11 +35,13 @@ export const LoginEmailHint = () => {
       <AlertTitle>
         {envClient.VITE_IS_DEMO ? 'Demo mode' : 'Dev mode'}
       </AlertTitle>
-      <AlertDescription className="flex flex-wrap gap-x-1 text-sm leading-4">
-        You can login with
-        <LoginEmailButton email="admin@admin.com" form={form} />
-        or
-        <LoginEmailButton email="user@user.com" form={form} />
+      <AlertDescription>
+        <div className="flex flex-wrap gap-x-1 leading-4">
+          You can login with
+          <LoginEmailButton email="admin@admin.com" form={form} />
+          or
+          <LoginEmailButton email="user@user.com" form={form} />
+        </div>
       </AlertDescription>
     </Alert>
   );
@@ -58,19 +60,21 @@ export const LoginEmailOtpHint = () => {
       <AlertTitle>
         {envClient.VITE_IS_DEMO ? 'Demo mode' : 'Dev mode'}
       </AlertTitle>
-      <AlertDescription className="flex gap-x-1 text-sm leading-4">
-        Use the code
-        <button
-          type="button"
-          className="cursor-pointer font-medium text-neutral-900 underline underline-offset-4 hover:no-underline dark:text-white"
-          onClick={() =>
-            form.setValue('otp', AUTH_EMAIL_OTP_MOCKED, {
-              shouldValidate: true,
-            })
-          }
-        >
-          {AUTH_EMAIL_OTP_MOCKED}
-        </button>
+      <AlertDescription>
+        <div className="flex gap-x-1 leading-4">
+          Use the code
+          <button
+            type="button"
+            className="cursor-pointer font-medium text-neutral-900 underline underline-offset-4 hover:no-underline dark:text-white"
+            onClick={() =>
+              form.setValue('otp', AUTH_EMAIL_OTP_MOCKED, {
+                shouldValidate: true,
+              })
+            }
+          >
+            {AUTH_EMAIL_OTP_MOCKED}
+          </button>
+        </div>
       </AlertDescription>
     </Alert>
   );

@@ -135,8 +135,8 @@ export const PageBook = (props: { params: { id: string } }) => {
           .match('default', ({ book }) => (
             <div className="flex flex-col gap-4 xs:flex-row">
               <div className="flex-2">
-                <Card className="py-1">
-                  <CardContent>
+                <Card variant="flush">
+                  <CardContent className="py-1">
                     <dl className="flex flex-col divide-y text-sm">
                       <div className="flex gap-4 py-3">
                         <dt className="w-24 flex-none font-medium text-muted-foreground">
