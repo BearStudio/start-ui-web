@@ -1,10 +1,4 @@
 import {
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  ChevronUp,
-} from 'lucide-react';
-import {
   ChevronProps,
   DayPicker,
   type DayPickerProps,
@@ -12,8 +6,14 @@ import {
   labelPrevious,
   NavProps,
   useDayPicker,
-} from 'react-day-picker';
-import { enUS } from 'react-day-picker/locale';
+} from '@daypicker/react';
+import { enUS } from '@daypicker/react/locale';
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { match } from 'ts-pattern';
 
