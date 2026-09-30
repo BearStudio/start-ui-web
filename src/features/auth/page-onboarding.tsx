@@ -60,7 +60,7 @@ export const PageOnboarding = () => {
             })}
           </p>
           <ConfirmSignOut>
-            <Button size="xs" variant="link" className="opacity-80">
+            <Button size="xs" variant="link">
               <LogOutIcon />
               {t('auth:signOut.action')}
             </Button>

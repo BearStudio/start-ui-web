@@ -1,3 +1,4 @@
+import { cva, type VariantProps } from 'class-variance-authority';
 import { CircleAlertIcon, LucideRefreshCw, XIcon } from 'lucide-react';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -24,14 +25,19 @@ export const DataList = ({
 
 export const DataListRow = ({
   withHover,
+  stackOnMobile,
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement> & { withHover?: boolean }) => {
+}: React.HTMLAttributes<HTMLDivElement> & {
+  withHover?: boolean;
+  stackOnMobile?: boolean;
+}) => {
   return (
     <div
       className={cn(
         'relative flex min-w-0 border-b px-1.5 transition duration-200 last:border-none',
         withHover && 'hover:bg-neutral-50 dark:hover:bg-white/5',
+        stackOnMobile && 'max-md:flex-col max-md:py-2 max-md:[&>div]:py-1',
         className
       )}
       {...props}
@@ -66,20 +72,40 @@ export const DataListTextHeader = ({
   );
 };
 
+const dataListTextVariants = cva('max-w-full truncate', {
+  variants: {
+    variant: {
+      default: 'text-sm',
+      strong: 'text-sm font-medium',
+      muted: 'text-sm text-muted-foreground',
+      caption: 'text-xs text-muted-foreground',
+      placeholder: 'text-xs text-muted-foreground opacity-60',
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+  },
+});
+
 export const DataListText = ({
   className = '',
+  variant,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) => {
+}: React.HTMLAttributes<HTMLDivElement> &
+  VariantProps<typeof dataListTextVariants>) => {
   return (
-    <div className={cn('max-w-full truncate text-sm', className)} {...props} />
+    <div
+      className={cn(dataListTextVariants({ variant }), className)}
+      {...props}
+    />
   );
 };
 
 export const DataListLoadingState = () => {
   return (
     <>
-      {[1, 0.75, 0.5].map((opacity) => (
-        <DataListRow key={opacity} style={{ opacity }}>
+      {['opacity-100', 'opacity-75', 'opacity-50'].map((opacity) => (
+        <DataListRow key={opacity} className={opacity}>
           <DataListCell>
             <div className="flex w-full flex-col gap-2 p-2">
               <Skeleton className="h-2 w-1/3" />
@@ -166,7 +192,7 @@ export const DataListRowResults = (props: {
     <DataListRow className={cn(props.className)}>
       <DataListCell className="py-1 pr-0">
         <div className="flex w-full items-center gap-1">
-          <DataListText className="flex-1 text-xs text-muted-foreground">
+          <DataListText variant="caption" className="flex-1">
             {props.children}
           </DataListText>
           {!!props.withClearButton && (

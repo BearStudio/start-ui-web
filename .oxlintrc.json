@@ -6,7 +6,8 @@
     "@tanstack/eslint-plugin-router",
     "eslint-plugin-simple-import-sort",
     "eslint-plugin-sonarjs",
-    "eslint-plugin-storybook"
+    "eslint-plugin-storybook",
+    "@shadcn/lint"
   ],
   "categories": {
     "correctness": "error"
@@ -25,7 +26,12 @@
         "ignoreRestSiblings": true
       }
     ],
-    "unicorn/filename-case": ["error", { "case": "kebabCase" }],
+    "unicorn/filename-case": [
+      "error",
+      {
+        "case": "kebabCase"
+      }
+    ],
     "simple-import-sort/imports": [
       "warn",
       {
@@ -65,7 +71,39 @@
     "@tanstack/router/route-param-names": "error",
     "sonarjs/cognitive-complexity": ["warn", 50],
     "sonarjs/prefer-immediate-return": "warn",
-    "sonarjs/todo-tag": "warn"
+    "sonarjs/todo-tag": "warn",
+    "shadcn/no-restyle": [
+      "error",
+      {
+        "allow": ["layout"],
+        "contracts": [
+          {
+            "pattern": "^CardTitle$",
+            "allow": ["layout", "typography"],
+            "deny": ["font-*"]
+          },
+          {
+            "pattern": "^(CardContent|ResponsiveDrawerBody)$",
+            "allow": ["layout", "spacing"]
+          }
+        ]
+      }
+    ],
+    "shadcn/no-raw-colors": "error",
+    "shadcn/no-arbitrary-values": [
+      "error",
+      {
+        "allow": ["layout"]
+      }
+    ],
+    "shadcn/no-inline-styles": "error",
+    "shadcn/no-unknown-classes": [
+      "error",
+      {
+        "allow": ["toaster"]
+      }
+    ],
+    "shadcn/require-static-classes": "error"
   },
   "overrides": [
     {
@@ -98,6 +136,37 @@
         "storybook/use-storybook-expect": "error",
         "storybook/use-storybook-testing-library": "error",
         "storybook/no-uninstalled-addons": "error"
+      }
+    },
+    {
+      "files": ["src/components/ui/**"],
+      "rules": {
+        "shadcn/no-restyle": "off",
+        "shadcn/no-arbitrary-values": "off",
+        "shadcn/require-static-classes": "off"
+      }
+    },
+    {
+      "files": ["src/emails/**"],
+      "rules": {
+        "shadcn/no-inline-styles": "off"
+      }
+    },
+    {
+      "files": ["src/features/book/book-cover.tsx"],
+      "rules": {
+        "shadcn/no-arbitrary-values": [
+          "error",
+          {
+            "allow": [
+              "layout",
+              "p-[10%]",
+              "pl-[16%]",
+              "text-[1px]",
+              "text-[2px]"
+            ]
+          }
+        ]
       }
     }
   ]

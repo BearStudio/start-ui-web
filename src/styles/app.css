@@ -66,6 +66,11 @@
   --spacing-safe-left: env(safe-area-inset-left);
   --spacing-safe-right: env(safe-area-inset-right);
 
+  --spacing-main-nav-top: calc(56px + env(safe-area-inset-top));
+  --spacing-main-nav-bottom: calc(64px + env(safe-area-inset-bottom));
+  --spacing-page-topbar: calc(56px + env(safe-area-inset-top));
+  --spacing-page-topbar-sm: calc(48px + env(safe-area-inset-top));
+
   --text-2xs: 0.625rem;
   --text-3xs: 0.5rem;
 
@@ -195,12 +200,24 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    font-size: calc(var(--font-scale, 1) * 100%);
+  }
   body {
     @apply bg-neutral-50 text-foreground dark:bg-neutral-950;
 
     @media all and (display-mode: standalone) {
       height: 100lvh; /* Force full height on iOS standalone */
     }
+  }
+}
+
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
 

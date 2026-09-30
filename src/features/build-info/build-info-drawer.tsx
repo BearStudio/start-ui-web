@@ -38,7 +38,7 @@ export const BuildInfoDrawer = ({
         />
       )}
       <ResponsiveDrawerContent forceRenderOverlay>
-        <ResponsiveDrawerHeader className="gap-2 text-center">
+        <ResponsiveDrawerHeader className="text-center">
           <ResponsiveDrawerTitle>
             <BuildInfoVersion />
           </ResponsiveDrawerTitle>
