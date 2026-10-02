@@ -31,7 +31,6 @@ import { Route as ManagerAccountIndexRouteImport } from './routes/manager/accoun
 import { Route as ManagerBooksIndexRouteImport } from './routes/manager/books/index'
 import { Route as ManagerDashboardIndexRouteImport } from './routes/manager/dashboard.index'
 import { Route as ManagerUsersIndexRouteImport } from './routes/manager/users/index'
-import { Route as ApiDevEmailTemplateRouteImport } from './routes/api/dev.email.$template'
 import { Route as ApiOpenapiAppSchemaRouteImport } from './routes/api/openapi/app.schema'
 import { Route as ApiOpenapiAuthSchemaRouteImport } from './routes/api/openapi/auth.schema'
 import { Route as AppBooksIdIndexRouteImport } from './routes/app/books/$id.index'
@@ -152,11 +151,6 @@ const ManagerUsersIndexRoute = ManagerUsersIndexRouteImport.update({
   path: '/users/',
   getParentRoute: () => ManagerRouteRoute,
 } as any)
-const ApiDevEmailTemplateRoute = ApiDevEmailTemplateRouteImport.update({
-  id: '/api/dev/email/$template',
-  path: '/api/dev/email/$template',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiOpenapiAppSchemaRoute = ApiOpenapiAppSchemaRouteImport.update({
   id: '/schema',
   path: '/schema',
@@ -228,7 +222,6 @@ export interface FileRoutesByFullPath {
   '/manager/books/': typeof ManagerBooksIndexRoute
   '/manager/dashboard/': typeof ManagerDashboardIndexRoute
   '/manager/users/': typeof ManagerUsersIndexRoute
-  '/api/dev/email/$template': typeof ApiDevEmailTemplateRoute
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
   '/app/books/$id/': typeof AppBooksIdIndexRoute
@@ -259,7 +252,6 @@ export interface FileRoutesByTo {
   '/manager/books': typeof ManagerBooksIndexRoute
   '/manager/dashboard': typeof ManagerDashboardIndexRoute
   '/manager/users': typeof ManagerUsersIndexRoute
-  '/api/dev/email/$template': typeof ApiDevEmailTemplateRoute
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
   '/app/books/$id': typeof AppBooksIdIndexRoute
@@ -294,7 +286,6 @@ export interface FileRoutesById {
   '/manager/books/': typeof ManagerBooksIndexRoute
   '/manager/dashboard/': typeof ManagerDashboardIndexRoute
   '/manager/users/': typeof ManagerUsersIndexRoute
-  '/api/dev/email/$template': typeof ApiDevEmailTemplateRoute
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
   '/app/books/$id/': typeof AppBooksIdIndexRoute
@@ -330,7 +321,6 @@ export interface FileRouteTypes {
     | '/manager/books/'
     | '/manager/dashboard/'
     | '/manager/users/'
-    | '/api/dev/email/$template'
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
     | '/app/books/$id/'
@@ -361,7 +351,6 @@ export interface FileRouteTypes {
     | '/manager/books'
     | '/manager/dashboard'
     | '/manager/users'
-    | '/api/dev/email/$template'
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
     | '/app/books/$id'
@@ -395,7 +384,6 @@ export interface FileRouteTypes {
     | '/manager/books/'
     | '/manager/dashboard/'
     | '/manager/users/'
-    | '/api/dev/email/$template'
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
     | '/app/books/$id/'
@@ -419,7 +407,6 @@ export interface RootRouteChildren {
   ApiOpenapiAuthRoute: typeof ApiOpenapiAuthRouteWithChildren
   ApiRestSplatRoute: typeof ApiRestSplatRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
-  ApiDevEmailTemplateRoute: typeof ApiDevEmailTemplateRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -577,13 +564,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/manager/users/'
       preLoaderRoute: typeof ManagerUsersIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
-    }
-    '/api/dev/email/$template': {
-      id: '/api/dev/email/$template'
-      path: '/api/dev/email/$template'
-      fullPath: '/api/dev/email/$template'
-      preLoaderRoute: typeof ApiDevEmailTemplateRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/api/openapi/app/schema': {
       id: '/api/openapi/app/schema'
@@ -753,7 +733,6 @@ const rootRouteChildren: RootRouteChildren = {
   ApiOpenapiAuthRoute: ApiOpenapiAuthRouteWithChildren,
   ApiRestSplatRoute: ApiRestSplatRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
-  ApiDevEmailTemplateRoute: ApiDevEmailTemplateRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,15 +1,33 @@
-import { Link, Section } from 'react-email';
+import { Column, Hr, Img, Link, Row, Section } from 'react-email';
 
-import { styles } from '@/emails/styles';
+import { emailAssetSrc } from '@/emails/utils';
 
 export const EmailFooter = () => {
   return (
-    <Section style={styles.footer}>
-      <Link style={styles.link} href="https://start-ui.com" target="_blank">
-        <strong>Start UI</strong>
-      </Link>
-      <br />
-      Opinionated UI starters
+    <Section className="text-text-muted px-2 pt-7 text-xs leading-5">
+      <Hr className="m-0 mb-5 border-t-border" />
+      <Row>
+        <Column className="align-middle">
+          <Link
+            className="text-text font-semibold no-underline"
+            href="https://start-ui.com"
+            target="_blank"
+          >
+            Start UI
+          </Link>
+          <br />
+          Opinionated UI starters
+        </Column>
+        <Column align="right" className="align-middle">
+          <Img
+            src={emailAssetSrc('mascot.png')}
+            alt=""
+            width={36}
+            height={48}
+            className="ml-auto block"
+          />
+        </Column>
+      </Row>
     </Section>
   );
 };

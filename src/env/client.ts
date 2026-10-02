@@ -1,25 +1,12 @@
-/* eslint-disable no-process-env */
+/* oxlint-disable node/no-process-env */
 import { createEnv } from '@t3-oss/env-core';
 import { z } from 'zod';
 
-const envMetaOrProcess: Record<string, string> = import.meta.env ?? process.env;
+import { envMetaOrProcess, getBaseUrl } from '@/env/base-url';
 
 const isDev = process.env.NODE_ENV
   ? process.env.NODE_ENV === 'development'
   : import.meta.env?.DEV;
-
-const getBaseUrl = () => {
-  const vercelUrlPreviewUrl =
-    envMetaOrProcess.VITE_VERCEL_ENV === 'preview'
-      ? envMetaOrProcess.VITE_VERCEL_BRANCH_URL
-      : null;
-
-  if (vercelUrlPreviewUrl) {
-    return `https://${vercelUrlPreviewUrl}`;
-  }
-
-  return envMetaOrProcess.VITE_BASE_URL;
-};
 
 export const envClient = createEnv({
   clientPrefix: 'VITE_',

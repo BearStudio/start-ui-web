@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
-import { Body, Head, Html, Preview } from 'react-email';
+import { Body, Head, Html, Preview, Tailwind } from 'react-email';
 
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
 
-import { styles } from '@/emails/styles';
+import { emailTailwindConfig } from '@/emails/tailwind.config';
 
 export const EmailLayout = ({
   preview,
@@ -21,11 +21,13 @@ export const EmailLayout = ({
         AVAILABLE_LANGUAGES.find(({ key }) => key === language)?.dir ?? 'ltr'
       }
     >
-      <Head>
-        <meta name="viewport" content="width=device-width" />
-      </Head>
-      <Preview>{preview}</Preview>
-      <Body style={styles.main}>{children}</Body>
+      <Tailwind config={emailTailwindConfig}>
+        <Head>
+          <meta name="viewport" content="width=device-width" />
+        </Head>
+        <Preview>{preview}</Preview>
+        <Body className="bg-canvas m-0 font-sans">{children}</Body>
+      </Tailwind>
     </Html>
   );
 };

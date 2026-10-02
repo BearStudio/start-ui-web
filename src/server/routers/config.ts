@@ -36,9 +36,9 @@ export default {
     .handler(() => {
       return {
         maildevIframeSrc:
-          // eslint-disable-next-line no-process-env
+          // oxlint-disable-next-line node/no-process-env
           import.meta.env.DEV && process.env.DOCKER_MAILDEV_UI_PORT
-            ? // eslint-disable-next-line no-process-env
+            ? // oxlint-disable-next-line node/no-process-env
               `http://localhost:${process.env.DOCKER_MAILDEV_UI_PORT}/#/`
             : null,
       };
