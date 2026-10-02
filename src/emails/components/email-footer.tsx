@@ -5,7 +5,7 @@ import { emailAssetSrc } from '@/emails/utils';
 export const EmailFooter = () => {
   return (
     <Section className="text-text-muted px-2 pt-7 text-xs leading-5">
-      <Hr className="m-0 mb-5 border-solid border-border" />
+      <Hr className="m-0 mb-5 border-t-border" />
       <Row>
         <Column className="align-middle">
           <Link

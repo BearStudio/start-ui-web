@@ -1,4 +1,4 @@
-/* eslint-disable no-process-env */
+/* oxlint-disable node/no-process-env */
 import { defineConfig } from 'prisma/config';
 
 // Prisma 7 no longer loads `.env` files. Commands that need the database

@@ -3,7 +3,6 @@
 🚀 Start UI <small>[web]</small> is an opinionated frontend starter repository created & maintained by the [BearStudio Team](https://www.bearstudio.fr/team) and other contributors.
 It represents our team's up-to-date stack that we use when creating web apps for our clients.
 
-
 ## Technologies
 
 <div align="center" style="margin: 0 0 16px 0"><img src=".github/assets/tech-logos.png" alt="Technologies logos of the starter" /></div>
@@ -16,9 +15,9 @@ For detailed information on how to use this project, please refer to the [docume
 
 ## Requirements
 
-* [Node.js](https://nodejs.org) >= 22
-* [pnpm](https://pnpm.io/)
-* [Docker](https://www.docker.com/) (or a [PostgreSQL](https://www.postgresql.org/) database)
+- [Node.js](https://nodejs.org) >= 22
+- [pnpm](https://pnpm.io/)
+- [Docker](https://www.docker.com/) (or a [PostgreSQL](https://www.postgresql.org/) database)
 
 ## Getting Started
 
@@ -31,11 +30,13 @@ That will scaffold a new folder with the latest version of 🚀 Start UI <small>
 ## Setup your IDE
 
 - VS Code
+
 ```bash
 cp .vscode/settings.example.json .vscode/settings.json
 ```
 
 - Zed
+
 ```bash
 cp .zed/settings.example.json .zed/settings.json
 ```
@@ -45,6 +46,7 @@ cp .zed/settings.example.json .zed/settings.json
 This project uses [TypeScript 7](https://devblogs.microsoft.com/typescript/announcing-typescript-native-previews/), the native compiler. It ships a `tsc` binary but no `tsserver`, so editors need the native language server to typecheck exactly like `pnpm lint:ts` does.
 
 - VS Code: install the [TypeScript 7](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview) extension (`TypeScriptTeam.native-preview`). The example settings already enable it:
+
 ```jsonc
 "js/ts.experimental.useTsgo": true,
 "js/ts.tsdk.path": "./node_modules/typescript"
@@ -136,13 +138,15 @@ The maildev UI is available at [localhost:1080](http://localhost:1080) (port con
 
 Emails templates are built with `react-email` components in the `src/emails` folder.
 
-Run the react-email preview server (port **3001**, separate from the Vite app on 3000):
+Run the react-email preview server (port **3030**, or the next free one, separate from the Vite app on 3000):
 
 ```bash
-pnpm email:dev
+pnpm dev:email
 ```
 
-Open [http://localhost:3001](http://localhost:3001) to browse templates under `src/emails/templates`. Each template can define `PreviewProps` on the default export for realistic fixtures (language, OTP code, and so on). Use the preview toolbar **Props** tab to tweak props live without changing the template source.
+Open [http://localhost:3030](http://localhost:3030) to browse templates under `src/emails/templates`. Each template should define `PreviewProps` on the default export for realistic fixtures, including `language` (no default is injected), OTP code, and so on. Use the preview toolbar **Props** tab to tweak props live, for example to switch `language`, without changing the template source.
+
+Email images live in `public/static` (served by the app at `${VITE_BASE_URL}/static`). `src/emails/templates/static` is a symlink to it so the preview server can serve them too. On Windows, enable `git config core.symlinks true` before cloning.
 
 ### OpenAPI Documentation for the API
 
@@ -152,11 +156,11 @@ You can access the API documentation via the OpenAPI interface at:
 
 This interface allows you to:
 
-* View complete and up-to-date documentation of all backend endpoints exposed by the API.
+- View complete and up-to-date documentation of all backend endpoints exposed by the API.
 
-* Understand request and response formats for each route.
+- Understand request and response formats for each route.
 
-* Facilitate development and debugging by testing endpoints directly from the interface, without needing the frontend.
+- Facilitate development and debugging by testing endpoints directly from the interface, without needing the frontend.
 
 ### Generate custom icons components from svg files
 
@@ -177,13 +181,14 @@ If you want to use the same set of custom duotone icons that Start UI is already
 E2E tests are setup with Playwright.
 
 ```sh
-pnpm e2e:setup  # Setup context to be used across test for more efficient execution 
+pnpm e2e:setup  # Setup context to be used across test for more efficient execution
 pnpm e2e        # Run tests in headless mode, this is the command executed in CI
 pnpm e2e:ui     # Open a UI which allows you to run specific tests and see test execution
 ```
 
 > [!WARNING]
 > The generated e2e context files contain authentication logic. If you make changes to your local database instance, you should re-run `pnpm e2e:setup`. It will be run automatically in a CI context.
+
 ## Production
 
 ```bash
@@ -223,5 +228,6 @@ your hooks issue:
 </ul>
 
 From now husky should have been removed; and lefthook should run your hooks correctly.
+
 </p>
 </details>

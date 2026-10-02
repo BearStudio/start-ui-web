@@ -60,7 +60,8 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'pnpm dev',
+    // Skip the react-email preview server (dev:email) in CI
+    command: process.env.CI ? 'pnpm run-p env dev:app' : 'pnpm dev',
     url: process.env.VITE_BASE_URL,
     reuseExistingServer: !process.env.CI,
   },

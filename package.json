@@ -30,6 +30,7 @@
     "prepare": "pnpm lefthook install",
     "dev": "run-p env dev:*",
     "dev:app": "pnpm gen:build-info && vite dev",
+    "dev:email": "cross-env EMAIL_PREVIEW=true email dev --dir src/emails/templates --port 3030",
     "build": "cross-env NODE_ENV=production run-p env gen:build-info && vite build",
     "start": "dotenv -- node .output/server/index.mjs",
     "env": "run-p env:*",
@@ -57,8 +58,7 @@
     "db:init": "pnpm db:push && pnpm db:seed",
     "db:push": "dotenv -- prisma db push && pnpm gen:prisma",
     "db:ui": "dotenv -- prisma studio",
-    "db:seed": "dotenv -- cross-env node ./run-jiti ./prisma/seed/index.ts",
-    "email:dev": "email dev --dir src/emails/templates --port 3001"
+    "db:seed": "dotenv -- cross-env node ./run-jiti ./prisma/seed/index.ts"
   },
   "dependencies": {
     "@base-ui/react": "1.8.0",
@@ -81,9 +81,9 @@
     "@tanstack/react-devtools": "0.10.13",
     "@tanstack/react-query": "5.104.0",
     "@tanstack/react-query-devtools": "5.104.0",
-    "@tanstack/react-router": "1.170.40",
+    "@tanstack/react-router": "1.170.41",
     "@tanstack/react-router-devtools": "1.167.2",
-    "@tanstack/react-start": "1.168.59",
+    "@tanstack/react-start": "1.168.60",
     "@uidotdev/usehooks": "2.4.1",
     "better-auth": "1.7.3",
     "boring-avatars": "2.0.4",
