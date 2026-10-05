@@ -1,3 +1,4 @@
+/* oxlint-disable shadcn/no-arbitrary-values */
 import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/lib/tailwind/utils';

@@ -154,23 +154,6 @@
         "shadcn/no-arbitrary-values": "off",
         "shadcn/no-unknown-classes": "off"
       }
-    },
-    {
-      "files": ["src/features/book/book-cover.tsx"],
-      "rules": {
-        "shadcn/no-arbitrary-values": [
-          "error",
-          {
-            "allow": [
-              "layout",
-              "p-[10%]",
-              "pl-[16%]",
-              "text-[1px]",
-              "text-[2px]"
-            ]
-          }
-        ]
-      }
     }
   ]
 }
