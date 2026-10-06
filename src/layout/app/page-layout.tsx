@@ -20,9 +20,6 @@ export const PageLayoutContainer = (props: {
   );
 };
 
-const TOPBAT_HEIGHT =
-  'calc(var(--page-layout-topbar-height, 56px) + env(safe-area-inset-top))';
-
 export const PageLayoutTopBar = (props: {
   children?: ReactNode;
   className?: string;
@@ -33,12 +30,9 @@ export const PageLayoutTopBar = (props: {
   return (
     <div
       className={cn(
-        'z-10 flex min-w-0 flex-col items-center justify-end overflow-hidden border-b border-b-neutral-200 bg-white pt-safe-top md:-mt-px md:[--page-layout-topbar-height:48px] dark:border-b-neutral-800 dark:bg-neutral-900',
+        'z-10 flex h-page-topbar min-w-0 flex-col items-center justify-end overflow-hidden border-b border-b-neutral-200 bg-white pt-safe-top md:-mt-px md:h-page-topbar-sm dark:border-b-neutral-800 dark:bg-neutral-900',
         props.className
       )}
-      style={{
-        height: TOPBAT_HEIGHT,
-      }}
     >
       <PageLayoutContainer
         className={cn('justify-end py-2', props.containerClassName)}

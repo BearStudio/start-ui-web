@@ -39,21 +39,23 @@ const ErrorFallback = (props: FallbackProps) => {
       <Alert
         variant="destructive"
         onClick={() => setOpen(true)}
-        className="@container cursor-pointer border-none bg-negative-500/5"
+        className="@container cursor-pointer"
       >
         <CircleAlertIcon className="size-4 @max-2xs:absolute @max-2xs:top-1/2 @max-2xs:left-1/2 @max-2xs:-translate-x-1/2 @max-2xs:-translate-y-1/2!" />
-        <AlertTitle className="flex flex-wrap items-center gap-2 @max-2xs:opacity-0">
-          <span className="line-clamp-1 flex-1">
-            {t('components:errorBoundary.title')}
-          </span>
-          <ResponsiveDrawerTrigger
-            render={<Button variant="secondary" size="xs" />}
-          >
-            {t('components:errorBoundary.details')}
-          </ResponsiveDrawerTrigger>
+        <AlertTitle>
+          <div className="flex flex-wrap items-center gap-2 @max-2xs:opacity-0">
+            <span className="line-clamp-1 flex-1">
+              {t('components:errorBoundary.title')}
+            </span>
+            <ResponsiveDrawerTrigger
+              render={<Button variant="secondary" size="xs" />}
+            >
+              {t('components:errorBoundary.details')}
+            </ResponsiveDrawerTrigger>
+          </div>
         </AlertTitle>
-        <AlertDescription className="line-clamp-1 font-mono text-xs text-muted-foreground! opacity-80 @max-2xs:hidden">
-          {errorMessage}
+        <AlertDescription className="@max-2xs:hidden">
+          <code className="line-clamp-1 font-mono text-xs">{errorMessage}</code>
         </AlertDescription>
       </Alert>
       <ResponsiveDrawerContent>
@@ -61,7 +63,7 @@ const ErrorFallback = (props: FallbackProps) => {
           <ResponsiveDrawerTitle>
             {t('components:errorBoundary.title')}
           </ResponsiveDrawerTitle>
-          <ResponsiveDrawerDescription className="text-xs">
+          <ResponsiveDrawerDescription>
             {t('components:errorBoundary.description')}
           </ResponsiveDrawerDescription>
         </ResponsiveDrawerHeader>

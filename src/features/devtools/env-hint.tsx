@@ -13,15 +13,10 @@ export const EnvHint = () => {
 
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-[9999] border-t-4"
-      style={{ borderColor: envClient.VITE_ENV_COLOR }}
+      className="pointer-events-none fixed inset-0 z-[9999] border-t-4 border-(--env-color)"
+      style={{ '--env-color': envClient.VITE_ENV_COLOR } as React.CSSProperties}
     >
-      <p
-        className="fixed top-0 left-4 rounded-b-xs px-1 text-[0.6rem] font-bold text-black uppercase"
-        style={{
-          background: envClient.VITE_ENV_COLOR,
-        }}
-      >
+      <p className="fixed top-0 left-4 rounded-b-xs bg-(--env-color) px-1 text-2xs font-bold text-black uppercase">
         {envClient.VITE_ENV_NAME}
       </p>
     </div>

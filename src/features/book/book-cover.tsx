@@ -1,3 +1,4 @@
+/* oxlint-disable shadcn/no-arbitrary-values */
 import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/lib/tailwind/utils';
@@ -17,14 +18,13 @@ export const BookCover = (props: {
       className={cn(
         '@container relative flex aspect-[2/3] flex-col justify-between overflow-hidden rounded-sm bg-neutral-800 p-[10%] pl-[16%] text-white shadow-2xl',
         props.variant === 'tiny' && 'w-8 rounded-xs',
+        !props.book.coverId && !!props.book.genre?.color && 'bg-(--book-color)',
         props.className
       )}
       style={
-        props.book.coverId
-          ? undefined
-          : {
-              backgroundColor: props.book.genre?.color ?? '#333',
-            }
+        {
+          '--book-color': props.book.genre?.color,
+        } as React.CSSProperties
       }
     >
       <div className="absolute inset-y-0 left-0 z-10 w-[5%] bg-gradient-to-r from-black/0 to-black/10 bg-blend-screen" />

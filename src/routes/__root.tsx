@@ -155,11 +155,11 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       suppressHydrationWarning
       lang={i18n.language}
       dir={languageConfig?.dir ?? 'ltr'}
-      style={{
-        fontSize: languageConfig?.fontScale
-          ? `${languageConfig.fontScale * 100}%`
-          : undefined,
-      }}
+      style={
+        {
+          '--font-scale': languageConfig?.fontScale,
+        } as React.CSSProperties
+      }
     >
       <head suppressHydrationWarning>
         <HeadContent />

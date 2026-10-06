@@ -22,9 +22,6 @@ export const PageLayoutContainer = (props: {
   );
 };
 
-const TOPBAT_HEIGHT =
-  'calc(var(--page-layout-topbar-height, 56px) + env(safe-area-inset-top))';
-
 export const PageLayoutTopBar = (props: {
   children?: ReactNode;
   className?: string;
@@ -36,10 +33,9 @@ export const PageLayoutTopBar = (props: {
   return (
     <header
       className={cn(
-        'flex shrink-0 items-end border-b bg-white px-4 dark:bg-neutral-900',
+        'flex h-page-topbar shrink-0 items-end border-b bg-white px-4 dark:bg-neutral-900',
         props.className
       )}
-      style={{ height: TOPBAT_HEIGHT }}
     >
       <div className="flex h-14 min-w-0 flex-1 items-center gap-4 rtl:h-11">
         {(!open ||

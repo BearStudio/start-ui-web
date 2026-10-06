@@ -15,8 +15,8 @@ export const UserCard = () => {
   const { t } = useTranslation(['auth', 'account']);
   const session = useSession();
   return (
-    <Card className="gap-0 p-0">
-      <CardHeader className="gap-y-0 py-4">
+    <Card variant="flush">
+      <CardHeader>
         <div className="flex min-w-0 items-center gap-3">
           <Avatar>
             <AvatarImage

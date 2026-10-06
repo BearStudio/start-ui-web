@@ -6,7 +6,6 @@ import { PlusIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { orpc } from '@/lib/orpc/client';
-import { cn } from '@/lib/tailwind/utils';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -147,13 +146,13 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
                       </Avatar>
                     </DataListCell>
                     <DataListCell>
-                      <DataListText className="font-medium">
+                      <DataListText variant="strong">
                         <Link to="/manager/users/$id" params={{ id: item.id }}>
                           {item.name}
                           <span className="absolute inset-0" />
                         </Link>
                       </DataListText>
-                      <DataListText className="text-xs text-muted-foreground">
+                      <DataListText variant="caption">
                         {item.email}
                       </DataListText>
                     </DataListCell>
@@ -168,10 +167,7 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
                     </DataListCell>
                     <DataListCell className="flex-[0.5] max-sm:hidden">
                       <DataListText
-                        className={cn(
-                          'text-xs text-muted-foreground',
-                          !item.onboardedAt && 'opacity-60'
-                        )}
+                        variant={item.onboardedAt ? 'caption' : 'placeholder'}
                       >
                         {item.onboardedAt ? (
                           <>
@@ -199,7 +195,7 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
                     </Button>
                   </DataListCell>
                   <DataListCell>
-                    <DataListText className="text-xs text-muted-foreground">
+                    <DataListText variant="caption">
                       {t('user:manager.list.showing', {
                         count: items.length,
                         total,
