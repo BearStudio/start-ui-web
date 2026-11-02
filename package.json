@@ -85,7 +85,7 @@
     "@tanstack/react-router-devtools": "1.167.2",
     "@tanstack/react-start": "1.169.2",
     "@uidotdev/usehooks": "2.4.1",
-    "better-auth": "1.7.3",
+    "better-auth": "1.7.7",
     "boring-avatars": "2.0.4",
     "class-variance-authority": "0.7.1",
     "cn": "0.4.0",
