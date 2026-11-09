@@ -34,7 +34,7 @@ const I18N_KEY_PAGE_PREFIX = AUTH_SIGNUP_ENABLED
 export default function PageLoginVerify({
   search,
 }: {
-  search: { redirect?: string; email: string };
+  search: { redirect?: string; email: string; oauthQuery?: string };
 }) {
   const { t } = useTranslation(['auth', 'common']);
   const session = useSession();
@@ -52,9 +52,11 @@ export default function PageLoginVerify({
   const submitHandler: SubmitHandler<FormFieldsLoginVerify> = async ({
     otp,
   }) => {
-    const { error } = await authClient.signIn.emailOtp({
+    const { data, error } = await authClient.signIn.emailOtp({
       email: search.email,
       otp,
+      // Continue the OAuth authorization flow (MCP clients) after sign-in
+      ...(search.oauthQuery ? { oauth_query: search.oauthQuery } : {}),
     });
 
     if (error) {
@@ -70,6 +72,9 @@ export default function PageLoginVerify({
       });
       return;
     }
+
+    // OAuth flow: the auth client follows the returned redirect URL
+    if (data && 'redirect' in data && data.redirect) return;
 
     // Refetch session to update guards and redirect
     session.refetch();

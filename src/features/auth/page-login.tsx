@@ -17,6 +17,7 @@ import { envClient } from '@/env/client';
 import { authClient } from '@/features/auth/client';
 import { AUTH_SIGNUP_ENABLED } from '@/features/auth/config';
 import { useMascot } from '@/features/auth/mascot';
+import { getSignedOAuthQuery } from '@/features/auth/oauth';
 import { FormFieldsLogin, zFormFieldsLogin } from '@/features/auth/schema';
 import { LoginEmailHint } from '@/features/devtools/login-hint';
 
@@ -99,6 +100,8 @@ export default function PageLogin({
       search: {
         redirect: search.redirect,
         email,
+        // Keep the OAuth authorization flow (MCP clients) across pages
+        oauthQuery: getSignedOAuthQuery(window.location.search),
       },
     });
   };

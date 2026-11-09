@@ -23,6 +23,8 @@ export const envServer = createEnv({
       .string()
       .optional()
       .transform((stringValue) => stringValue?.split(',').map((v) => v.trim())),
+    // Allow anyone to register an OAuth client (MCP clients without CIMD support)
+    MCP_ALLOW_DYNAMIC_CLIENT_REGISTRATION: z.stringbool().default(false),
 
     GITHUB_CLIENT_ID: zOptionalWithReplaceMe(),
     GITHUB_CLIENT_SECRET: zOptionalWithReplaceMe(),
