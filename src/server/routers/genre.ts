@@ -1,3 +1,4 @@
+import { openapi } from '@orpc/openapi';
 import { z } from 'zod';
 
 import { zGenre } from '@/features/genre/schema';
@@ -12,11 +13,13 @@ export default {
       genre: ['read'],
     },
   })
-    .route({
-      method: 'GET',
-      path: '/genres',
-      tags,
-    })
+    .meta(
+      openapi({
+        method: 'GET',
+        path: '/genres',
+        tags,
+      })
+    )
     .input(
       z
         .object({

@@ -1,11 +1,18 @@
 import { RPCHandler } from '@orpc/server/fetch';
-import { CORSPlugin, ResponseHeadersPlugin } from '@orpc/server/plugins';
+import {
+  CORSHandlerPlugin,
+  ResponseHeadersHandlerPlugin,
+} from '@orpc/server/plugins';
 import { createFileRoute } from '@tanstack/react-router';
 
+import { corsAllowedOrigins } from '@/server/cors';
 import { router } from '@/server/router';
 
 const handler = new RPCHandler(router, {
-  plugins: [new CORSPlugin(), new ResponseHeadersPlugin()],
+  plugins: [
+    new CORSHandlerPlugin({ origin: corsAllowedOrigins }),
+    new ResponseHeadersHandlerPlugin(),
+  ],
 });
 
 async function handle({ request }: { request: Request }) {
@@ -25,6 +32,8 @@ export const Route = createFileRoute('/api/rpc/$')({
       PUT: handle,
       PATCH: handle,
       DELETE: handle,
+      // CORS preflight
+      OPTIONS: handle,
     },
   },
 });

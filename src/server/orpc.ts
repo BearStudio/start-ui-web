@@ -1,5 +1,6 @@
-import { ORPCError, os } from '@orpc/server';
-import { type ResponseHeadersPluginContext } from '@orpc/server/plugins';
+import { getOpenAPIMeta } from '@orpc/openapi';
+import { COMMON_ERROR_STATUS_MAP, ORPCError, os } from '@orpc/server';
+import { type ResponseHeadersHandlerPluginContext } from '@orpc/server/plugins';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 import { randomUUID } from 'node:crypto';
 import { performance } from 'node:perf_hooks';
@@ -13,8 +14,12 @@ import { Prisma } from '@/server/db/generated/client';
 import { logger } from '@/server/logger';
 import { timingStore } from '@/server/timing-store';
 
+// OpenAPI meta method defaults to POST when not set
+const getProcedureMethod = (procedure: Parameters<typeof getOpenAPIMeta>[0]) =>
+  getOpenAPIMeta(procedure)?.method ?? 'POST';
+
 const base = os
-  .$context<ResponseHeadersPluginContext>()
+  .$context<ResponseHeadersHandlerPluginContext>()
   // Auth
   .use(async ({ next, context }) => {
     const start = performance.now();
@@ -42,7 +47,7 @@ const base = os
     const start = performance.now();
     const meta = {
       path: path.join('.'),
-      type: procedure['~orpc'].route.method,
+      type: getProcedureMethod(procedure),
       requestId: randomUUID(),
       userId: context.user?.id,
     };
@@ -68,7 +73,10 @@ const base = os
       const logLevel = (() => {
         if (!(error instanceof ORPCError)) return 'error';
         if (error.message === 'DEMO_MODE_ENABLED') return 'info';
-        const errorCode = error.status;
+        const errorCode =
+          COMMON_ERROR_STATUS_MAP[
+            error.code as keyof typeof COMMON_ERROR_STATUS_MAP
+          ] ?? 400;
         if (errorCode >= 500) return 'error';
         if (errorCode >= 400) return 'warn';
         if (errorCode >= 300) return 'info';
@@ -102,7 +110,7 @@ const base = os
   })
   // Demo Mode
   .use(async ({ next, procedure }) => {
-    if (envClient.VITE_IS_DEMO && procedure['~orpc'].route.method !== 'GET') {
+    if (envClient.VITE_IS_DEMO && getProcedureMethod(procedure) !== 'GET') {
       throw new ORPCError('METHOD_NOT_SUPPORTED', {
         message: 'DEMO_MODE_ENABLED',
       });

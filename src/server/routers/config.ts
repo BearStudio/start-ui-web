@@ -1,3 +1,4 @@
+import { openapi } from '@orpc/openapi';
 import { z } from 'zod';
 
 import { envClient } from '@/env/client';
@@ -7,7 +8,7 @@ const tags = ['config'];
 
 export default {
   env: publicProcedure()
-    .route({ method: 'GET', path: '/config/env', tags })
+    .meta(openapi({ method: 'GET', path: '/config/env', tags }))
     .output(
       z.object({
         name: z.string().optional(),
@@ -27,7 +28,7 @@ export default {
       };
     }),
   devtools: publicProcedure()
-    .route({ method: 'GET', path: '/config/devtools', tags })
+    .meta(openapi({ method: 'GET', path: '/config/devtools', tags }))
     .output(
       z.object({
         maildevIframeSrc: z.string().nullish(),
