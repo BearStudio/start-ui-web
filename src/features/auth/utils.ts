@@ -2,6 +2,7 @@ import { useRouter, useSearch } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
 import { authClient } from '@/features/auth/client';
+import { isOAuthFlowSearch } from '@/features/auth/oauth';
 import { Role } from '@/features/auth/permissions';
 import { useSession } from '@/features/auth/use-session';
 
@@ -10,10 +11,12 @@ export const useRedirectAfterLogin = () => {
   const router = useRouter();
   const session = useSession();
   const searchRedirect = search.redirect;
+  // During an OAuth authorization flow (MCP clients), Better Auth redirects
+  const isOAuthFlow = isOAuthFlowSearch(search);
 
   useEffect(() => {
     const exec = () => {
-      if (session.isPending || !session.data) {
+      if (session.isPending || !session.data || isOAuthFlow) {
         return;
       }
 
@@ -74,5 +77,5 @@ export const useRedirectAfterLogin = () => {
     };
 
     exec();
-  }, [searchRedirect, session.isPending, session.data, router]);
+  }, [searchRedirect, isOAuthFlow, session.isPending, session.data, router]);
 };
