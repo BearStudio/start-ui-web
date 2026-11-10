@@ -14,20 +14,42 @@ import { auth } from '@/server/auth';
 import { db } from '@/server/db';
 import { Prisma } from '@/server/db/generated/client';
 import { logger } from '@/server/logger';
+import { MCP_SCOPES, McpPrincipal } from '@/server/mcp/config';
 import { timingStore } from '@/server/timing-store';
 
 // OpenAPI meta method defaults to POST when not set
 const getProcedureMethod = (procedure: Parameters<typeof getOpenAPIMeta>[0]) =>
   getOpenAPIMeta(procedure)?.method ?? 'POST';
 
+type AuthSession = Awaited<ReturnType<typeof auth.api.getSession>>;
+type AuthUser = NonNullable<AuthSession>['user'];
+
+/** User of an MCP tool call, from the OAuth access token subject */
+const getMcpUser = async (mcp: McpPrincipal): Promise<AuthUser | undefined> => {
+  const user = await db.user.findUnique({ where: { id: mcp.userId } });
+  // Users are onboarded on the consent page (GuardAuthenticated)
+  if (!user?.onboardedAt) return undefined;
+  const isBanned =
+    !!user.banned && (!user.banExpires || user.banExpires > new Date());
+  return isBanned ? undefined : { ...user, onboardedAt: user.onboardedAt };
+};
+
 const base = os
-  .$context<ResponseHeadersHandlerPluginContext>()
+  .$context<
+    ResponseHeadersHandlerPluginContext & {
+      /** Set by the MCP server (/api/mcp) instead of a session cookie */
+      mcp?: McpPrincipal;
+    }
+  >()
   .errors({ [DemoModeError.code]: DemoModeError })
   // Auth
   .use(async ({ next, context }) => {
     const start = performance.now();
 
-    const session = await auth.api.getSession({ headers: getRequestHeaders() });
+    const session = context.mcp
+      ? undefined
+      : await auth.api.getSession({ headers: getRequestHeaders() });
+    const user = context.mcp ? await getMcpUser(context.mcp) : session?.user;
 
     const duration = performance.now() - start;
 
@@ -38,7 +60,7 @@ const base = os
 
     return await next({
       context: {
-        user: session?.user,
+        user,
         session: session?.session,
         db,
       },
@@ -53,6 +75,7 @@ const base = os
       type: getProcedureMethod(procedure),
       requestId: randomUUID(),
       userId: context.user?.id,
+      mcpClientId: context.mcp?.clientId,
     };
 
     const loggerForMiddleWare = logger.child({ ...meta, scope: 'procedure' });
@@ -187,11 +210,26 @@ export const protectedProcedure = ({
 }: {
   permissions: Permission | null;
 }) =>
-  base.use(async ({ context, next }) => {
-    const { user, session } = context;
+  base.use(async ({ context, next, procedure }) => {
+    const { user, session, mcp } = context;
 
-    if (!user || !session) {
+    // Web: session cookie, MCP: OAuth access token (no session)
+    if (!user || (!session && !mcp)) {
       throw new ORPCError('UNAUTHORIZED');
+    }
+
+    // The OAuth scopes granted to the MCP client limit what it can do on
+    // top of the user permissions
+    if (mcp) {
+      const requiredScope =
+        getProcedureMethod(procedure) === 'GET'
+          ? MCP_SCOPES.read
+          : MCP_SCOPES.write;
+      if (!mcp.scopes.includes(requiredScope)) {
+        throw new ORPCError('FORBIDDEN', {
+          message: `The "${requiredScope}" scope is required`,
+        });
+      }
     }
 
     if (!permissions) {
@@ -204,7 +242,8 @@ export const protectedProcedure = ({
     }
 
     const userHasPermission = await auth.api.userHasPermission({
-      headers: getRequestHeaders(),
+      // MCP requests carry a bearer token, not a session: check the user by id
+      headers: mcp ? undefined : getRequestHeaders(),
       body: {
         userId: user.id,
         permissions,
