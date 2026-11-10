@@ -20,7 +20,8 @@ import {
 import { permissions } from '@/features/auth/permissions';
 import { db } from '@/server/db';
 import { sendEmail } from '@/server/email';
-import { MCP_RESOURCE, MCP_SCOPES_LIST } from '@/server/mcp/config';
+import { MCP_SCOPES_LIST } from '@/server/mcp/config';
+import { MCP_RESOURCE } from '@/server/mcp/resource';
 import { getUserLanguage } from '@/server/utils';
 
 export type Auth = typeof auth;
@@ -30,6 +31,8 @@ export const auth = betterAuth({
       new URL(envClient.VITE_BASE_URL).host,
       ...(envServer.AUTH_ALLOWED_HOSTS ?? []),
     ],
+    // Used by server-side auth.api calls without request headers (MCP tools)
+    fallback: envClient.VITE_BASE_URL,
   },
   session: {
     expiresIn: envServer.AUTH_SESSION_EXPIRATION_IN_SECONDS,

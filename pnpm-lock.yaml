@@ -41,12 +41,18 @@ importers:
       '@hookform/resolvers':
         specifier: 5.2.2
         version: 5.2.2(react-hook-form@7.71.1(react@19.2.4))
+      '@modelcontextprotocol/server':
+        specifier: 2.4.0
+        version: 2.4.0
       '@orpc/client':
         specifier: 2.0.0-beta.50
         version: 2.0.0-beta.50
       '@orpc/contract':
         specifier: 2.0.0-beta.50
         version: 2.0.0-beta.50
+      '@orpc/mcp':
+        specifier: 2.0.0-beta.50
+        version: 2.0.0-beta.50(@modelcontextprotocol/server@2.4.0)(crossws@0.4.12(srvx@1.0.5))
       '@orpc/openapi':
         specifier: 2.0.0-beta.50
         version: 2.0.0-beta.50(crossws@0.4.12(srvx@1.0.5))
@@ -189,6 +195,9 @@ importers:
       '@faker-js/faker':
         specifier: 10.5.0
         version: 10.5.0
+      '@modelcontextprotocol/client':
+        specifier: 2.4.0
+        version: 2.4.0
       '@playwright/test':
         specifier: 1.64.1
         version: 1.64.1
@@ -1220,6 +1229,18 @@ packages:
       '@types/react': '>=16'
       react: '>=16'
 
+  '@modelcontextprotocol/client@2.4.0':
+    resolution: {integrity: sha512-LgrD2OphHuG12vfKFKz6SOnq7bKHQmhGJIAYdD+MZBn2npHEyry6uD8zvktodtl5CQM85MO0anUyD9JwmUmxww==}
+    engines: {node: '>=20'}
+
+  '@modelcontextprotocol/core@2.4.0':
+    resolution: {integrity: sha512-z8QBKqdfXLPzkLQuG4xp8hrVEMm1PZ1IgxMN2sMbJiFiAKOWXnAzogXn2W4aqIBlP1ea6U5yiqVquvUNM1Cj6Q==}
+    engines: {node: '>=20'}
+
+  '@modelcontextprotocol/server@2.4.0':
+    resolution: {integrity: sha512-rgR9yxSaAJ+bcsi/XroT/S2AfPiIWloXAnrdfYSCms9ivVju0ishu/wW0J21Ho6+ZOR1r7RyeRbjiRuF87ix5Q==}
+    engines: {node: '>=20'}
+
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     resolution: {integrity: sha512-oTXEIha4SsuXdTA4Iyskj0kpdx2yVXdhd75c2v3xGrHFfVMsbhTPZU/nMPL4sWKo4pBHm3aucLaqGlF696dTyQ==}
     engines: {node: ^22.20 || ^24.12 || >=25}
@@ -1349,6 +1370,11 @@ packages:
 
   '@orpc/json-schema@2.0.0-beta.50':
     resolution: {integrity: sha512-mtx2rWiJJ7q+fWxReTSAaved2UpaG8d/QeWOL/onXvfYmTqtvwIt183PLcz6eV4AuExq4tvboWrgf4A8a/IcYA==}
+
+  '@orpc/mcp@2.0.0-beta.50':
+    resolution: {integrity: sha512-mZFu8JjbG31nu7d6QSOgHnUfJ+dhEqxCvI9yGFrGkFHU5/C0K2gTBIlSrykWof7SoeITInGFSivCq8QfIXme/Q==}
+    peerDependencies:
+      '@modelcontextprotocol/server': '>=2.0.0'
 
   '@orpc/openapi@2.0.0-beta.50':
     resolution: {integrity: sha512-H9v1O5YEkHVqweCeaRV7h9VBoA3IPmlFedGtcekWY0vqn8DWQPpZ8xcvRwXNef+EEecZp4WQ0wAdgg1jNMqnxQ==}
@@ -4642,6 +4668,14 @@ packages:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
 
+  eventsource-parser@3.1.1:
+    resolution: {integrity: sha512-EKN1vKAMcZ8MlYMpaNuxN6R9yakzH6uajHcHVTqWJzvu5pWw9DyhbP35HH8MVBQ+dZjAfDxk+A8NiR9KWaXiyQ==}
+    engines: {node: '>=18.0.0'}
+
+  eventsource@3.0.7:
+    resolution: {integrity: sha512-CRT1WTyuQoD771GW56XEZFQ/ZoSfWid1alKGDYMmkt2yl8UXrVR4pspqWNEcqKvVIzg6PAltWjxcSSPrboA4iA==}
+    engines: {node: '>=18.0.0'}
+
   expect-type@1.4.0:
     resolution: {integrity: sha512-KfYbmpRm0VbLjEvVa9yGwCi9GI34xvi7A/HXYWQO65CSD2u3MczUJSuwXKFIxlGsgBQizV9q5J9NHj4VG0n+pA==}
     engines: {node: '>=12.0.0'}
@@ -5803,6 +5837,10 @@ packages:
     resolution: {integrity: sha512-0GNPNzHXBKw6U/InGe79A3Crzyk9bcSyObF9/Gfo9DLEf5qj5RF50RSjsu0W1rZ6ZqRGdzDFCRBQvi9/rSGPtA==}
     hasBin: true
 
+  pkce-challenge@5.0.1:
+    resolution: {integrity: sha512-wQ0b/W4Fr01qtpHlqSqspcj3EhBvimsdh0KlHhH8HRZnMsEa0ea2fTULOXOS9ccQr3om+GcGRk4e+isrZWV8qQ==}
+    engines: {node: '>=16.20.0'}
+
   pkg-types@2.3.3:
     resolution: {integrity: sha512-j/lCFdcppV0JxWpCEITdbDltBxPP6cHT+yNJ6Go2OgoSA9518X847X9z0p6LtA4Nc16+eQzCZjRrWanTGvHJ5w==}
 
@@ -6529,10 +6567,6 @@ packages:
 
   type-fest@5.10.0:
     resolution: {integrity: sha512-NoSdpq/WEiAg5sjmBkmV/hfxv6HJH4NqPNrqjtSO5CwRmpsDfaf4begxW34KdJykH/l1yHtwBWQkCRdoXO8mPA==}
-    engines: {node: '>=20'}
-
-  type-fest@5.9.0:
-    resolution: {integrity: sha512-yANm3Jr3GiJ1qgJlxGAVxTOIcEOk1rhQHamlXtnrCK7EHP4HeM9OGxtMg/W7HFdrVzw/ZWJKGVIJusVH85sLtw==}
     engines: {node: '>=20'}
 
   typed-array-buffer@1.0.3:
@@ -7644,6 +7678,25 @@ snapshots:
       '@types/react': 19.2.10
       react: 19.2.4
 
+  '@modelcontextprotocol/client@2.4.0':
+    dependencies:
+      '@modelcontextprotocol/core': 2.4.0
+      cross-spawn: 7.0.6
+      eventsource: 3.0.7
+      eventsource-parser: 3.1.1
+      jose: 6.2.12
+      pkce-challenge: 5.0.1
+      zod: 4.6.6
+
+  '@modelcontextprotocol/core@2.4.0':
+    dependencies:
+      zod: 4.6.6
+
+  '@modelcontextprotocol/server@2.4.0':
+    dependencies:
+      '@modelcontextprotocol/core': 2.4.0
+      zod: 4.6.6
+
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     optional: true
 
@@ -7763,6 +7816,23 @@ snapshots:
     transitivePeerDependencies:
       - crossws
       - fastify
+
+  '@orpc/mcp@2.0.0-beta.50(@modelcontextprotocol/server@2.4.0)(crossws@0.4.12(srvx@1.0.5))':
+    dependencies:
+      '@modelcontextprotocol/server': 2.4.0
+      '@orpc/client': 2.0.0-beta.50
+      '@orpc/contract': 2.0.0-beta.50
+      '@orpc/json-schema': 2.0.0-beta.50(crossws@0.4.12(srvx@1.0.5))
+      '@orpc/openapi': 2.0.0-beta.50(crossws@0.4.12(srvx@1.0.5))
+      '@orpc/server': 2.0.0-beta.50(crossws@0.4.12(srvx@1.0.5))
+      '@orpc/shared': 2.0.0-beta.50
+      '@standard-server/core': 0.16.0
+    transitivePeerDependencies:
+      - '@scalar/api-reference'
+      - '@types/swagger-ui'
+      - crossws
+      - fastify
+      - swagger-ui
 
   '@orpc/openapi@2.0.0-beta.50(crossws@0.4.12(srvx@1.0.5))':
     dependencies:
@@ -10434,7 +10504,7 @@ snapshots:
 
   dot-prop@10.2.0:
     dependencies:
-      type-fest: 5.9.0
+      type-fest: 5.10.0
 
   dotenv-cli@11.0.0:
     dependencies:
@@ -10773,6 +10843,12 @@ snapshots:
       '@types/estree': 1.0.9
 
   esutils@2.0.3: {}
+
+  eventsource-parser@3.1.1: {}
+
+  eventsource@3.0.7:
+    dependencies:
+      eventsource-parser: 3.1.1
 
   expect-type@1.4.0: {}
 
@@ -11963,6 +12039,8 @@ snapshots:
       sonic-boom: 4.2.1
       thread-stream: 4.2.0
 
+  pkce-challenge@5.0.1: {}
+
   pkg-types@2.3.3:
     dependencies:
       confbox: 0.3.1
@@ -12787,10 +12865,6 @@ snapshots:
       prelude-ls: 1.2.1
 
   type-fest@5.10.0:
-    dependencies:
-      tagged-tag: 1.0.0
-
-  type-fest@5.9.0:
     dependencies:
       tagged-tag: 1.0.0
 

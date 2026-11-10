@@ -15,6 +15,7 @@ import { Route as LoginRouteRouteImport } from './routes/login/route'
 import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as ManagerRouteRouteImport } from './routes/manager/route'
 import { Route as DotwellKnownSplatRouteImport } from './routes/[.]well-known/$'
+import { Route as ApiMcpRouteImport } from './routes/api/mcp'
 import { Route as ApiUploadRouteImport } from './routes/api/upload'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
@@ -71,6 +72,11 @@ const ManagerRouteRoute = ManagerRouteRouteImport.update({
 const DotwellKnownSplatRoute = DotwellKnownSplatRouteImport.update({
   id: '/.well-known/$',
   path: '/.well-known/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMcpRoute = ApiMcpRouteImport.update({
+  id: '/api/mcp',
+  path: '/api/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiUploadRoute = ApiUploadRouteImport.update({
@@ -218,6 +224,7 @@ export interface FileRoutesByFullPath {
   '/manager': typeof ManagerRouteRouteWithChildren
   '/logout': typeof LogoutRoute
   '/.well-known/$': typeof DotwellKnownSplatRoute
+  '/api/mcp': typeof ApiMcpRoute
   '/api/upload': typeof ApiUploadRoute
   '/oauth/consent': typeof OauthConsentRoute
   '/app/': typeof AppIndexRoute
@@ -250,6 +257,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/logout': typeof LogoutRoute
   '/.well-known/$': typeof DotwellKnownSplatRoute
+  '/api/mcp': typeof ApiMcpRoute
   '/api/upload': typeof ApiUploadRoute
   '/oauth/consent': typeof OauthConsentRoute
   '/app': typeof AppIndexRoute
@@ -286,6 +294,7 @@ export interface FileRoutesById {
   '/manager': typeof ManagerRouteRouteWithChildren
   '/logout': typeof LogoutRoute
   '/.well-known/$': typeof DotwellKnownSplatRoute
+  '/api/mcp': typeof ApiMcpRoute
   '/api/upload': typeof ApiUploadRoute
   '/oauth/consent': typeof OauthConsentRoute
   '/app/': typeof AppIndexRoute
@@ -323,6 +332,7 @@ export interface FileRouteTypes {
     | '/manager'
     | '/logout'
     | '/.well-known/$'
+    | '/api/mcp'
     | '/api/upload'
     | '/oauth/consent'
     | '/app/'
@@ -355,6 +365,7 @@ export interface FileRouteTypes {
     | '/'
     | '/logout'
     | '/.well-known/$'
+    | '/api/mcp'
     | '/api/upload'
     | '/oauth/consent'
     | '/app'
@@ -390,6 +401,7 @@ export interface FileRouteTypes {
     | '/manager'
     | '/logout'
     | '/.well-known/$'
+    | '/api/mcp'
     | '/api/upload'
     | '/oauth/consent'
     | '/app/'
@@ -426,6 +438,7 @@ export interface RootRouteChildren {
   ManagerRouteRoute: typeof ManagerRouteRouteWithChildren
   LogoutRoute: typeof LogoutRoute
   DotwellKnownSplatRoute: typeof DotwellKnownSplatRoute
+  ApiMcpRoute: typeof ApiMcpRoute
   ApiUploadRoute: typeof ApiUploadRoute
   OauthConsentRoute: typeof OauthConsentRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -477,6 +490,13 @@ declare module '@tanstack/react-router' {
       path: '/.well-known/$'
       fullPath: '/.well-known/$'
       preLoaderRoute: typeof DotwellKnownSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mcp': {
+      id: '/api/mcp'
+      path: '/api/mcp'
+      fullPath: '/api/mcp'
+      preLoaderRoute: typeof ApiMcpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/upload': {
@@ -768,6 +788,7 @@ const rootRouteChildren: RootRouteChildren = {
   ManagerRouteRoute: ManagerRouteRouteWithChildren,
   LogoutRoute: LogoutRoute,
   DotwellKnownSplatRoute: DotwellKnownSplatRoute,
+  ApiMcpRoute: ApiMcpRoute,
   ApiUploadRoute: ApiUploadRoute,
   OauthConsentRoute: OauthConsentRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
