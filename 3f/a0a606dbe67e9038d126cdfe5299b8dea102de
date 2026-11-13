@@ -1,0 +1,18 @@
+.github/actions/setup-pnpm/action.yml
+  h_8338e66e7f6b21 8
+.github/workflows/code-quality.yml
+  h_8338e66e7f6b21 35,54
+.github/workflows/e2e-tests.yml
+  h_8338e66e7f6b21 74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3fa0a606dbe67e9038d126cdfe5299b8dea102de",
+  "prompts": {},
+  "humans": {
+    "h_8338e66e7f6b21": {
+      "author": "Renan Decamps <renan.decamps@gmail.com>"
+    }
+  }
+}
