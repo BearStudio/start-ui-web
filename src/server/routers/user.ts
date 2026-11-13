@@ -359,7 +359,7 @@ export default {
     )
     .output(z.void())
     .handler(async ({ context, input }) => {
-      if (context.session.token === input.sessionToken) {
+      if (context.session?.token === input.sessionToken) {
         context.logger.warn(
           'Prevent to revoke the current connected user session'
         );

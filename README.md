@@ -162,6 +162,45 @@ This interface allows you to:
 
 - Facilitate development and debugging by testing endpoints directly from the interface, without needing the frontend.
 
+### MCP server
+
+The API is exposed to AI agents (Claude, Cursor, ChatGPT…) as a [Model Context Protocol](https://modelcontextprotocol.io) server at:
+
+`http://localhost:3000/api/mcp`
+
+Connect a client, for example Claude Code:
+
+```bash
+claude mcp add --transport http start-ui http://localhost:3000/api/mcp
+```
+
+The client signs the user in with OAuth 2.1 (login page and consent screen of the app). Tools run as this user, with the same permissions as in the app. The consent also limits what the client can do: `mcp:read` for `GET` procedures, `mcp:write` for the others.
+
+Procedures are exposed as tools only when they opt in, with their OpenAPI `summary` and `description` as the tool title and description:
+
+```ts
+import { mcp } from '@orpc/mcp';
+import { openapi } from '@orpc/openapi';
+
+protectedProcedure({ permissions: { book: ['read'] } })
+  .meta(
+    openapi({
+      method: 'GET',
+      path: '/books',
+      summary: 'List books',
+      description: 'List books, filter with `searchTerm`',
+    })
+  )
+  .meta(mcp.tool({})) // Exposed as the `book_getAll` tool
+```
+
+Configuration:
+
+- `MCP_ENABLED`: set to `false` to disable the MCP server.
+- `MCP_ALLOW_DYNAMIC_CLIENT_REGISTRATION`: MCP clients identify themselves with [Client ID Metadata Documents](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization/client-registration). Set to `true` to also allow Dynamic Client Registration for clients that do not support it yet. Anyone can then register an OAuth client.
+
+To inspect the server, run `npx @modelcontextprotocol/inspector` and connect to `http://localhost:3000/api/mcp`.
+
 ### Generate custom icons components from svg files
 
 Put the custom svg files into the `src/components/icons/svg-sources` folder and then run the following command:

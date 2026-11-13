@@ -72,8 +72,10 @@
     "@daypicker/react": "10.0.1",
     "@fontsource-variable/inter": "5.2.8",
     "@hookform/resolvers": "5.2.2",
+    "@modelcontextprotocol/server": "2.4.0",
     "@orpc/client": "2.0.0-beta.50",
     "@orpc/contract": "2.0.0-beta.50",
+    "@orpc/mcp": "2.0.0-beta.50",
     "@orpc/openapi": "2.0.0-beta.50",
     "@orpc/server": "2.0.0-beta.50",
     "@orpc/tanstack-query": "2.0.0-beta.50",
@@ -123,6 +125,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "10.5.0",
+    "@modelcontextprotocol/client": "2.4.0",
     "@playwright/test": "1.64.1",
     "@react-email/ui": "6.9.5",
     "@shadcn/lint": "0.2.0",
