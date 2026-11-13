@@ -1,0 +1,14 @@
+README.md
+  h_8338e66e7f6b21 18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4e66f0b3e4c850d4a01c2802d9ab53cc2e175ea5",
+  "prompts": {},
+  "humans": {
+    "h_8338e66e7f6b21": {
+      "author": "Renan Decamps <renan.decamps@gmail.com>"
+    }
+  }
+}
