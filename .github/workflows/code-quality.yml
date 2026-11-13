@@ -17,6 +17,8 @@ jobs:
 
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
+        with:
+          node-version: 24.22.3
 
       - name: Run oxlint
         run: pnpm oxlint --deny-warnings .
@@ -32,7 +34,7 @@ jobs:
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
         with:
-          node-version: 24
+          node-version: 24.22.3
 
       - name: Run Typescript checker
         run: pnpm run lint:ts
@@ -51,7 +53,7 @@ jobs:
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
         with:
-          node-version: 24
+          node-version: 24.22.3
 
       - name: Setup Playwright
         uses: ./.github/actions/setup-playwright

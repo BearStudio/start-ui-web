@@ -71,7 +71,7 @@ jobs:
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
         with:
-          node-version: 24
+          node-version: 24.22.3
 
       - name: Setup Playwright
         uses: ./.github/actions/setup-playwright

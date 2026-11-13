@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG NODE_VERSION=24
+ARG NODE_VERSION=24.22.3
 
 # ------------------------------------------------------------------------------
 # Base: official pnpm image. pnpm manages the Node runtime itself, so the Node
