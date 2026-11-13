@@ -1,10 +1,12 @@
 import { getOpenAPIMeta } from '@orpc/openapi';
-import { COMMON_ERROR_STATUS_MAP, ORPCError, os } from '@orpc/server';
+import { DEFAULT_ERROR_STATUS, ORPCError, os } from '@orpc/server';
 import { type ResponseHeadersHandlerPluginContext } from '@orpc/server/plugins';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 import { randomUUID } from 'node:crypto';
 import { performance } from 'node:perf_hooks';
 import { match } from 'ts-pattern';
+
+import { DemoModeError, ERROR_STATUS_MAP } from '@/lib/orpc/errors';
 
 import { envClient } from '@/env/client';
 import { Permission } from '@/features/auth/permissions';
@@ -20,6 +22,7 @@ const getProcedureMethod = (procedure: Parameters<typeof getOpenAPIMeta>[0]) =>
 
 const base = os
   .$context<ResponseHeadersHandlerPluginContext>()
+  .errors({ [DemoModeError.code]: DemoModeError })
   // Auth
   .use(async ({ next, context }) => {
     const start = performance.now();
@@ -71,15 +74,12 @@ const base = os
       return result;
     } catch (error) {
       const logLevel = (() => {
+        if (error instanceof DemoModeError) return 'info';
         if (!(error instanceof ORPCError)) return 'error';
-        if (error.message === 'DEMO_MODE_ENABLED') return 'info';
-        const errorCode =
-          COMMON_ERROR_STATUS_MAP[
-            error.code as keyof typeof COMMON_ERROR_STATUS_MAP
-          ] ?? 400;
-        if (errorCode >= 500) return 'error';
-        if (errorCode >= 400) return 'warn';
-        if (errorCode >= 300) return 'info';
+        const status = ERROR_STATUS_MAP[error.code] ?? DEFAULT_ERROR_STATUS;
+        if (status >= 500) return 'error';
+        if (status >= 400) return 'warn';
+        if (status >= 300) return 'info';
         return 'error';
       })();
 
@@ -109,11 +109,9 @@ const base = os
     });
   })
   // Demo Mode
-  .use(async ({ next, procedure }) => {
+  .use(async ({ next, procedure, errors }) => {
     if (envClient.VITE_IS_DEMO && getProcedureMethod(procedure) !== 'GET') {
-      throw new ORPCError('METHOD_NOT_SUPPORTED', {
-        message: 'DEMO_MODE_ENABLED',
-      });
+      throw errors.DEMO_MODE_ENABLED();
     }
     return await next();
   })

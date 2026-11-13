@@ -5,10 +5,13 @@ import {
 } from '@orpc/server/plugins';
 import { createFileRoute } from '@tanstack/react-router';
 
+import { ERROR_STATUS_MAP } from '@/lib/orpc/errors';
+
 import { corsAllowedOrigins } from '@/server/cors';
 import { router } from '@/server/router';
 
 const handler = new RPCHandler(router, {
+  errorStatusMap: ERROR_STATUS_MAP,
   plugins: [
     new CORSHandlerPlugin({ origin: corsAllowedOrigins }),
     new ResponseHeadersHandlerPlugin(),

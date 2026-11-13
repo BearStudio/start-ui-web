@@ -1,4 +1,4 @@
-import { createORPCClient, onError, ORPCError } from '@orpc/client';
+import { createORPCClient, onError } from '@orpc/client';
 import { RPCLink } from '@orpc/client/fetch';
 import type { RouterClient } from '@orpc/server';
 import { createTanstackQueryUtils } from '@orpc/tanstack-query';
@@ -6,6 +6,7 @@ import { createTanstackQueryUtils } from '@orpc/tanstack-query';
 import { envClient } from '@/env/client';
 import { openDemoModeDrawer } from '@/features/demo/demo-mode-drawer';
 
+import { DemoModeError } from './errors';
 import type { Router } from './types';
 
 const link = new RPCLink({
@@ -14,7 +15,7 @@ const link = new RPCLink({
   origin: typeof window === 'undefined' ? envClient.VITE_BASE_URL : undefined,
   interceptors: [
     onError((error) => {
-      if (error instanceof ORPCError && error.message === 'DEMO_MODE_ENABLED') {
+      if (error instanceof DemoModeError) {
         openDemoModeDrawer();
       }
     }),

@@ -3,6 +3,8 @@ import { ZodToJsonSchemaConverter } from '@orpc/zod';
 import { createFileRoute } from '@tanstack/react-router';
 import { json } from '@tanstack/react-start';
 
+import { ERROR_STATUS_MAP } from '@/lib/orpc/errors';
+
 import { envClient } from '@/env/client';
 import { router } from '@/server/router';
 
@@ -16,6 +18,7 @@ export const Route = createFileRoute('/api/openapi/app/schema')({
       GET: async () => {
         const spec = await generator.generate(router, {
           version: '3.1.1',
+          errorStatusMap: ERROR_STATUS_MAP,
           base: {
             info: {
               title: 'Application API',
