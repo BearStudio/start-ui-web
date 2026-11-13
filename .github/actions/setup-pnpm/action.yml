@@ -5,7 +5,7 @@ inputs:
   node-version:
     description: Node.js version to use
     required: false
-    default: 'lts/*'
+    default: '26'
 
 runs:
   using: composite
@@ -20,6 +20,7 @@ runs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
+        check-latest: true
         cache: 'pnpm'
 
     - name: Install deps
