@@ -15,7 +15,7 @@ For detailed information on how to use this project, please refer to the [docume
 
 ## Requirements
 
-- [Node.js](https://nodejs.org) `^22.23.5 || ^24.22.3 || >=26.13.1` (recommended: 24)
+- [Node.js](https://nodejs.org) `^22.23.5 || ^24.22.3 || >=26.13.1`
 - [pnpm](https://pnpm.io/)
 - [Docker](https://www.docker.com/) (or a [PostgreSQL](https://www.postgresql.org/) database)
 
