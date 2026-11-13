@@ -8,6 +8,7 @@ export const Route = createFileRoute('/login/verify/')({
   validateSearch: z.object({
     redirect: z.string().catch('').optional(),
     email: z.email(),
+    oauthQuery: z.string().optional(),
   }),
 });
 
