@@ -15,7 +15,7 @@ For detailed information on how to use this project, please refer to the [docume
 
 ## Requirements
 
-- [Node.js](https://nodejs.org) >= 22.23.5
+- [Node.js](https://nodejs.org) `^22.23.5 || >=24.22.3` (recommended: 24)
 - [pnpm](https://pnpm.io/)
 - [Docker](https://www.docker.com/) (or a [PostgreSQL](https://www.postgresql.org/) database)
 
@@ -79,8 +79,8 @@ pnpm dev
 
 The `Dockerfile` builds a production image of the app. It is based on the
 official [pnpm image](https://github.com/pnpm/pnpm/pkgs/container/pnpm), which
-also installs the Node runtime. The Node version is pinned by the
-`NODE_VERSION` build argument (default `24.22.3`).
+also installs the Node runtime. The Node major version is pinned by the
+`NODE_VERSION` build argument (default `24`).
 
 Only the `VITE_*` variables are needed at build time, because they are inlined
 in the client bundle. Server variables (`DATABASE_URL`, `AUTH_SECRET`, `EMAIL_*`,
