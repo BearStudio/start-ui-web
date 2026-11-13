@@ -1,3 +1,4 @@
+import { openapi } from '@orpc/openapi';
 import { z } from 'zod';
 
 import { zFormFieldsOnboarding } from '@/features/auth/schema';
@@ -10,11 +11,13 @@ export default {
   submitOnboarding: protectedProcedure({
     permissions: null,
   })
-    .route({
-      method: 'POST',
-      path: '/account/submit-onboarding',
-      tags,
-    })
+    .meta(
+      openapi({
+        method: 'POST',
+        path: '/account/submit-onboarding',
+        tags,
+      })
+    )
     .input(zFormFieldsOnboarding())
     .output(z.void())
     .handler(async ({ context, input }) => {
@@ -31,11 +34,13 @@ export default {
   updateInfo: protectedProcedure({
     permissions: null,
   })
-    .route({
-      method: 'POST',
-      path: '/account/info',
-      tags,
-    })
+    .meta(
+      openapi({
+        method: 'POST',
+        path: '/account/info',
+        tags,
+      })
+    )
     .input(
       zUser().pick({
         name: true,

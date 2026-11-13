@@ -1,4 +1,5 @@
 import { ORPCError } from '@orpc/client';
+import { openapi } from '@orpc/openapi';
 import { z } from 'zod';
 
 import { zBook, zFormFieldsBook } from '@/features/book/schema';
@@ -13,11 +14,13 @@ export default {
       book: ['read'],
     },
   })
-    .route({
-      method: 'GET',
-      path: '/books',
-      tags,
-    })
+    .meta(
+      openapi({
+        method: 'GET',
+        path: '/books',
+        tags,
+      })
+    )
     .input(
       z
         .object({
@@ -88,11 +91,13 @@ export default {
       book: ['read'],
     },
   })
-    .route({
-      method: 'GET',
-      path: '/books/{id}',
-      tags,
-    })
+    .meta(
+      openapi({
+        method: 'GET',
+        path: '/books/{id}',
+        tags,
+      })
+    )
     .input(
       z.object({
         id: z.string(),
@@ -119,11 +124,13 @@ export default {
       book: ['create'],
     },
   })
-    .route({
-      method: 'POST',
-      path: '/books',
-      tags,
-    })
+    .meta(
+      openapi({
+        method: 'POST',
+        path: '/books',
+        tags,
+      })
+    )
     .input(zFormFieldsBook())
     .output(zBook())
     .handler(async ({ context, input }) => {
@@ -144,11 +151,13 @@ export default {
       book: ['update'],
     },
   })
-    .route({
-      method: 'POST',
-      path: '/books/{id}',
-      tags,
-    })
+    .meta(
+      openapi({
+        method: 'POST',
+        path: '/books/{id}',
+        tags,
+      })
+    )
     .input(zFormFieldsBook().extend({ id: z.string() }))
     .output(zBook())
     .handler(async ({ context, input }) => {
@@ -170,11 +179,13 @@ export default {
       book: ['delete'],
     },
   })
-    .route({
-      method: 'DELETE',
-      path: '/books/{id}',
-      tags,
-    })
+    .meta(
+      openapi({
+        method: 'DELETE',
+        path: '/books/{id}',
+        tags,
+      })
+    )
     .input(
       zBook().pick({
         id: true,

@@ -1,4 +1,5 @@
 import { ORPCError } from '@orpc/client';
+import { openapi } from '@orpc/openapi';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 import { z } from 'zod';
 
@@ -15,11 +16,13 @@ export default {
       user: ['list'],
     },
   })
-    .route({
-      method: 'GET',
-      path: '/users',
-      tags,
-    })
+    .meta(
+      openapi({
+        method: 'GET',
+        path: '/users',
+        tags,
+      })
+    )
     .input(
       z
         .object({
@@ -88,11 +91,13 @@ export default {
       user: ['list'],
     },
   })
-    .route({
-      method: 'GET',
-      path: '/users/{id}',
-      tags,
-    })
+    .meta(
+      openapi({
+        method: 'GET',
+        path: '/users/{id}',
+        tags,
+      })
+    )
     .input(
       z.object({
         id: z.string(),
@@ -118,11 +123,13 @@ export default {
       user: ['set-role'],
     },
   })
-    .route({
-      method: 'POST',
-      path: '/users/{id}',
-      tags,
-    })
+    .meta(
+      openapi({
+        method: 'POST',
+        path: '/users/{id}',
+        tags,
+      })
+    )
     .input(
       zUser().pick({
         id: true,
@@ -163,11 +170,13 @@ export default {
       user: ['create'],
     },
   })
-    .route({
-      method: 'POST',
-      path: '/users',
-      tags,
-    })
+    .meta(
+      openapi({
+        method: 'POST',
+        path: '/users',
+        tags,
+      })
+    )
     .input(
       zUser().pick({
         name: true,
@@ -193,11 +202,13 @@ export default {
       user: ['delete'],
     },
   })
-    .route({
-      method: 'DELETE',
-      path: '/users/{id}',
-      tags,
-    })
+    .meta(
+      openapi({
+        method: 'DELETE',
+        path: '/users/{id}',
+        tags,
+      })
+    )
     .input(
       zUser().pick({
         id: true,
@@ -231,11 +242,13 @@ export default {
       session: ['list'],
     },
   })
-    .route({
-      method: 'GET',
-      path: '/users/{userId}/sessions',
-      tags,
-    })
+    .meta(
+      openapi({
+        method: 'GET',
+        path: '/users/{userId}/sessions',
+        tags,
+      })
+    )
     .input(
       z.object({
         userId: z.string(),
@@ -289,11 +302,13 @@ export default {
       session: ['revoke'],
     },
   })
-    .route({
-      method: 'POST',
-      path: '/users/{id}/sessions/revoke',
-      tags,
-    })
+    .meta(
+      openapi({
+        method: 'POST',
+        path: '/users/{id}/sessions/revoke',
+        tags,
+      })
+    )
     .input(
       z.object({
         id: z.string(),
@@ -329,11 +344,13 @@ export default {
       session: ['revoke'],
     },
   })
-    .route({
-      method: 'POST',
-      path: '/users/{id}/sessions/{sessionToken}/revoke',
-      tags,
-    })
+    .meta(
+      openapi({
+        method: 'POST',
+        path: '/users/{id}/sessions/{sessionToken}/revoke',
+        tags,
+      })
+    )
     .input(
       z.object({
         id: z.string(),
