@@ -16,6 +16,8 @@ const oauthConsentQueryOptions = (oauthQuery: string) =>
   queryOptions({
     queryKey: ['oauth-consent', oauthQuery],
     queryFn: () => getOAuthConsent({ data: { oauthQuery } }),
+    retry: false,
+    staleTime: Infinity,
   });
 
 export default function PageOAuthConsent({
