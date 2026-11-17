@@ -119,6 +119,7 @@ export function DataTableFilterChip<Read, Write>({
   const { t } = useTranslation(['components']);
   return (
     <div
+      data-slot="data-table-filter-chip"
       role="group"
       aria-label={t('components:dataTable.filterLabel', {
         title: filter.title,

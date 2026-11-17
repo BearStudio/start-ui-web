@@ -213,6 +213,7 @@ function TableCell({
   return (
     <td
       data-slot="table-cell"
+      data-sticky={sticky || undefined}
       className={cn(
         tableCellVariants({ sticky, pinEdge, shrink, align, wrap, tone }),
         className

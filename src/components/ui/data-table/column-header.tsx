@@ -53,6 +53,7 @@ export function DataTableColumnHeader({
     return (
       // Named by its title alone, as the column it heads: what it does is its description.
       <Button
+        data-slot="data-table-column-header"
         variant="ghost"
         size="sm"
         className={edge}
@@ -92,7 +93,14 @@ export function DataTableColumnHeader({
       }}
     >
       <DropdownMenuTrigger
-        render={<Button variant="ghost" size="sm" className={edge} />}
+        render={
+          <Button
+            data-slot="data-table-column-header"
+            variant="ghost"
+            size="sm"
+            className={edge}
+          />
+        }
       >
         {/* Over a column of numbers, the icon comes first: the title then lines up with the figures. */}
         {align === 'end' && icon}

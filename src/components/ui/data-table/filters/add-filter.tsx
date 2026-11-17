@@ -40,7 +40,14 @@ export function DataTableAddFilter<Key extends string>({
       }}
     >
       <DropdownMenuTrigger
-        render={<Button ref={ref} variant="ghost" size="sm" />}
+        render={
+          <Button
+            ref={ref}
+            data-slot="data-table-add-filter"
+            variant="ghost"
+            size="sm"
+          />
+        }
       >
         <PlusIcon />
         {t('components:dataTable.addFilter')}

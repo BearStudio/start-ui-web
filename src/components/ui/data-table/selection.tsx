@@ -138,6 +138,7 @@ export function SelectAllCheckbox() {
   const all = count > 0 && count === selectable.length;
   return (
     <Checkbox
+      data-slot="data-table-select-all"
       noLabel
       aria-label={
         allRows
@@ -183,6 +184,7 @@ export function SelectRowCheckbox({ rowId }: { rowId: string }) {
       }}
     >
       <Checkbox
+        data-slot="data-table-select-row"
         noLabel
         aria-label={
           label(rowId) ?? t('components:dataTable.selection.selectRow')

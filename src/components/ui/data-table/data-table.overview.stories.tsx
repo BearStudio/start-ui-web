@@ -146,6 +146,17 @@ export const Overview = () => {
           A table that sorts, searches, filters, pages and selects, its state in
           memory or in the URL. It comes in layers: take the ones you need.
         </p>
+        <p className="text-muted-foreground">
+          Each part on screen, named as the code names it:{' '}
+          <a
+            href="/?path=/story/datatable-anatomy--anatomy"
+            target="_top"
+            className="underline underline-offset-4"
+          >
+            DataTable/Anatomy
+          </a>
+          .
+        </p>
       </header>
 
       <section className="flex flex-col gap-3">

@@ -72,7 +72,15 @@ export function DataTableColumnVisibility<TData extends RowData>({
   const shown = toggles.filter((toggle) => !hidden.includes(toggle.id));
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger render={<Button variant="secondary" size="sm" />}>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            data-slot="data-table-column-visibility"
+            variant="secondary"
+            size="sm"
+          />
+        }
+      >
         <Columns3Icon />
         {t('components:dataTable.columns')}
       </DropdownMenuTrigger>

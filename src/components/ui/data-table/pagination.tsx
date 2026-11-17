@@ -282,7 +282,10 @@ export function DataTablePagination({
 
   return (
     // One line where it fits: on a phone, the count and the pages share it, the size select below them.
-    <div className="flex flex-wrap items-center justify-between gap-2">
+    <div
+      data-slot="data-table-pagination"
+      className="flex flex-wrap items-center justify-between gap-2"
+    >
       <div className="flex shrink-0 flex-wrap items-center justify-center gap-x-4 gap-y-2">
         <p aria-live="polite" className="text-muted-foreground">
           {results === undefined
