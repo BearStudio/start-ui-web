@@ -163,6 +163,7 @@ function TableHead({
   return (
     <th
       data-slot="table-head"
+      data-sticky={sticky || undefined}
       className={cn(
         tableHeadVariants({ sticky, pinEdge, shrink, align, spans }),
         className

@@ -501,7 +501,12 @@ export function DataTable<
   const [pinOffsets, setPinOffsets] = React.useState<
     Readonly<Record<string, number>>
   >({});
+  // The widths held at each end, where the columns that scroll start and stop: the shades of overflow sit there,
+  // beside the held columns, not under them at the edges of the table.
+  const [heldEdges, setHeldEdges] = React.useState({ start: 0, end: 0 });
   React.useLayoutEffect(() => {
+    const endHead = () =>
+      head.current?.querySelector<HTMLElement>('th[data-sticky=end]');
     const measure = () => {
       let start = 0;
       const next: Record<string, number> = {};
@@ -512,6 +517,12 @@ export function DataTable<
       setPinOffsets((current) =>
         JSON.stringify(current) === JSON.stringify(next) ? current : next
       );
+      const end = endHead()?.offsetWidth ?? 0;
+      setHeldEdges((current) =>
+        current.start === start && current.end === end
+          ? current
+          : { start, end }
+      );
     };
     measure();
     const observer = new ResizeObserver(measure);
@@ -519,8 +530,10 @@ export function DataTable<
       const cell = pinHeads.current.get(id);
       if (cell !== undefined) observer.observe(cell);
     }
+    const end = endHead();
+    if (end !== null && end !== undefined) observer.observe(end);
     return () => observer.disconnect();
-  }, [pinChain]);
+  }, [pinChain, hasStickyEnd]);
   const pinOf = (id: string) => {
     const at = pinChain.indexOf(id);
     return at === -1
@@ -824,6 +837,8 @@ export function DataTable<
           style={
             {
               '--header-height': `${size.height}px`,
+              '--held-start': `${heldEdges.start}px`,
+              '--held-end': `${heldEdges.end}px`,
               // The viewport less the padding of a cell; `auto` until measured (the server knows no width), so the
               // empty slot spans its cell meanwhile.
               '--empty-width':
@@ -986,14 +1001,19 @@ export function DataTable<
           <div
             aria-hidden="true"
             data-slot="data-table-overflow-start"
-            className="pointer-events-none absolute inset-y-0 start-0 z-20 w-6 from-shade to-transparent opacity-0 transition-opacity group-data-overflow-x-start/scroll:opacity-100 motion-reduce:transition-none ltr:bg-linear-to-r rtl:bg-linear-to-l"
+            className="pointer-events-none absolute inset-y-0 start-(--held-start) z-20 w-6 from-shade to-transparent opacity-0 transition-opacity group-data-overflow-x-start/scroll:opacity-100 motion-reduce:transition-none ltr:bg-linear-to-r rtl:bg-linear-to-l"
           />
           <div
             aria-hidden="true"
             data-slot="data-table-overflow-end"
-            className="pointer-events-none absolute inset-y-0 end-0 z-20 w-6 from-shade to-transparent opacity-0 transition-opacity group-data-overflow-x-end/scroll:opacity-100 group-data-sticky-end/table:hidden motion-reduce:transition-none ltr:bg-linear-to-l rtl:bg-linear-to-r"
+            className="pointer-events-none absolute inset-y-0 end-(--held-end) z-20 w-6 from-shade to-transparent opacity-0 transition-opacity group-data-overflow-x-end/scroll:opacity-100 motion-reduce:transition-none ltr:bg-linear-to-l rtl:bg-linear-to-r"
           />
-          <ScrollBar orientation="horizontal" className="z-20" />
+          {/* The track runs along the columns that scroll only, between those held at each end: a padding Base UI
+              counts when it sizes the thumb. */}
+          <ScrollBar
+            orientation="horizontal"
+            className="z-20 ps-(--held-start) pe-(--held-end)"
+          />
           <ScrollAreaPrimitive.Corner />
         </ScrollAreaPrimitive.Root>
         {onRowClick !== undefined && (

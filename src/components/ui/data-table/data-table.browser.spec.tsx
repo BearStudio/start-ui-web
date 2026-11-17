@@ -786,7 +786,7 @@ describe('DataTable details', () => {
     expect(getComputedStyle(cell).boxShadow).toMatch(/inset/);
   });
 
-  it('hides the shade of the end behind a column held at the end', async () => {
+  it('shades the edge beside a column held at the end, not under it, and runs the scrollbar beside it', async () => {
     await render(
       <div className="flex h-75 w-100 flex-col">
         <DataTable
@@ -810,9 +810,21 @@ describe('DataTable details', () => {
       .poll(() => root.hasAttribute('data-overflow-x-end'))
       .toBe(true);
     expect(slot('data-table').hasAttribute('data-sticky-end')).toBe(true);
-    expect(getComputedStyle(slot('data-table-overflow-end')).display).toBe(
-      'none'
+    const held = document
+      .querySelector('thead th[data-sticky=end]')
+      ?.getBoundingClientRect();
+    await expect
+      .poll(() => slot('data-table-overflow-end').getBoundingClientRect().right)
+      .toBeCloseTo(held?.left ?? 0, 0);
+    expect(getComputedStyle(slot('data-table-overflow-end')).opacity).toBe('1');
+    const scrollbar = root.querySelector<HTMLElement>(
+      '[data-orientation=horizontal][data-slot=scroll-area-scrollbar]'
     );
+    expect(
+      Number.parseFloat(
+        getComputedStyle(scrollbar as HTMLElement).paddingInlineEnd
+      )
+    ).toBeCloseTo(held?.width ?? 0, 0);
   });
 
   it('keeps a scroll past its end to itself only when it has rows to scroll', async () => {
