@@ -96,6 +96,11 @@ const choices = [
     'RowSelection',
   ],
   [
+    'Columns shown, hidden or pinned',
+    'DataTableColumnVisibility: a pin beside each column holds it at the start while the others scroll',
+    'RealLifeUseCase',
+  ],
+  [
     'A row that opens something',
     '`onRowClick` on DataTable',
     'RowClickAndActions',

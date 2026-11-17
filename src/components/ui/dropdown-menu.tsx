@@ -11,12 +11,15 @@ const itemIndicatorClassName = {
   end: 'ps-2 pe-8',
   // A box before the label, empty until ticked: the items of a choice of several.
   checkbox: 'ps-8 pe-2',
+  // No mark: the item shows its state itself, as an icon that toggles.
+  none: 'px-2',
 } as const;
 
 const indicatorPositionClassName = {
   start: 'start-2',
   end: 'end-2',
   checkbox: 'start-2',
+  none: '',
 } as const;
 
 function DropdownMenu(props: MenuPrimitive.Root.Props) {
@@ -118,10 +121,10 @@ function DropdownMenuCheckboxItem({
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
   /**
-   * Where the check sits: before the label, after it as in a `Select`, or in a box shown unticked too, which tells a
-   * choice of several from a choice of one.
+   * Where the check sits: before the label, after it as in a `Select`, in a box shown unticked too, which tells a
+   * choice of several from a choice of one, or nowhere, for an item whose content shows its state (a toggled icon).
    */
-  indicator?: 'start' | 'end' | 'checkbox';
+  indicator?: 'start' | 'end' | 'checkbox' | 'none';
 }) {
   return (
     <MenuPrimitive.CheckboxItem
@@ -135,7 +138,7 @@ function DropdownMenuCheckboxItem({
       onCheckedChange={onCheckedChange}
       {...props}
     >
-      {indicator === 'checkbox' ? (
+      {indicator === 'none' ? null : indicator === 'checkbox' ? (
         <span
           aria-hidden
           className="pointer-events-none absolute start-2 flex size-4 items-center justify-center rounded-sm border border-input group-data-checked/checkbox-item:border-primary group-data-checked/checkbox-item:bg-primary group-data-checked/checkbox-item:text-primary-foreground"

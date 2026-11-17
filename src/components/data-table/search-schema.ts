@@ -6,7 +6,7 @@ type OptionalFilters<Filters extends z.ZodRawShape> = {
 
 /**
  * The state of a table in the URL, as a Zod schema for the `validateSearch` of a route: the page, the text searched,
- * the sorting among `columns`, the hidden columns, and one filter per schema of `filters`.
+ * the sorting among `columns`, the hidden and pinned columns, and one filter per schema of `filters`.
  *
  * A key left out stays out. A value that does not validate is replaced by `undefined`, not dropped, since the router
  * keeps the raw value of a key that validation drops: the state then takes its default, in the one form it has.
@@ -52,6 +52,7 @@ export const dataTableSearchSchema = <
     orderBy: z.enum(columns).optional().catch(undefined),
     dir: z.enum(['asc', 'desc']).optional().catch(undefined),
     hidden: z.array(z.string()).optional().catch(undefined),
+    pinned: z.array(z.string()).optional().catch(undefined),
     ...(Object.fromEntries(
       Object.entries(filters ?? {}).map(([key, schema]) => [
         key,

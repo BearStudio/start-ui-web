@@ -22,6 +22,8 @@ export type DataTableBaseState<SortColumn extends string = string> = {
   readonly dir?: SortDirection | undefined;
   /** The ids of the columns hidden. */
   readonly hidden?: ReadonlyArray<string> | undefined;
+  /** The ids of the columns pinned at the start of the rows, in the order they were pinned. */
+  readonly pinned?: ReadonlyArray<string> | undefined;
 };
 
 /**
@@ -30,7 +32,7 @@ export type DataTableBaseState<SortColumn extends string = string> = {
  */
 export type DataTableStateValue = DataTableBaseState;
 
-/** The fields of a state that hold its filters: every field but the page, the search, the sorting, and the hidden columns. */
+/** The fields of a state that hold its filters: every field but the page, the search, the sorting, and the columns hidden or pinned. */
 export type DataTableFilterKey<S extends DataTableStateValue> = Exclude<
   keyof S,
   keyof DataTableStateValue
@@ -156,6 +158,7 @@ export const dataTableState = <S extends DataTableStateValue>(
     'orderBy',
     'dir',
     'hidden',
+    'pinned',
     ...filterKeys,
   ];
   const fingerprintOwn = (state: S) =>
@@ -362,9 +365,39 @@ export const dataTableState = <S extends DataTableStateValue>(
           !visible && state.orderBy === id && id !== defaultSorting.column
             ? without(state, 'orderBy', 'dir', 'page')
             : state;
+        // A column hidden is unpinned: its pin would come back with it unasked.
+        const pins = (kept.pinned ?? []).filter(
+          (other) => visible || other !== id
+        );
+        const unpinned =
+          pins.length === (kept.pinned ?? []).length
+            ? kept
+            : pins.length === 0
+              ? without(kept, 'pinned')
+              : { ...kept, pinned: pins };
         return next === undefined
-          ? without(kept, 'hidden')
-          : { ...kept, hidden: next };
+          ? without(unpinned, 'hidden')
+          : { ...unpinned, hidden: next };
+      });
+    },
+    /** The ids of the columns pinned at the start, in order, for the `table` of `DataTable`. */
+    pinnedColumns: store.state.pinned ?? [],
+    /**
+     * Pins a column at the start of the rows, after those pinned before it, or unpins it: it stays while the others
+     * scroll. A column pinned shows. Pins in a row make one history entry.
+     */
+    setColumnPinned: (id: string, pinned: boolean) => {
+      const pinnedOf = (state: S) => {
+        const others = (state.pinned ?? []).filter((other) => other !== id);
+        const next = pinned ? [...others, id] : others;
+        return next.length === 0 ? undefined : next;
+      };
+      set('pinned', pinnedOf, (state) => {
+        const next = pinnedOf(state);
+        const shown = pinned ? shownForSort(state, id) : state;
+        return next === undefined
+          ? without(shown, 'pinned')
+          : { ...shown, pinned: next };
       });
     },
     /** Whether the search or a filter narrows the rows. */

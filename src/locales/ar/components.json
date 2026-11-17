@@ -104,6 +104,7 @@
     "sortedDescending": "مرتب حسب {{title}}، تنازليًا",
     "columns": "الأعمدة",
     "columnsShown": "الأعمدة المعروضة",
+    "pinColumn": "تثبيت {{title}}",
     "pageOf": "الصفحة {{page}} من {{pages}}",
     "pageOfResults": "الصفحة {{page}} من {{pages}}، {{results}}",
     "page": "الصفحة {{page}}",

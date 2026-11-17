@@ -173,4 +173,19 @@ describe('useRouterDataTable', () => {
     expect(history.length).toBe(1);
     expect(history.location.search).toBe('?page=3');
   });
+
+  it('reads the pinned columns from the URL, and keeps them from page to page', async () => {
+    const { history } = await setup([
+      `/?pinned=${encodeURIComponent(JSON.stringify(['name']))}`,
+    ]);
+    await expect.element(state()).toHaveTextContent('{"pinned":["name"]}');
+
+    await pageLink(2).click();
+    await expect
+      .element(state())
+      .toHaveTextContent('{"pinned":["name"],"page":2}');
+
+    history.back();
+    await expect.element(state()).toHaveTextContent('{"pinned":["name"]}');
+  });
 });

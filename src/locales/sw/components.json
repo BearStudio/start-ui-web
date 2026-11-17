@@ -100,6 +100,7 @@
     "sortedDescending": "Imepangwa kwa {{title}}, kushuka",
     "columns": "Safu",
     "columnsShown": "Safu zinazoonyeshwa",
+    "pinColumn": "Bandika {{title}}",
     "pageOf": "Ukurasa {{page}} kati ya {{pages}}",
     "pageOfResults": "Ukurasa {{page}} kati ya {{pages}}, {{results}}",
     "page": "Ukurasa {{page}}",

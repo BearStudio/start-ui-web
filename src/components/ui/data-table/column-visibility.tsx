@@ -1,5 +1,6 @@
 import type { RowData } from '@tanstack/react-table';
-import { Columns3Icon } from 'lucide-react';
+import { Columns3Icon, PinIcon } from 'lucide-react';
+import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
@@ -13,7 +14,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-type Toggle = { readonly id: string; readonly title: string };
+type Toggle = {
+  readonly id: string;
+  readonly title: string;
+  /** Outside any group: a group's columns stay together, so none of them can be pinned. */
+  readonly pinnable: boolean;
+};
 
 // A column with no `title` has no name to list it by: it always shows.
 const togglesOf = (
@@ -33,13 +39,15 @@ const togglesOf = (
         id: column.id,
         title:
           group === undefined ? column.title : `${group} · ${column.title}`,
+        pinnable: group === undefined,
       },
     ];
   });
 
 /**
  * A menu that shows or hides the columns of a table, each named by its `title` (a group's prefixed to its columns').
- * The last column shown cannot be hidden.
+ * The last column shown cannot be hidden. With `table.setColumnPinned` (what `useDataTable` answers), a pin beside
+ * each column outside a group holds it at the start of the rows while the others scroll.
  */
 export function DataTableColumnVisibility<TData extends RowData>({
   table,
@@ -48,6 +56,8 @@ export function DataTableColumnVisibility<TData extends RowData>({
   table: {
     readonly hiddenColumns: ReadonlyArray<string>;
     readonly setColumnVisible: (id: string, visible: boolean) => void;
+    readonly pinnedColumns?: ReadonlyArray<string>;
+    readonly setColumnPinned?: (id: string, pinned: boolean) => void;
   };
   columns: ReadonlyArray<DataTableColumn<TData>>;
 }) {
@@ -73,10 +83,12 @@ export function DataTableColumnVisibility<TData extends RowData>({
           </DropdownMenuLabel>
           {toggles.map((toggle) => {
             const checked = !hidden.includes(toggle.id);
-            return (
+            const pinned = table.pinnedColumns?.includes(toggle.id) ?? false;
+            const { setColumnPinned } = table;
+            const visibility = (
               <DropdownMenuCheckboxItem
                 indicator="checkbox"
-                key={toggle.id}
+                className="flex-1"
                 checked={checked}
                 disabled={checked && shown.length === 1}
                 onCheckedChange={(next) => {
@@ -90,6 +102,35 @@ export function DataTableColumnVisibility<TData extends RowData>({
               >
                 {toggle.title}
               </DropdownMenuCheckboxItem>
+            );
+            if (setColumnPinned === undefined)
+              return (
+                <React.Fragment key={toggle.id}>{visibility}</React.Fragment>
+              );
+            // The pin sits beside its column, an item of its own: the arrow keys reach it next.
+            return (
+              <div key={toggle.id} className="flex items-center gap-1">
+                {visibility}
+                {toggle.pinnable && (
+                  <DropdownMenuCheckboxItem
+                    indicator="none"
+                    checked={pinned}
+                    closeOnClick={false}
+                    aria-label={t('components:dataTable.pinColumn', {
+                      title: toggle.title,
+                    })}
+                    onCheckedChange={(next) => setColumnPinned(toggle.id, next)}
+                  >
+                    <PinIcon
+                      className={
+                        pinned
+                          ? 'fill-current text-foreground'
+                          : 'text-muted-foreground'
+                      }
+                    />
+                  </DropdownMenuCheckboxItem>
+                )}
+              </div>
             );
           })}
         </DropdownMenuGroup>

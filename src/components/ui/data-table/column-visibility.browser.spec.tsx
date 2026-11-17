@@ -56,7 +56,8 @@ function Products({ initial = { page: 2 } }: { initial?: State }) {
 
 const header = (name: string) =>
   page.getByRole('columnheader', { name, exact: true });
-const toggle = (name: string) => page.getByRole('menuitemcheckbox', { name });
+const toggle = (name: string) =>
+  page.getByRole('menuitemcheckbox', { name, exact: true });
 
 describe('DataTableColumnVisibility', () => {
   it('hides a column in the state, on the same page, a group with its last column, and never the last column shown', async () => {

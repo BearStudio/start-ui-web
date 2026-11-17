@@ -18,6 +18,7 @@ type State = {
   readonly total?: { readonly min?: number; readonly max?: number };
   readonly ids?: ReadonlySet<string>;
   readonly hidden?: ReadonlyArray<string>;
+  readonly pinned?: ReadonlyArray<string>;
 };
 
 const defaults = { column: 'name', direction: 'asc' } as const;
@@ -463,5 +464,64 @@ describe('dataTableState rowsKey and empty filters', () => {
     expect(key({ tags: [] })).toBe(key({}));
     expect(key({ status: '' as 'active' })).toBe(key({}));
     expect(key({ status: 'active' })).not.toBe(key({}));
+  });
+});
+
+describe('dataTableState pinned columns', () => {
+  it('pins columns in the order they were pinned, in one history entry for a run', () => {
+    const { table, updates } = memoryStore({ page: 2 });
+
+    table.setColumnPinned('createdAt', true);
+    table.setColumnPinned('name', true);
+
+    expect(table.pinnedColumns).toEqual([]);
+    expect(updates).toEqual([
+      { state: { page: 2, pinned: ['createdAt'] }, replace: false },
+      { state: { page: 2, pinned: ['createdAt', 'name'] }, replace: true },
+    ]);
+    expect(
+      memoryStore({ pinned: ['createdAt', 'name'] }).table.pinnedColumns
+    ).toEqual(['createdAt', 'name']);
+  });
+
+  it('unpins a column, and leaves pinned out of the state once none is left', () => {
+    const { table, updates } = memoryStore({ pinned: ['createdAt', 'name'] });
+
+    table.setColumnPinned('createdAt', false);
+    table.setColumnPinned('name', false);
+
+    expect(updates.map((update) => update.state)).toEqual([
+      { pinned: ['name'] },
+      {},
+    ]);
+  });
+
+  it('shows a hidden column it pins', () => {
+    const { table, updates } = memoryStore({ hidden: ['name', 'createdAt'] });
+
+    table.setColumnPinned('name', true);
+
+    expect(updates.map((update) => update.state)).toEqual([
+      { hidden: ['createdAt'], pinned: ['name'] },
+    ]);
+  });
+
+  it('unpins a column it hides', () => {
+    const { table, updates } = memoryStore({ pinned: ['name', 'createdAt'] });
+
+    table.setColumnVisible('name', false);
+
+    expect(updates.map((update) => update.state)).toEqual([
+      { hidden: ['name'], pinned: ['createdAt'] },
+    ]);
+  });
+
+  it('keeps pins out of what the rows depend on', () => {
+    const keys = (state: State) => {
+      const { table } = memoryStore(state);
+      return [table.filtersKey, table.rowsKey, table.isFiltered];
+    };
+
+    expect(keys({ pinned: ['name'] })).toEqual(keys({}));
   });
 });

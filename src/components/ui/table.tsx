@@ -116,11 +116,24 @@ function TableRow({
 const stickyEnd =
   'sticky end-0 z-1 w-px bg-surface ltr:group-data-overflow-x-end/scroll:shadow-edge-l rtl:group-data-overflow-x-end/scroll:shadow-edge-r';
 
+// A cell pinned at the start of its row, at `--pin-start` from it (the width of the cells pinned before it).
+const stickyStart = 'sticky start-(--pin-start) z-1 bg-surface';
+
+// The backgrounds a row shows through a cell, for an opaque one.
+const rowBackgrounds =
+  'group-hover/row:bg-row-hover group-focus-visible/row:bg-row-hover group-has-aria-expanded/row:bg-row-hover group-data-[state=selected]/row:bg-row-selected! group-data-[state=selected]/row:group-hover/row:bg-row-selected-hover!';
+
+// The last cell pinned at the start draws its edge while columns hide under it.
+const pinEdge =
+  'ltr:group-data-overflow-x-start/scroll:shadow-edge-r rtl:group-data-overflow-x-start/scroll:shadow-edge-l';
+
 const tableHeadVariants = cva(
   'h-10 px-3 text-start align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pe-0',
   {
     variants: {
-      sticky: { false: '', end: stickyEnd },
+      sticky: { false: '', start: stickyStart, end: stickyEnd },
+      /** The last of the cells pinned at the start: it draws the edge the others scroll under. */
+      pinEdge: { false: '', true: pinEdge },
       /** As narrow as its content: a checkbox, the actions of a row. */
       shrink: { false: '', true: 'w-px' },
       align: { start: '', end: 'text-end', center: 'text-center' },
@@ -129,6 +142,7 @@ const tableHeadVariants = cva(
     },
     defaultVariants: {
       sticky: false,
+      pinEdge: false,
       shrink: false,
       align: 'start',
       spans: false,
@@ -139,6 +153,7 @@ const tableHeadVariants = cva(
 function TableHead({
   className,
   sticky,
+  pinEdge,
   shrink,
   align,
   spans,
@@ -149,7 +164,7 @@ function TableHead({
     <th
       data-slot="table-head"
       className={cn(
-        tableHeadVariants({ sticky, shrink, align, spans }),
+        tableHeadVariants({ sticky, pinEdge, shrink, align, spans }),
         className
       )}
       {...props}
@@ -163,8 +178,10 @@ const tableCellVariants = cva(
     variants: {
       sticky: {
         false: '',
-        end: `${stickyEnd} group-hover/row:bg-row-hover group-focus-visible/row:bg-row-hover group-has-aria-expanded/row:bg-row-hover group-data-[state=selected]/row:bg-row-selected! group-data-[state=selected]/row:group-hover/row:bg-row-selected-hover!`,
+        start: `${stickyStart} ${rowBackgrounds}`,
+        end: `${stickyEnd} ${rowBackgrounds}`,
       },
+      pinEdge: { false: '', true: pinEdge },
       shrink: { false: '', true: 'w-px' },
       align: { start: '', end: 'text-end tabular-nums', center: 'text-center' },
       /** `true` for prose: the text wraps rather than widening the column. */
@@ -173,6 +190,7 @@ const tableCellVariants = cva(
     },
     defaultVariants: {
       sticky: false,
+      pinEdge: false,
       shrink: false,
       align: 'start',
       wrap: false,
@@ -184,6 +202,7 @@ const tableCellVariants = cva(
 function TableCell({
   className,
   sticky,
+  pinEdge,
   shrink,
   align,
   wrap,
@@ -195,7 +214,7 @@ function TableCell({
     <td
       data-slot="table-cell"
       className={cn(
-        tableCellVariants({ sticky, shrink, align, wrap, tone }),
+        tableCellVariants({ sticky, pinEdge, shrink, align, wrap, tone }),
         className
       )}
       {...props}

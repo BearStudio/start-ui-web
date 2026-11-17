@@ -68,6 +68,8 @@ export type DataTableHeaders<
   readonly canFilter?: (target: FilterKey | 'search') => boolean;
   /** The ids of the columns left out. */
   readonly hiddenColumns?: ReadonlyArray<string>;
+  /** The ids of the columns pinned at the start of the rows, in order. */
+  readonly pinnedColumns?: ReadonlyArray<string>;
   /** Changes whenever other rows show (a page, a sorting, a search): the rows scroll back to the top. */
   readonly rowsKey?: string;
 };
@@ -386,12 +388,13 @@ export function DataTable<
   const { t } = useTranslation(['components']);
   const sorting = headers?.sorting;
   const hiddenKey = (headers?.hiddenColumns ?? []).join('\n');
+  const pinnedKey = (headers?.pinnedColumns ?? []).join('\n');
   const selectable = selection !== undefined;
   // The last row ticked, from which Shift + click selects a range.
   const anchor = React.useRef<string | null>(null);
   // Columns declared once keep their identity, so the table does not rebuild them on every render. The checkboxes
   // read the selection from a context, so a new selection does not rebuild them either.
-  const definitions = React.useMemo(() => {
+  const { definitions, pinned } = React.useMemo(() => {
     const all = columns as ReadonlyArray<DataTableColumn<RowData>>;
     const visible = visibleColumns(
       all,
@@ -399,11 +402,25 @@ export function DataTable<
     );
     // A URL that hides every column with a title hides none, as the menu of columns reads it: a table of its untitled
     // columns only (the actions of a row) is no table.
-    const shown = (hasTitledLeaf(visible) ? visible : all).map(definitionOf);
-    return (selectable ? [selectColumn, ...shown] : shown) as ReadonlyArray<
-      ColumnDefOf<TData>
-    >;
-  }, [columns, hiddenKey, selectable]);
+    const kept = hasTitledLeaf(visible) ? visible : all;
+    // Pinned columns come first, in the order they were pinned: only a column with a title, outside any group (a
+    // group's header spans its columns, which must stay together).
+    const pins = (pinnedKey === '' ? [] : pinnedKey.split('\n')).flatMap((id) =>
+      kept.filter(
+        (column) => !isGroup(column) && isTitled(column) && column.id === id
+      )
+    );
+    const ordered = [
+      ...pins,
+      ...kept.filter((column) => !pins.includes(column)),
+    ].map(definitionOf);
+    return {
+      definitions: (selectable
+        ? [selectColumn, ...ordered]
+        : ordered) as ReadonlyArray<ColumnDefOf<TData>>,
+      pinned: pins.map((column) => column.id ?? ''),
+    };
+  }, [columns, hiddenKey, pinnedKey, selectable]);
   const table = useTable({
     features,
     columns: definitions,
@@ -468,6 +485,52 @@ export function DataTable<
   const viewport = React.useRef<HTMLDivElement>(null);
   const head = React.useRef<HTMLTableSectionElement>(null);
   const size = useSize(viewport, head);
+
+  // The columns held at the start: the checkbox column with the pinned ones, then the pinned ones in order. Each sits
+  // at the width of those before it, measured on their headers.
+  const pinChain = React.useMemo(
+    () =>
+      pinned.length === 0
+        ? []
+        : selectable
+          ? [selectColumnId, ...pinned]
+          : pinned,
+    [pinned, selectable]
+  );
+  const pinHeads = React.useRef(new Map<string, HTMLTableCellElement>());
+  const [pinOffsets, setPinOffsets] = React.useState<
+    Readonly<Record<string, number>>
+  >({});
+  React.useLayoutEffect(() => {
+    const measure = () => {
+      let start = 0;
+      const next: Record<string, number> = {};
+      for (const id of pinChain) {
+        next[id] = start;
+        start += pinHeads.current.get(id)?.offsetWidth ?? 0;
+      }
+      setPinOffsets((current) =>
+        JSON.stringify(current) === JSON.stringify(next) ? current : next
+      );
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    for (const id of pinChain) {
+      const cell = pinHeads.current.get(id);
+      if (cell !== undefined) observer.observe(cell);
+    }
+    return () => observer.disconnect();
+  }, [pinChain]);
+  const pinOf = (id: string) => {
+    const at = pinChain.indexOf(id);
+    return at === -1
+      ? undefined
+      : { start: pinOffsets[id] ?? 0, edge: at === pinChain.length - 1 };
+  };
+  const pinHead = (id: string) => (cell: HTMLTableCellElement | null) => {
+    if (cell === null) pinHeads.current.delete(id);
+    else pinHeads.current.set(id, cell);
+  };
   // oxlint-disable-next-line react/incompatible-library -- the app builds without the React Compiler, which would skip this component
   const virtualizer = useVirtualizer({
     enabled: virtual !== undefined,
@@ -715,10 +778,17 @@ export function DataTable<
     >
       {row.getAllCells().map((cell) => {
         const layout = layoutOf(cell.column.columnDef, cell.column.id);
+        const pin = pinOf(cell.column.id);
         return (
           <TableCell
             key={cell.id}
-            sticky={layout.sticky}
+            sticky={pin === undefined ? layout.sticky : 'start'}
+            pinEdge={pin?.edge ?? false}
+            {...(pin !== undefined && {
+              style: {
+                '--pin-start': `${pin.start}px`,
+              } as React.CSSProperties,
+            })}
             shrink={layout.shrink}
             align={layout.align}
             // The cell of the checkbox selects, it does not open the row.
@@ -802,9 +872,16 @@ export function DataTable<
                             header.column.columnDef,
                             header.column.id
                           );
+                          const pin = spansColumns
+                            ? undefined
+                            : pinOf(header.column.id);
                           return (
                             <TableHead
                               key={header.id}
+                              {...(pin !== undefined && {
+                                ref: pinHead(header.column.id),
+                              })}
+                              pinEdge={pin?.edge ?? false}
                               colSpan={header.colSpan}
                               rowSpan={
                                 header.rowSpan > 1 ? header.rowSpan : undefined
@@ -817,16 +894,24 @@ export function DataTable<
                                   ? ariaSort[sorting.direction]
                                   : undefined
                               }
-                              sticky={layout.sticky}
+                              sticky={
+                                pin === undefined ? layout.sticky : 'start'
+                              }
                               shrink={layout.shrink}
                               align={layout.align}
                               spans={spansColumns}
-                              // A width given to a column holds from one page to the next.
+                              style={
+                                {
+                                  '--column-size':
+                                    layout.size === undefined
+                                      ? 'auto'
+                                      : `${layout.size}px`,
+                                  '--pin-start': `${pin?.start ?? 0}px`,
+                                } as React.CSSProperties
+                              }
+                              // A width given to a column holds from one page to the next, at least.
                               {...(layout.size !== undefined &&
                                 !spansColumns && {
-                                  style: {
-                                    '--column-size': `${layout.size}px`,
-                                  } as React.CSSProperties,
                                   className:
                                     'w-(--column-size) min-w-(--column-size)',
                                 })}

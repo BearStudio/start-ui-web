@@ -101,6 +101,7 @@
     "sortedDescending": "Trié par {{title}}, décroissant",
     "columns": "Colonnes",
     "columnsShown": "Colonnes affichées",
+    "pinColumn": "Épingler {{title}}",
     "pageOf": "Page {{page}} sur {{pages}}",
     "pageOfResults": "Page {{page}} sur {{pages}}, {{results}}",
     "page": "Page {{page}}",
