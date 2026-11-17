@@ -33,8 +33,8 @@ type Part = {
   readonly role: string;
   /** Finds the part in the live table, by its `data-slot`. */
   readonly find: (root: HTMLElement) => Element | null | undefined;
-  /** The corner of its number: the end for the parts that hold others, whose start is taken. */
-  readonly corner?: 'end';
+  /** The corner of its number: an end one for the parts that hold others, whose top start is taken. */
+  readonly corner?: 'end' | 'bottom-end';
 };
 
 const all = (root: HTMLElement, selector: string) => [
@@ -81,7 +81,7 @@ const parts: ReadonlyArray<Part> = [
   },
   {
     name: 'DataTable',
-    corner: 'end',
+    corner: 'bottom-end',
     role: 'The table itself: its header, its rows in a scroll area, its footer.',
     find: (root) => root.querySelector('[data-slot=data-table]'),
   },
@@ -321,7 +321,12 @@ export const Anatomy = () => {
           />
         </div>
         {/* Over the live table, and through it to the pointer: the table stays usable. */}
-        <div aria-hidden className="pointer-events-none absolute inset-0">
+        {/* Above everything the table stacks (its sticky header, its shades): the outlines, then all the numbers over
+            them, so no outline hides a number. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 isolate z-50"
+        >
           {boxes.map((box) => (
             <div
               key={box.index}
@@ -335,22 +340,28 @@ export const Anatomy = () => {
               }
               className={cn(
                 'absolute top-(--y) left-(--x) h-(--h) w-(--w) rounded-sm border border-dashed border-chart-1 transition-opacity motion-reduce:transition-none',
-                active === box.index &&
-                  'z-10 border-2 border-solid bg-chart-1/10',
+                active === box.index && 'border-2 border-solid bg-chart-1/10',
+                active !== null && active !== box.index && 'opacity-15'
+              )}
+            />
+          ))}
+          {boxes.map((box) => (
+            <span
+              key={box.index}
+              // On a corner of its box: the start one, or the end one for a part that holds others.
+              style={
+                {
+                  '--x': `${parts[box.index]?.corner === undefined ? box.x : box.x + box.width}px`,
+                  '--y': `${parts[box.index]?.corner === 'bottom-end' ? box.y + box.height : box.y}px`,
+                } as React.CSSProperties
+              }
+              className={cn(
+                'absolute top-(--y) left-(--x) flex size-5 -translate-1/2 items-center justify-center rounded-full bg-chart-1 text-xs leading-none font-semibold text-white ring-2 ring-background transition-opacity motion-reduce:transition-none',
                 active !== null && active !== box.index && 'opacity-15'
               )}
             >
-              <span
-                className={cn(
-                  'absolute -top-2.5 flex size-5 items-center justify-center rounded-full bg-chart-1 text-xs leading-none font-semibold text-white',
-                  parts[box.index]?.corner === 'end'
-                    ? '-right-2.5'
-                    : '-left-2.5'
-                )}
-              >
-                {box.index + 1}
-              </span>
-            </div>
+              {box.index + 1}
+            </span>
           ))}
         </div>
       </div>
