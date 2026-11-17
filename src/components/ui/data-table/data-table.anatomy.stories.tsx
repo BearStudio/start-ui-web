@@ -219,34 +219,48 @@ const useBoxes = (root: React.RefObject<HTMLDivElement | null>) => {
     const measure = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
-        setBoxes(
-          parts.flatMap((part, index) => {
-            const found = part.find(element);
-            if (
-              found === null ||
-              found === undefined ||
-              !found.checkVisibility({ visibilityProperty: true })
-            )
-              return [];
-            const rect = found.getBoundingClientRect();
-            return [
-              {
-                index,
-                // In the viewport: the overlay is fixed, above the page and its popups.
-                x: rect.x,
-                y: rect.y,
-                width: rect.width,
-                height: rect.height,
-              },
-            ];
-          })
+        const next: ReadonlyArray<Box> = parts.flatMap((part, index) => {
+          const found = part.find(element);
+          if (
+            found === null ||
+            found === undefined ||
+            !found.checkVisibility({ visibilityProperty: true })
+          )
+            return [];
+          const rect = found.getBoundingClientRect();
+          return [
+            {
+              index,
+              // In the viewport: the overlay is fixed, above the page and its popups. Whole pixels, so a measure
+              // that finds nothing moved is the same measure.
+              x: Math.round(rect.x),
+              y: Math.round(rect.y),
+              width: Math.round(rect.width),
+              height: Math.round(rect.height),
+            },
+          ];
+        });
+        // Stored only when something moved: a render of the story changes the page (Base UI sets attributes of its
+        // inputs), which would measure again, and render again, without end.
+        setBoxes((current) =>
+          JSON.stringify(current) === JSON.stringify(next) ? current : next
         );
       });
     };
     measure();
     const resize = new ResizeObserver(measure);
     resize.observe(element);
-    const mutation = new MutationObserver(measure);
+    // The overlay's own changes say nothing of the table.
+    const mutation = new MutationObserver((records) => {
+      if (
+        records.some(
+          (record) =>
+            !(record.target instanceof Element) ||
+            record.target.closest('[data-anatomy-overlay]') === null
+        )
+      )
+        measure();
+    });
     // The body, not only the table: an editor opens in a portal.
     mutation.observe(document.body, {
       subtree: true,
@@ -364,6 +378,7 @@ export const Anatomy = () => {
     return createPortal(
       <div
         aria-hidden
+        data-anatomy-overlay
         className={cn(
           'pointer-events-none fixed inset-0 isolate',
           // Under popups (z-50), but for the parts of a popup, drawn over it.
