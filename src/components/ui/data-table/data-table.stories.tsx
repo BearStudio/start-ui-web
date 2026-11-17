@@ -120,69 +120,8 @@ export const Default = () => {
   );
 };
 
-export const EmptyState = () => {
-  const columns = useMemo(
-    (): ReadonlyArray<DataTableColumn<User>> => [
-      { id: 'name', accessorKey: 'name', title: 'Name' },
-      { id: 'email', accessorKey: 'email', title: 'Email' },
-    ],
-    []
-  );
-
-  return (
-    <DataTable
-      columns={columns}
-      data={[]}
-      label="Users"
-      empty={<DataTableEmptyState />}
-    />
-  );
-};
-
-export const EmptySearchState = () => {
-  const columns = useMemo(
-    (): ReadonlyArray<DataTableColumn<User>> => [
-      { id: 'name', accessorKey: 'name', title: 'Name' },
-      { id: 'email', accessorKey: 'email', title: 'Email' },
-    ],
-    []
-  );
-
-  return (
-    <DataTable
-      columns={columns}
-      data={[]}
-      label="Users"
-      empty={
-        <DataTableEmptyState
-          searchTerm="zorglub"
-          onReset={() => alert('table.reset()')}
-        />
-      }
-    />
-  );
-};
-
-export const LoadingState = () => {
-  const columns = useMemo(
-    (): ReadonlyArray<DataTableColumn<User>> => [
-      { id: 'name', accessorKey: 'name', title: 'Name' },
-      { id: 'email', accessorKey: 'email', title: 'Email' },
-    ],
-    []
-  );
-
-  return (
-    <DataTable
-      columns={columns}
-      data={[]}
-      label="Users"
-      empty={<DataTableLoadingState />}
-    />
-  );
-};
-
-export const ErrorState = () => {
+// Every state the body of a table shows with no row, side by side: empty, nothing found, loading, failed.
+export const States = () => {
   const columns = useMemo(
     (): ReadonlyArray<DataTableColumn<User>> => [
       { id: 'name', accessorKey: 'name', title: 'Name' },
@@ -192,12 +131,21 @@ export const ErrorState = () => {
   );
   const [retrying, setRetrying] = useState(false);
 
-  return (
-    <DataTable
-      columns={columns}
-      data={[]}
-      label="Users"
-      empty={
+  const states = [
+    { title: 'Empty', empty: <DataTableEmptyState /> },
+    {
+      title: 'Nothing found',
+      empty: (
+        <DataTableEmptyState
+          searchTerm="zorglub"
+          onReset={() => alert('table.reset()')}
+        />
+      ),
+    },
+    { title: 'Loading', empty: <DataTableLoadingState /> },
+    {
+      title: 'Error',
+      empty: (
         <DataTableErrorState
           title="Could not load the users"
           retry={() => {
@@ -208,8 +156,26 @@ export const ErrorState = () => {
         >
           The server did not answer.
         </DataTableErrorState>
-      }
-    />
+      ),
+    },
+  ];
+
+  return (
+    <div className="flex flex-col gap-6">
+      {states.map((state) => (
+        <section key={state.title} className="flex flex-col gap-2">
+          <h3 className="text-sm font-medium text-muted-foreground">
+            {state.title}
+          </h3>
+          <DataTable
+            columns={columns}
+            data={[]}
+            label={`Users, ${state.title.toLowerCase()}`}
+            empty={state.empty}
+          />
+        </section>
+      ))}
+    </div>
   );
 };
 
