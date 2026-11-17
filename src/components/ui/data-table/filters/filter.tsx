@@ -20,6 +20,7 @@ export type DataTableFilterValueChange<Read, Write> =
 export type DataTableFilterEditorProps<Read, Write = Read> = {
   /** The props of the chip's button: spread them on the trigger of the popup. */
   readonly trigger: {
+    readonly 'data-slot': 'data-table-filter-trigger';
     readonly className: string;
     readonly children: React.ReactNode;
   };
@@ -128,19 +129,29 @@ export function DataTableFilterChip<Read, Write>({
     >
       {filter.editor({
         trigger: {
+          'data-slot': 'data-table-filter-trigger',
           className: triggerClassName,
           children: (
             <>
-              <span className="whitespace-nowrap text-muted-foreground">
+              <span
+                data-slot="data-table-filter-title"
+                className="whitespace-nowrap text-muted-foreground"
+              >
                 {t('components:dataTable.filterTitle', { title: filter.title })}
               </span>
               {value === undefined || isFilterEmpty(filter, value) ? (
-                <span className="text-muted-foreground">
+                <span
+                  data-slot="data-table-filter-summary"
+                  className="text-muted-foreground"
+                >
                   {filter.placeholder ?? t('components:dataTable.select')}
                 </span>
               ) : (
                 // One line, cut short: the whole value stays in the button's name.
-                <span className="truncate font-medium">
+                <span
+                  data-slot="data-table-filter-summary"
+                  className="truncate font-medium"
+                >
                   {filter.summary(value)}
                 </span>
               )}
@@ -154,6 +165,7 @@ export function DataTableFilterChip<Read, Write>({
         onOpenChange,
       })}
       <Button
+        data-slot="data-table-filter-remove"
         variant="ghost"
         size="icon-xs"
         className="me-1"

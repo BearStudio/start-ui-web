@@ -1,6 +1,7 @@
 import type { Meta } from '@storybook/react-vite';
 import { MoreHorizontalIcon, Trash2Icon } from 'lucide-react';
 import * as React from 'react';
+import { createPortal } from 'react-dom';
 
 import { cn } from '@/lib/tailwind/utils';
 
@@ -33,8 +34,10 @@ type Part = {
   readonly role: string;
   /** Finds the part in the live table, by its `data-slot`. */
   readonly find: (root: HTMLElement) => Element | null | undefined;
+  /** Inside the part above it, as `filter.summary` inside `DataTableFilterChip`: indented in the legend. */
+  readonly depth?: 1;
   /** The corner of its number: an end one for the parts that hold others, whose top start is taken. */
-  readonly corner?: 'end' | 'bottom-end';
+  readonly corner?: 'end' | 'bottom-start' | 'bottom-end';
 };
 
 const all = (root: HTMLElement, selector: string) => [
@@ -64,8 +67,56 @@ const parts: ReadonlyArray<Part> = [
   },
   {
     name: 'DataTableFilterChip',
+    corner: 'bottom-start',
     role: 'A filter shown: its title, its value, its editor (here a selectFilter), its remove button.',
     find: (root) => root.querySelector('[data-slot=data-table-filter-chip]'),
+  },
+  {
+    name: 'filter.title',
+    depth: 1,
+    role: 'The name of the filter (`DataTableFilter.title`), before its value.',
+    find: (root) => root.querySelector('[data-slot=data-table-filter-title]'),
+  },
+  {
+    name: 'filter.summary(value)',
+    depth: 1,
+    role: 'What the filter holds, in short; its `placeholder` while empty.',
+    find: (root) => root.querySelector('[data-slot=data-table-filter-summary]'),
+  },
+  {
+    name: 'trigger',
+    corner: 'end',
+    depth: 1,
+    role: 'The chip’s button, which the editor spreads on the trigger of its popup.',
+    find: (root) => root.querySelector('[data-slot=data-table-filter-trigger]'),
+  },
+  {
+    name: 'filter.editor(props)',
+    depth: 1,
+    corner: 'end',
+    role: 'The popup that edits the value: a menu for selectFilter and multiSelectFilter, your own form for a custom filter (DataTableFilterPopover). Open it with the scenario above.',
+    // Rendered in a portal, outside the table.
+    find: () =>
+      document.querySelector(
+        '[data-slot=dropdown-menu-content], [data-slot=popover-content]'
+      ),
+  },
+  {
+    name: 'DataTableFilterOption',
+    corner: 'bottom-start',
+    depth: 1,
+    role: 'An option of the editor (`options` of selectFilter): its `label`, its `count`.',
+    find: () =>
+      document.querySelector(
+        '[data-slot=dropdown-menu-content] [role=menuitemradio], [data-slot=dropdown-menu-content] [role=menuitemcheckbox]'
+      ),
+  },
+  {
+    name: 'onRemove',
+    corner: 'end',
+    depth: 1,
+    role: 'The chip’s remove button: the filter and its value go.',
+    find: (root) => root.querySelector('[data-slot=data-table-filter-remove]'),
   },
   {
     name: 'DataTableColumnVisibility',
@@ -164,7 +215,6 @@ const useBoxes = (root: React.RefObject<HTMLDivElement | null>) => {
     const measure = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
-        const origin = element.getBoundingClientRect();
         setBoxes(
           parts.flatMap((part, index) => {
             const found = part.find(element);
@@ -178,8 +228,9 @@ const useBoxes = (root: React.RefObject<HTMLDivElement | null>) => {
             return [
               {
                 index,
-                x: rect.x - origin.x,
-                y: rect.y - origin.y,
+                // In the viewport: the overlay is fixed, above the page and its popups.
+                x: rect.x,
+                y: rect.y,
                 width: rect.width,
                 height: rect.height,
               },
@@ -192,17 +243,18 @@ const useBoxes = (root: React.RefObject<HTMLDivElement | null>) => {
     const resize = new ResizeObserver(measure);
     resize.observe(element);
     const mutation = new MutationObserver(measure);
-    mutation.observe(element, {
+    // The body, not only the table: an editor opens in a portal.
+    mutation.observe(document.body, {
       subtree: true,
       childList: true,
       attributes: true,
     });
-    element.addEventListener('scroll', measure, true);
+    document.addEventListener('scroll', measure, true);
     return () => {
       cancelAnimationFrame(frame);
       resize.disconnect();
       mutation.disconnect();
-      element.removeEventListener('scroll', measure, true);
+      document.removeEventListener('scroll', measure, true);
     };
   }, [root]);
   return boxes;
@@ -253,9 +305,20 @@ const columns: ReadonlyArray<DataTableColumnFor<User, State>> = [
   },
 ];
 
+type Scenario = 'default' | 'editor' | 'selection';
+
+const scenarios: ReadonlyArray<{
+  readonly id: Scenario;
+  readonly label: string;
+}> = [
+  { id: 'default', label: 'The table' },
+  { id: 'editor', label: 'The editor of a filter, open' },
+  { id: 'selection', label: 'Rows selected' },
+];
+
 /**
- * A live table, each part outlined and numbered with the name the code gives it. Hover a name to find its part; tick
- * "With a selection" to see the bar that takes the toolbar's place.
+ * A live table, each part outlined and numbered with the name the code gives it. Hover a name to find its part; pick a
+ * scenario to see the parts that only show in it: the editor of a filter, the bar of a selection.
  */
 export const Anatomy = () => {
   const store = useMemoryDataTableStore<State>({
@@ -275,6 +338,19 @@ export const Anatomy = () => {
   const root = React.useRef<HTMLDivElement>(null);
   const boxes = useBoxes(root);
   const [active, setActive] = React.useState<number | null>(null);
+  const [scenario, setScenario] = React.useState<Scenario>('default');
+  // Each scenario brings out the parts that only show in it: the editor of a filter, the bar of a selection.
+  const show = (next: Scenario) => {
+    setScenario(next);
+    selection.onSelectedChange(
+      new Set(
+        next === 'selection' ? rows.slice(0, 2).map((user) => user.id) : []
+      )
+    );
+    table.toolbar.chips
+      .find((chip) => chip.key === 'status')
+      ?.onOpenChange(next === 'editor');
+  };
 
   return (
     <div className="flex flex-col gap-6 lg:flex-row">
@@ -321,68 +397,69 @@ export const Anatomy = () => {
           />
         </div>
         {/* Over the live table, and through it to the pointer: the table stays usable. */}
-        {/* Above everything the table stacks (its sticky header, its shades): the outlines, then all the numbers over
-            them, so no outline hides a number. */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 isolate z-50"
-        >
-          {boxes.map((box) => (
-            <div
-              key={box.index}
-              style={
-                {
-                  '--x': `${box.x}px`,
-                  '--y': `${box.y}px`,
-                  '--w': `${box.width}px`,
-                  '--h': `${box.height}px`,
-                } as React.CSSProperties
-              }
-              className={cn(
-                'absolute top-(--y) left-(--x) h-(--h) w-(--w) rounded-sm border border-dashed border-chart-1 transition-opacity motion-reduce:transition-none',
-                active === box.index && 'border-2 border-solid bg-chart-1/10',
-                active !== null && active !== box.index && 'opacity-15'
-              )}
-            />
-          ))}
-          {boxes.map((box) => (
-            <span
-              key={box.index}
-              // On a corner of its box: the start one, or the end one for a part that holds others.
-              style={
-                {
-                  '--x': `${parts[box.index]?.corner === undefined ? box.x : box.x + box.width}px`,
-                  '--y': `${parts[box.index]?.corner === 'bottom-end' ? box.y + box.height : box.y}px`,
-                } as React.CSSProperties
-              }
-              className={cn(
-                'absolute top-(--y) left-(--x) flex size-5 -translate-1/2 items-center justify-center rounded-full bg-chart-1 text-xs leading-none font-semibold text-white ring-2 ring-background transition-opacity motion-reduce:transition-none',
-                active !== null && active !== box.index && 'opacity-15'
-              )}
-            >
-              {box.index + 1}
-            </span>
-          ))}
-        </div>
+        {/* In a portal, fixed: above everything, the table's sticky parts and an editor's popup included. The outlines,
+            then all the numbers over them, so no outline hides a number. */}
+        {createPortal(
+          <div
+            aria-hidden
+            className="pointer-events-none fixed inset-0 isolate z-60"
+          >
+            {boxes.map((box) => (
+              <div
+                key={box.index}
+                style={
+                  {
+                    '--x': `${box.x}px`,
+                    '--y': `${box.y}px`,
+                    '--w': `${box.width}px`,
+                    '--h': `${box.height}px`,
+                  } as React.CSSProperties
+                }
+                className={cn(
+                  'absolute top-(--y) left-(--x) h-(--h) w-(--w) rounded-sm border border-dashed border-chart-1 transition-opacity motion-reduce:transition-none',
+                  active === box.index && 'border-2 border-solid bg-chart-1/10',
+                  active !== null && active !== box.index && 'opacity-15'
+                )}
+              />
+            ))}
+            {boxes.map((box) => (
+              <span
+                key={box.index}
+                // On a corner of its box: the start one, or the end one for a part that holds others.
+                style={
+                  {
+                    '--x': `${parts[box.index]?.corner?.endsWith('end') === true ? box.x + box.width : box.x}px`,
+                    '--y': `${parts[box.index]?.corner?.startsWith('bottom') === true ? box.y + box.height : box.y}px`,
+                  } as React.CSSProperties
+                }
+                className={cn(
+                  'absolute top-(--y) left-(--x) flex size-5 -translate-1/2 items-center justify-center rounded-full bg-chart-1 text-xs leading-none font-semibold text-white ring-2 ring-background transition-opacity motion-reduce:transition-none',
+                  active !== null && active !== box.index && 'opacity-15'
+                )}
+              >
+                {box.index + 1}
+              </span>
+            ))}
+          </div>,
+          document.body
+        )}
       </div>
 
       <aside className="flex flex-col gap-3 text-sm lg:w-80">
-        <label className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            checked={selection.count > 0}
-            onChange={(event) =>
-              selection.onSelectedChange(
-                new Set(
-                  event.target.checked
-                    ? rows.slice(0, 2).map((user) => user.id)
-                    : []
-                )
-              )
-            }
-          />
-          With a selection
-        </label>
+        <fieldset className="flex flex-col gap-1">
+          <legend className="mb-1 font-medium">Show</legend>
+          {scenarios.map((option) => (
+            <label key={option.id} className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="anatomy-scenario"
+                checked={scenario === option.id}
+                onChange={() => show(option.id)}
+              />
+              {option.label}
+            </label>
+          ))}
+        </fieldset>
         <ol className="flex flex-col gap-1">
           {parts.map((part, index) => {
             const shown = boxes.some((box) => box.index === index);
@@ -395,6 +472,7 @@ export const Anatomy = () => {
                 onFocus={() => setActive(index)}
                 onBlur={() => setActive(null)}
                 className={cn(
+                  part.depth === 1 && 'ms-6',
                   'flex gap-2 rounded-md p-2 outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50',
                   !shown && 'opacity-50'
                 )}
