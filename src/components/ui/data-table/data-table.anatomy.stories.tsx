@@ -34,6 +34,8 @@ type Part = {
   readonly role: string;
   /** Finds the part in the live table, by its `data-slot`. */
   readonly find: (root: HTMLElement) => Element | null | undefined;
+  /** In a popup (an editor): outlined above it, while the outlines of the table stay under every popup. */
+  readonly popup?: true;
   /** Inside the part above it, as `filter.summary` inside `DataTableFilterChip`: indented in the legend. */
   readonly depth?: 1;
   /** The corner of its number: an end one for the parts that hold others, whose top start is taken. */
@@ -92,6 +94,7 @@ const parts: ReadonlyArray<Part> = [
   },
   {
     name: 'filter.editor(props)',
+    popup: true,
     depth: 1,
     corner: 'end',
     role: 'The popup that edits the value: a menu for selectFilter and multiSelectFilter, your own form for a custom filter (DataTableFilterPopover). Open it with the scenario above.',
@@ -103,6 +106,7 @@ const parts: ReadonlyArray<Part> = [
   },
   {
     name: 'DataTableFilterOption',
+    popup: true,
     corner: 'bottom-start',
     depth: 1,
     role: 'An option of the editor (`options` of selectFilter): its `label`, its `count`.',
@@ -352,6 +356,61 @@ export const Anatomy = () => {
       ?.onOpenChange(next === 'editor');
   };
 
+  // Two layers: the table's parts under any popup, so a popup stays on top; a popup's own parts over it.
+  const layer = (popupLayer: boolean) => {
+    const layerBoxes = boxes.filter(
+      (box) => (parts[box.index]?.popup === true) === popupLayer
+    );
+    return createPortal(
+      <div
+        aria-hidden
+        className={cn(
+          'pointer-events-none fixed inset-0 isolate',
+          // Under popups (z-50), but for the parts of a popup, drawn over it.
+          popupLayer ? 'z-60' : 'z-40'
+        )}
+      >
+        {layerBoxes.map((box) => (
+          <div
+            key={box.index}
+            style={
+              {
+                '--x': `${box.x}px`,
+                '--y': `${box.y}px`,
+                '--w': `${box.width}px`,
+                '--h': `${box.height}px`,
+              } as React.CSSProperties
+            }
+            className={cn(
+              'absolute top-(--y) left-(--x) h-(--h) w-(--w) rounded-sm border border-dashed border-chart-1 transition-opacity motion-reduce:transition-none',
+              active === box.index && 'border-2 border-solid bg-chart-1/10',
+              active !== null && active !== box.index && 'opacity-15'
+            )}
+          />
+        ))}
+        {layerBoxes.map((box) => (
+          <span
+            key={box.index}
+            // On a corner of its box: the start one, or the end one for a part that holds others.
+            style={
+              {
+                '--x': `${parts[box.index]?.corner?.endsWith('end') === true ? box.x + box.width : box.x}px`,
+                '--y': `${parts[box.index]?.corner?.startsWith('bottom') === true ? box.y + box.height : box.y}px`,
+              } as React.CSSProperties
+            }
+            className={cn(
+              'absolute top-(--y) left-(--x) flex size-5 -translate-1/2 items-center justify-center rounded-full bg-chart-1 text-xs leading-none font-semibold text-white ring-2 ring-background transition-opacity motion-reduce:transition-none',
+              active !== null && active !== box.index && 'opacity-15'
+            )}
+          >
+            {box.index + 1}
+          </span>
+        ))}
+      </div>,
+      document.body
+    );
+  };
+
   return (
     <div className="flex flex-col gap-6 lg:flex-row">
       <div
@@ -399,50 +458,8 @@ export const Anatomy = () => {
         {/* Over the live table, and through it to the pointer: the table stays usable. */}
         {/* In a portal, fixed: above everything, the table's sticky parts and an editor's popup included. The outlines,
             then all the numbers over them, so no outline hides a number. */}
-        {createPortal(
-          <div
-            aria-hidden
-            className="pointer-events-none fixed inset-0 isolate z-60"
-          >
-            {boxes.map((box) => (
-              <div
-                key={box.index}
-                style={
-                  {
-                    '--x': `${box.x}px`,
-                    '--y': `${box.y}px`,
-                    '--w': `${box.width}px`,
-                    '--h': `${box.height}px`,
-                  } as React.CSSProperties
-                }
-                className={cn(
-                  'absolute top-(--y) left-(--x) h-(--h) w-(--w) rounded-sm border border-dashed border-chart-1 transition-opacity motion-reduce:transition-none',
-                  active === box.index && 'border-2 border-solid bg-chart-1/10',
-                  active !== null && active !== box.index && 'opacity-15'
-                )}
-              />
-            ))}
-            {boxes.map((box) => (
-              <span
-                key={box.index}
-                // On a corner of its box: the start one, or the end one for a part that holds others.
-                style={
-                  {
-                    '--x': `${parts[box.index]?.corner?.endsWith('end') === true ? box.x + box.width : box.x}px`,
-                    '--y': `${parts[box.index]?.corner?.startsWith('bottom') === true ? box.y + box.height : box.y}px`,
-                  } as React.CSSProperties
-                }
-                className={cn(
-                  'absolute top-(--y) left-(--x) flex size-5 -translate-1/2 items-center justify-center rounded-full bg-chart-1 text-xs leading-none font-semibold text-white ring-2 ring-background transition-opacity motion-reduce:transition-none',
-                  active !== null && active !== box.index && 'opacity-15'
-                )}
-              >
-                {box.index + 1}
-              </span>
-            ))}
-          </div>,
-          document.body
-        )}
+        {layer(false)}
+        {layer(true)}
       </div>
 
       <aside className="flex flex-col gap-3 text-sm lg:w-80">
