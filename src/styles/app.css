@@ -118,6 +118,9 @@
   --sidebar-accent-foreground: var(--color-neutral-900);
   --sidebar-border: var(--color-neutral-200);
   --sidebar-ring: var(--color-neutral-300);
+  /* The shadow cast over content cut off at the edge of a scroll area. */
+  --shade: oklch(0 0 0 / 0.08);
+  --surface: var(--background);
 }
 
 .dark {
@@ -155,6 +158,8 @@
   --sidebar-accent-foreground: var(--color-neutral-50);
   --sidebar-border: var(--color-neutral-800);
   --sidebar-ring: var(--color-neutral-600);
+  --shade: oklch(0 0 0 / 0.6);
+  --surface: var(--background);
 }
 
 @theme inline {
@@ -194,9 +199,28 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  /* A hovered row, opaque (a cell that stays in place while the others scroll under it), apart from any surface. */
+  --color-row-hover: color-mix(in oklab, var(--foreground) 5%, var(--surface));
+  /* A selected row, opaque too, apart from a hovered one. */
+  --color-row-selected: color-mix(in oklab, var(--primary) 10%, var(--surface));
+  --color-row-selected-hover: color-mix(
+    in oklab,
+    var(--primary) 14%,
+    var(--surface)
+  );
+  --color-shade: var(--shade);
+  /* What the table sits on: the page, or a card. Sticky cells paint it over the cells that scroll under them. */
+  --color-surface: var(--surface);
+  /* Lines drawn inside a cell, which move with it when it is sticky: a border stays behind. */
+  --shadow-edge-l: inset 1px 0 0 var(--border);
+  --shadow-edge-r: inset -1px 0 0 var(--border);
+  --inset-shadow-edge-b: inset 0 -1px 0 var(--border);
 }
 
 @layer base {
+  [data-slot='card'] {
+    --surface: var(--card);
+  }
   * {
     @apply border-border outline-ring/50;
   }

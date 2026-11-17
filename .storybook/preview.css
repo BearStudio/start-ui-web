@@ -1,6 +1,12 @@
+/* As the app's body: a component that paints its own surface shows where it differs from the page. */
 body,
 .docs-story {
-  background-color: var(--background);
+  background-color: var(--color-neutral-50);
+}
+
+.dark body,
+.dark .docs-story {
+  background-color: var(--color-neutral-950);
 }
 
 #preview-container {

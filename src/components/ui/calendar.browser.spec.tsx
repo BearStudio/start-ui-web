@@ -10,7 +10,8 @@ import { Calendar } from './calendar';
 vi.mock('react-i18next', { spy: true });
 vi.mocked(module.useTranslation).mockImplementation(
   // @ts-expect-error We don't bother typing properly for this test
-  () => ({ t: (key) => key })
+  // `Providers` reads the direction of the language.
+  () => ({ t: (key) => key, i18n: { dir: () => 'ltr' } })
 );
 
 describe('Calendar', () => {

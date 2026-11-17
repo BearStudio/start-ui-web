@@ -6,7 +6,7 @@ import { cn } from '@/lib/tailwind/utils';
 import { Spinner } from '@/components/ui/spinner';
 
 const buttonVariants = cva(
-  "group/button relative inline-flex w-fit max-w-full min-w-0 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:translate-y-px disabled:pointer-events-none disabled:opacity-40 disabled:grayscale aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 data-disabled:pointer-events-none data-disabled:opacity-40 data-disabled:grayscale dark:disabled:opacity-20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 dark:data-disabled:opacity-20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&>span]:gap-2",
+  "group/button relative inline-flex w-fit max-w-full min-w-0 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:translate-y-px disabled:pointer-events-none disabled:opacity-40 disabled:grayscale aria-disabled:pointer-events-none aria-disabled:opacity-40 aria-disabled:grayscale aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 data-disabled:pointer-events-none data-disabled:opacity-40 data-disabled:grayscale dark:disabled:opacity-20 dark:aria-disabled:opacity-20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 dark:data-disabled:opacity-20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&>span]:gap-2",
   {
     variants: {
       variant: {
@@ -33,6 +33,8 @@ const buttonVariants = cva(
           "size-6 max-w-none rounded-sm text-xs [&_svg:not([class*='size-'])]:size-3",
         'icon-sm': 'size-8 max-w-none',
         'icon-lg': 'size-10 max-w-none',
+        /** A number, such as a page: square for a digit or two, as wide as it needs past them. */
+        number: 'h-8 max-w-none min-w-8 px-1.5 tabular-nums',
       },
     },
     compoundVariants: [

@@ -16,6 +16,7 @@ type InputProps = Pick<
   | 'defaultValue'
   | 'disabled'
   | 'readOnly'
+  | 'aria-label'
   | 'aria-invalid'
   | 'aria-describedby'
   | 'autoFocus'

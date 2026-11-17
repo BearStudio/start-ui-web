@@ -56,16 +56,39 @@ export const SearchInput = ({
     onChange?.(s);
   });
 
+  // The last text sent: a `value` that comes back as it is only catches up with the input, it does not replace what
+  // was typed since.
+  const [sent, setSent] = useState<string | undefined>(value ?? defaultValue);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const send = (s: string) => {
+    timeoutRef.current = undefined;
+    setSent(s);
+    onChangeEvent(s);
+  };
+  const sendEvent = useEffectEvent(send);
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      onChangeEvent(search);
-    }, delay);
+    timeoutRef.current = setTimeout(() => sendEvent(search), delay);
 
-    return () => clearTimeout(timeoutId);
+    return () => clearTimeout(timeoutRef.current);
   }, [search, delay]);
 
+  // Leaving the input with a search on its way runs it, so a click that follows (a reset, a link) acts on it.
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    if (timeoutRef.current !== undefined && search !== sent) {
+      clearTimeout(timeoutRef.current);
+      send(search);
+    }
+    rest.onBlur?.(event);
+  };
+
   const externalValueHasChanged = useValueHasChanged(value);
-  if (externalValueHasChanged && value !== search) {
+  if (
+    externalValueHasChanged &&
+    value !== search &&
+    // A text of blanks sent comes back as no search: the blanks typed stay.
+    (value ?? '') !== ((sent ?? '').trim() === '' ? '' : (sent ?? ''))
+  ) {
+    setSent(value);
     setSearch(value ?? '');
   }
 
@@ -79,7 +102,11 @@ export const SearchInput = ({
   };
 
   const handleEscape = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event?.key?.toLowerCase() === 'escape') {
+    // Escape while composing (an IME) cancels the composition, not the search.
+    if (
+      event?.key?.toLowerCase() === 'escape' &&
+      !event.nativeEvent.isComposing
+    ) {
       handleClear();
     }
     rest.onKeyDown?.(event);
@@ -93,7 +120,7 @@ export const SearchInput = ({
           onClick={handleClear}
           variant="ghost"
           size="icon-xs"
-          className="mr-0.5"
+          className="me-0.5"
         >
           <span className="sr-only">
             {clearLabel ?? t('components:searchInput.clear')}
@@ -113,6 +140,7 @@ export const SearchInput = ({
         value={search || ''}
         placeholder={placeholder ?? t('components:searchInput.placeholder')}
         onKeyDown={handleEscape}
+        onBlur={handleBlur}
         disabled={disabled}
       />
       <InputGroupAddon align="inline-end">{getEndElement()}</InputGroupAddon>

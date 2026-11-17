@@ -22,7 +22,7 @@ const labelVariants = cva(
 );
 
 const checkboxVariants = cva(
-  'flex flex-none cursor-pointer items-center justify-center rounded-sm outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-disabled:opacity-20 aria-invalid:focus-visible:ring-destructive/50 data-checked:bg-primary data-checked:text-primary-foreground data-disabled:cursor-not-allowed data-disabled:bg-muted-foreground data-indeterminate:border data-indeterminate:bg-white data-unchecked:border data-unchecked:bg-white aria-invalid:data-unchecked:border-destructive dark:data-indeterminate:bg-input/30 dark:data-unchecked:bg-input/30',
+  'flex flex-none cursor-pointer items-center justify-center rounded-sm outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:focus-visible:ring-destructive/50 data-checked:bg-primary data-checked:text-primary-foreground data-disabled:cursor-not-allowed data-disabled:opacity-50 data-indeterminate:border data-indeterminate:bg-white data-unchecked:border data-unchecked:bg-white aria-invalid:data-unchecked:border-destructive data-disabled:data-unchecked:bg-muted dark:data-indeterminate:bg-input/30 dark:data-unchecked:bg-input/30',
   {
     variants: {
       size: {
@@ -71,7 +71,8 @@ export function Checkbox({
       <CheckboxPrimitive.Root
         className={cn(checkboxVariants({ size }), className)}
         {...props}
-        aria-labelledby={id}
+        // Without its label, the checkbox is named by its own `aria-label`.
+        aria-labelledby={noLabel ? props['aria-labelledby'] : id}
       >
         <CheckboxPrimitive.Indicator
           keepMounted={true}

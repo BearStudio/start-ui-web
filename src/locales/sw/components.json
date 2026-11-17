@@ -83,5 +83,62 @@
     "unknown": "Haijulikani",
     "copyError": "Nakili Hitilafu",
     "copied": "Imenakiliwa"
+  },
+  "dataTable": {
+    "addFilter": "Ongeza kichujio",
+    "filter": "Chuja",
+    "filterLabel": "Kichujio cha {{title}}",
+    "filterTitle": "{{title}}:",
+    "removeFilter": "Ondoa kichujio cha {{title}}",
+    "select": "Chagua",
+    "clear": "Futa",
+    "selectedCount_one": "{{count}} imechaguliwa",
+    "selectedCount_other": "{{count}} zimechaguliwa",
+    "sortAscending": "Kupanda",
+    "sortDescending": "Kushuka",
+    "sortedAscending": "Imepangwa kwa {{title}}, kupanda",
+    "sortedDescending": "Imepangwa kwa {{title}}, kushuka",
+    "columns": "Safu",
+    "columnsShown": "Safu zinazoonyeshwa",
+    "pageOf": "Ukurasa {{page}} kati ya {{pages}}",
+    "pageOfResults": "Ukurasa {{page}} kati ya {{pages}}, {{results}}",
+    "page": "Ukurasa {{page}}",
+    "previous": "Iliyotangulia",
+    "next": "Inayofuata",
+    "unknownValue": {
+      "loading": "inapakia",
+      "notAnOption": "si chaguo",
+      "error": "imeshindwa kupakia"
+    },
+    "options": {
+      "error": "Imeshindwa kupakia chaguo",
+      "retrying": "Inajaribu tena…",
+      "empty": "Hakuna chaguo",
+      "announceLoading": "Inapakia chaguo",
+      "announceCount_one": "Chaguo {{count}}",
+      "announceCount_other": "Chaguo {{count}}"
+    },
+    "states": {
+      "loading": "Inapakia…",
+      "empty": "Hakuna data",
+      "noResults": "Hakuna matokeo",
+      "noResultsFor": "Hakuna matokeo ya \"{{searchTerm}}\"",
+      "clearFilters": "Futa vichujio",
+      "error": "Kitu kilienda vibaya",
+      "retry": "Jaribu tena",
+      "loadedOf": "{{loaded}} kati ya {{total}}",
+      "loaded_one": "{{count}} imepakiwa",
+      "loaded_other": "{{count}} zimepakiwa",
+      "loadMore": "Pakia zaidi"
+    },
+    "selection": {
+      "selectAll": "Chagua safu zote zinazoonyeshwa",
+      "selectAllRows": "Chagua safu zote",
+      "selectRow": "Chagua safu",
+      "clear": "Futa uteuzi"
+    },
+    "rowsPerPage": "Safu kwa ukurasa",
+    "rowHint": "Enter hufungua safu; vitufe vya mishale husogea kati ya safu.",
+    "rowHintSelectable": "Enter hufungua safu, Space huichagua; vitufe vya mishale husogea kati ya safu."
   }
 }
