@@ -996,7 +996,7 @@ export function DataTable<
             </ScrollAreaPrimitive.Content>
           </ScrollAreaPrimitive.Viewport>
           {/* The track starts below the header, a padding Base UI counts when it sizes the thumb. */}
-          <ScrollBar autoHide className="pt-(--header-height)" />
+          <ScrollBar autoHide className="z-20 pt-(--header-height)" />
           {/* A scrollbar that shows on hover only says nothing of the columns past the edge: a shade does. */}
           <div
             aria-hidden="true"
