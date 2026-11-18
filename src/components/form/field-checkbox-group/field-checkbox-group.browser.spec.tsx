@@ -225,13 +225,8 @@ test('disabled group', async () => {
   const cb = page.getByRole('checkbox', { name: 'Buzz Pawdrin' });
   await expect.element(cb).toBeDisabled();
 
-  try {
-    await user.click(page.getByRole('button', { name: 'Submit' }), {
-      timeout: FAILED_CLICK_TIMEOUT_MS,
-    });
-  } catch {
-    expect(mockedSubmit).toHaveBeenCalledWith({ bears: undefined });
-  }
+  await user.click(page.getByRole('button', { name: 'Submit' }));
+  expect(mockedSubmit).toHaveBeenCalledWith({ bears: undefined });
 });
 
 test('disabled option', async () => {
