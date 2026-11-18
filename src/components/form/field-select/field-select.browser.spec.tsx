@@ -22,7 +22,7 @@ test('should select item on click', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
       useFormOptions={{ defaultValues: { bear: '' } }}
@@ -56,7 +56,7 @@ test('default value', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
       useFormOptions={{ defaultValues: { bear: 'grizzlyrin' } }}
@@ -78,7 +78,7 @@ test('default value', async () => {
 
   await expect
     .element(page.getByRole('combobox', { name: 'Bearstronaut' }))
-    .toHaveTextContent('Yuri Grizzlyrin');
+    .toMatchTextContent('Yuri Grizzlyrin');
 
   await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ bear: 'grizzlyrin' });
@@ -88,7 +88,7 @@ test('disabled', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
       useFormOptions={{ defaultValues: { bear: 'pawdrin' } }}
@@ -120,7 +120,7 @@ test('disabled option', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
       useFormOptions={{ defaultValues: { bear: '' } }}

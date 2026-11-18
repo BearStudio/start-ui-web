@@ -22,7 +22,7 @@ test('should toggle checkbox on click', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
       useFormOptions={{ defaultValues: { bears: [] } }}
@@ -56,7 +56,7 @@ test('should toggle checkbox on label click', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
       useFormOptions={{ defaultValues: { bears: [] } }}
@@ -91,7 +91,7 @@ test('should allow selecting multiple checkboxes', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
       useFormOptions={{ defaultValues: { bears: [] } }}
@@ -130,7 +130,7 @@ test('keyboard interaction: toggle with space', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
       useFormOptions={{ defaultValues: { bears: [] } }}
@@ -166,7 +166,7 @@ test('default values', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
       useFormOptions={{
@@ -199,7 +199,7 @@ test('disabled group', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
       useFormOptions={{
@@ -238,7 +238,7 @@ test('disabled option', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bears: z.array(z.string()) })}
       useFormOptions={{ defaultValues: { bears: [] } }}
