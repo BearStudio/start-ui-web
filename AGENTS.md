@@ -11,3 +11,15 @@ UI must use the design system in `src/components/ui` and the theme in `src/style
 - Do not use inline styles. Pass dynamic values through CSS custom properties (`style={{ '--x': value }}` with `className="w-(--x)"`).
 
 When a design needs a treatment no variant covers, add a variant in the component file in `src/components/ui` instead of overriding it at the call site.
+
+## Tests
+
+Vitest runs every file in one shared module graph (`isolate: false`) and in random order (`sequence.shuffle`). A test file must leave nothing behind for the next one:
+
+- Do not use `vi.mock` on a module another test file also imports (`react-i18next`, `@/server/auth`...). It cannot apply once that module is loaded. Render through the real providers, or inject the dependency.
+- Spies, mocks, stubbed env and globals are restored after each test (`restoreMocks`, `unstubEnvs`, `unstubGlobals`). Do not opt out.
+- Undo anything else you change in `afterEach`: fake timers (`vi.useRealTimers()`), `document`, `window`, `localStorage`, module-level variables.
+- Do not depend on another test running first, e.g. for document focus or data it created.
+- Never add retries or raise a timeout to make a test pass. A test that needs one has a bug: find it.
+
+Replay a failing order with `vitest run --sequence.seed=<seed shown in the output>`.
