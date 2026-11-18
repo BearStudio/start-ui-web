@@ -124,14 +124,14 @@ export function DataTableToolbar({
               onChange={(value) => onSearch(value ?? '')}
             />
           )}
+          {chips.map(({ key, ...chip }) => (
+            <DataTableFilterChip key={key} {...chip} />
+          ))}
           <DataTableAddFilter
             ref={attachAddFilter}
             filters={addable}
             onAdd={onAdd}
           />
-          {chips.map(({ key, ...chip }) => (
-            <DataTableFilterChip key={key} {...chip} />
-          ))}
           {table.isFiltered && (
             <Button variant="ghost" size="sm" onClick={table.reset}>
               <XIcon />
