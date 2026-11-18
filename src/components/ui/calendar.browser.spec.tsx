@@ -1,17 +1,9 @@
 import dayjs from 'dayjs';
-import * as module from 'react-i18next';
 import { describe, expect, it, vi } from 'vitest';
 
 import { page, render } from '@/tests/utils';
 
 import { Calendar } from './calendar';
-
-// https://vitest.dev/guide/browser/#limitations
-vi.mock('react-i18next', { spy: true });
-vi.mocked(module.useTranslation).mockImplementation(
-  // @ts-expect-error We don't bother typing properly for this test
-  () => ({ t: (key) => key })
-);
 
 describe('Calendar', () => {
   it('should render with previous and next button by default', async () => {
