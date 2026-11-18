@@ -43,35 +43,25 @@ jobs:
       S3_SECURE: false
       S3_FORCE_PATH_STYLE: true
       VITE_S3_BUCKET_PUBLIC_URL: http://localhost:7070/default
-    services:
-      postgres:
-        image: postgres:16.1
-
-        env:
-          POSTGRES_PASSWORD: startui
-          POSTGRES_USER: startui
-          POSTGRES_DB: startui
-
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-
-      maildev:
-        image: maildev/maildev:2.2.1
-        options: >-
-          --health-cmd "wget --spider --no-verbose --tries=1 -T 3 http://localhost:1080/healthz"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 1025:1025
-          - 1080:1080
-
     steps:
+      # Start services in the background so image pulls and boot overlap
+      # with checkout and install. `services:` would block the job until
+      # both are pulled and healthy.
+      - name: Start services
+        run: |
+          start() {
+            name=$1; shift
+            (docker run -d --name "$name" "$@" > "/tmp/$name.log" 2>&1; echo $? > "/tmp/$name.status") &
+          }
+          start postgres -p 5432:5432 \
+            -e POSTGRES_PASSWORD=startui -e POSTGRES_USER=startui -e POSTGRES_DB=startui \
+            --health-cmd pg_isready --health-interval 1s \
+            postgres:16.1
+          start maildev -p 1025:1025 -p 1080:1080 \
+            --health-cmd "wget --spider --no-verbose --tries=1 -T 3 http://localhost:1080/healthz" \
+            --health-interval 1s \
+            maildev/maildev:2.2.1
+
       - uses: actions/checkout@v4
         with:
           # Blobless, not shallow: full history for merge-base, blobs on demand.
@@ -87,6 +77,17 @@ jobs:
         uses: ./.github/actions/setup-playwright
         with:
           browsers: chromium ${{ matrix.browser }}
+
+      - name: Wait for services
+        run: |
+          for c in postgres maildev; do
+            until [ -f "/tmp/$c.status" ]; do sleep 0.2; done
+            if [ "$(cat /tmp/$c.status)" != 0 ]; then cat "/tmp/$c.log"; exit 1; fi
+            until [ "$(docker inspect -f '{{.State.Health.Status}}' $c)" = healthy ]; do
+              if [ "$(docker inspect -f '{{.State.Running}}' $c)" != true ]; then docker logs $c; exit 1; fi
+              sleep 0.2
+            done
+          done
 
       - name: Migrate database
         run: pnpm db:push
