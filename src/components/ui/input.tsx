@@ -46,7 +46,7 @@ function Input({
       {!!startAddon && (
         <InputGroupAddon align="inline-start">{startAddon}</InputGroupAddon>
       )}
-      <InputGroupInput {...props} ref={ref} data-slot="input" />
+      <InputGroupInput {...props} disabled ref={ref} data-slot="input" />
       {!!endAddon && (
         <InputGroupAddon align="inline-end">{endAddon}</InputGroupAddon>
       )}
