@@ -10,12 +10,18 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Cache Playwright browsers
+    # Browsers only change with the Playwright version, not the lockfile.
+    - name: Get Playwright version
+      id: version
+      shell: bash
+      run: echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+
+    - name: Restore Playwright browsers
       id: playwright-cache
-      uses: actions/cache@v4
+      uses: actions/cache/restore@v4
       with:
         path: ~/.cache/ms-playwright
-        key: ${{ runner.os }}-playwright-${{ inputs.browsers }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+        key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.version.outputs.version }}-${{ inputs.browsers }}
 
     - name: Install Playwright browsers
       if: steps.playwright-cache.outputs.cache-hit != 'true'
@@ -23,6 +29,13 @@ runs:
       env:
         BROWSERS: ${{ inputs.browsers }}
       run: pnpm exec playwright install $BROWSERS --with-deps
+
+    - name: Save Playwright browsers
+      if: steps.playwright-cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: ~/.cache/ms-playwright
+        key: ${{ steps.playwright-cache.outputs.cache-primary-key }}
 
     - name: Install Playwright system deps
       if: steps.playwright-cache.outputs.cache-hit == 'true'

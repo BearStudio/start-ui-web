@@ -1,5 +1,5 @@
 name: Setup pnpm
-description: Install pnpm, setup Node.js with cache, and install dependencies
+description: Install pnpm and Node.js, then restore node_modules or install it
 
 inputs:
   node-version:
@@ -20,9 +20,31 @@ runs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
-        check-latest: true
-        cache: 'pnpm'
+
+    # Cache node_modules itself, not the package store: a hit skips the
+    # install entirely. Keys only change with the lockfile, so PRs restore
+    # the cache that main saved.
+    - name: Restore node_modules
+      id: node-modules
+      uses: actions/cache/restore@v4
+      with:
+        path: node_modules
+        key: node-modules-${{ runner.os }}-${{ runner.arch }}-node${{ inputs.node-version }}-${{ hashFiles('pnpm-lock.yaml', 'pnpm-workspace.yaml') }}
 
     - name: Install deps
+      if: steps.node-modules.outputs.cache-hit != 'true'
       shell: bash
       run: pnpm install --frozen-lockfile
+
+    # Generated files (Prisma client, build info) live outside node_modules.
+    - name: Generate files
+      if: steps.node-modules.outputs.cache-hit == 'true'
+      shell: bash
+      run: pnpm run postinstall
+
+    - name: Save node_modules
+      if: steps.node-modules.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: node_modules
+        key: ${{ steps.node-modules.outputs.cache-primary-key }}
