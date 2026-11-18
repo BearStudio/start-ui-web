@@ -1,12 +1,7 @@
 import { expect, test, vi } from 'vitest';
 import { z } from 'zod';
 
-import {
-  FAILED_CLICK_TIMEOUT_MS,
-  page,
-  render,
-  setupUser,
-} from '@/tests/utils';
+import { page, render, setupUser } from '@/tests/utils';
 
 import { FormField, FormFieldController, FormFieldLabel } from '..';
 import { FormMocked } from '../form-test-utils';
@@ -111,7 +106,7 @@ test('disabled', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  await render(
+  const screen = await render(
     <FormMocked
       schema={z.object({ code: z.string().min(6).max(6) })}
       useFormOptions={{ defaultValues: { code: '000000' } }}
@@ -132,11 +127,13 @@ test('disabled', async () => {
     </FormMocked>
   );
   const input = page.getByLabelText('Code');
-  try {
-    await user.click(input, { timeout: FAILED_CLICK_TIMEOUT_MS });
-  } catch {
-    // Click expected to fail since input is disabled
-  }
+  await expect.element(input).toBeDisabled();
+  // The clipboard API requires a focused document. Click the form's top-left
+  // corner to focus it without touching the disabled input: do not rely on
+  // a previous test having left the document focused.
+  await user.click(page.elementLocator(screen.container), {
+    position: { x: 0, y: 0 },
+  });
   // Add the code to the user clipboard
   await navigator.clipboard.writeText('123456');
   await user.paste();
