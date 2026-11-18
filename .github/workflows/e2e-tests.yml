@@ -73,6 +73,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Blobless, not shallow: full history for merge-base, blobs on demand.
+          filter: blob:none
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
