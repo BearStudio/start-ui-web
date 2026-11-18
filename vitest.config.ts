@@ -15,6 +15,7 @@ export default defineConfig({
           name: 'browser',
           browser: {
             enabled: true,
+            headless: process.env.VITEST_BROWSER_HEADED !== 'true',
             provider: playwright({
               contextOptions: {
                 permissions: ['clipboard-write', 'clipboard-read'],
