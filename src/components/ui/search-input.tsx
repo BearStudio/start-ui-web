@@ -52,7 +52,14 @@ export const SearchInput = ({
 
   const [search, setSearch] = useState<string>(value ?? defaultValue ?? '');
 
+  // Last value reported to (or received from) the parent. Without it, the
+  // debounce fires on mount with an unchanged value, and a parent that
+  // navigates on change (`to: '.'`) hijacks any navigation started meanwhile.
+  const lastValue = useRef(value ?? defaultValue ?? '');
+
   const onChangeEvent = useEffectEvent((s: string) => {
+    if (s === (value ?? lastValue.current)) return;
+    lastValue.current = s;
     onChange?.(s);
   });
 
