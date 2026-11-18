@@ -56,6 +56,11 @@ jobs:
     if: github.event.pull_request.draft == false
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    # Chromium and its system dependencies come baked in the image: no
+    # apt-get at run time (see e2e-tests.yml).
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --user 1001
     env:
       VITE_BASE_URL: http://localhost:3000
       VITE_S3_BUCKET_PUBLIC_URL: 'http://localhost:9000/default'
@@ -71,8 +76,8 @@ jobs:
         with:
           node-version: 26
 
-      - name: Setup Playwright
-        uses: ./.github/actions/setup-playwright
+      - name: Check Playwright image version
+        uses: ./.github/actions/check-playwright-image
 
       - name: Run tests
         run: SKIP_ENV_VALIDATION=true pnpm run test:ci
