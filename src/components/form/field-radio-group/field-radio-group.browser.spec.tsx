@@ -35,7 +35,7 @@ test('should select radio on button click', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
       useFormOptions={{ defaultValues: { bear: '' } }}
@@ -69,7 +69,7 @@ test('should select radio on label click', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
       useFormOptions={{ defaultValues: { bear: '' } }}
@@ -106,7 +106,7 @@ test('should handle keyboard navigation', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
 
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
       useFormOptions={{ defaultValues: { bear: '' } }}
@@ -152,7 +152,7 @@ test('should handle keyboard navigation', async () => {
 test('default value', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
       useFormOptions={{
@@ -186,7 +186,7 @@ test('default value', async () => {
 test('disabled', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
       useFormOptions={{
@@ -221,7 +221,7 @@ test('disabled', async () => {
 test('disabled option', async () => {
   const user = setupUser();
   const mockedSubmit = vi.fn();
-  render(
+  await render(
     <FormMocked
       schema={z.object({ bear: z.string() })}
       useFormOptions={{
