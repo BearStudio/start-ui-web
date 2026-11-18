@@ -83,5 +83,66 @@
     "unknown": "Inconnu",
     "copyError": "Copier l'erreur",
     "copied": "Copié"
+  },
+  "dataTable": {
+    "addFilter": "Ajouter un filtre",
+    "filter": "Filtrer",
+    "filterLabel": "Filtre {{title}}",
+    "filterTitle": "{{title}} :",
+    "removeFilter": "Retirer le filtre {{title}}",
+    "select": "Choisir",
+    "clear": "Effacer",
+    "selectedCount_one": "{{count}} sélectionné",
+    "selectedCount_other": "{{count}} sélectionnés",
+    "selectedCount_many": "{{count}} sélectionnés",
+    "sortAscending": "Croissant",
+    "sortDescending": "Décroissant",
+    "sortedAscending": "Trié par {{title}}, croissant",
+    "sortedDescending": "Trié par {{title}}, décroissant",
+    "columns": "Colonnes",
+    "columnsShown": "Colonnes affichées",
+    "pinColumn": "Épingler {{title}}",
+    "pageOf": "Page {{page}} sur {{pages}}",
+    "pageOfResults": "Page {{page}} sur {{pages}}, {{results}}",
+    "page": "Page {{page}}",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "unknownValue": {
+      "loading": "chargement",
+      "notAnOption": "pas une option",
+      "error": "chargement impossible"
+    },
+    "options": {
+      "error": "Impossible de charger les options",
+      "retrying": "Nouvel essai…",
+      "empty": "Aucune option",
+      "announceLoading": "Chargement des options",
+      "announceCount_one": "{{count}} option",
+      "announceCount_other": "{{count}} options",
+      "announceCount_many": "{{count}} options"
+    },
+    "states": {
+      "loading": "Chargement…",
+      "empty": "Aucune donnée",
+      "noResults": "Aucun résultat",
+      "noResultsFor": "Aucun résultat pour « {{searchTerm}} »",
+      "clearFilters": "Effacer les filtres",
+      "error": "Quelque chose s'est mal passé",
+      "retry": "Réessayer",
+      "loadedOf": "{{loaded}} sur {{total}}",
+      "loaded_one": "{{count}} chargée",
+      "loaded_other": "{{count}} chargées",
+      "loaded_many": "{{count}} chargées",
+      "loadMore": "Charger plus"
+    },
+    "selection": {
+      "selectAll": "Sélectionner toutes les lignes affichées",
+      "selectAllRows": "Sélectionner toutes les lignes",
+      "selectRow": "Sélectionner la ligne",
+      "clear": "Désélectionner"
+    },
+    "rowsPerPage": "Lignes par page",
+    "rowHint": "Entrée ouvre une ligne ; les flèches passent d’une ligne à l’autre.",
+    "rowHintSelectable": "Entrée ouvre une ligne, Espace la sélectionne ; les flèches passent d’une ligne à l’autre."
   }
 }

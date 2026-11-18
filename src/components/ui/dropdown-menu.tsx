@@ -4,6 +4,24 @@ import { ReactNode } from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
+const itemIndicatorClassName = {
+  // A mark before the label, in the margin of the item.
+  start: 'ps-8 pe-2',
+  // A check after the label, as the items of a `Select`.
+  end: 'ps-2 pe-8',
+  // A box before the label, empty until ticked: the items of a choice of several.
+  checkbox: 'ps-8 pe-2',
+  // No mark: the item shows its state itself, as an icon that toggles.
+  none: 'px-2',
+} as const;
+
+const indicatorPositionClassName = {
+  start: 'start-2',
+  end: 'end-2',
+  checkbox: 'start-2',
+  none: '',
+} as const;
+
 function DropdownMenu(props: MenuPrimitive.Root.Props) {
   return <MenuPrimitive.Root data-slot="dropdown-menu" {...props} />;
 }
@@ -97,25 +115,48 @@ function DropdownMenuCheckboxItem({
   children,
   checked,
   onCheckedChange,
+  indicator = 'start',
   ...props
 }: Omit<MenuPrimitive.CheckboxItem.Props, 'checked' | 'onCheckedChange'> & {
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
+  /**
+   * Where the check sits: before the label, after it as in a `Select`, in a box shown unticked too, which tells a
+   * choice of several from a choice of one, or nowhere, for an item whose content shows its state (a toggled icon).
+   */
+  indicator?: 'start' | 'end' | 'checkbox' | 'none';
 }) {
   return (
     <MenuPrimitive.CheckboxItem
       data-slot="dropdown-menu-checkbox-item"
       className={cn(
-        "relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "group/checkbox-item relative flex cursor-default items-center gap-2 rounded-sm py-1.5 text-sm outline-hidden select-none data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        itemIndicatorClassName[indicator],
         className
       )}
       checked={checked}
       onCheckedChange={onCheckedChange}
       {...props}
     >
-      <MenuPrimitive.CheckboxItemIndicator className="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center">
-        <CheckIcon className="size-4" />
-      </MenuPrimitive.CheckboxItemIndicator>
+      {indicator === 'none' ? null : indicator === 'checkbox' ? (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute start-2 flex size-4 items-center justify-center rounded-sm border border-input group-data-checked/checkbox-item:border-primary group-data-checked/checkbox-item:bg-primary group-data-checked/checkbox-item:text-primary-foreground"
+        >
+          <MenuPrimitive.CheckboxItemIndicator className="flex">
+            <CheckIcon className="size-3" />
+          </MenuPrimitive.CheckboxItemIndicator>
+        </span>
+      ) : (
+        <MenuPrimitive.CheckboxItemIndicator
+          className={cn(
+            'pointer-events-none absolute flex size-3.5 items-center justify-center',
+            indicatorPositionClassName[indicator]
+          )}
+        >
+          <CheckIcon className="size-4" />
+        </MenuPrimitive.CheckboxItemIndicator>
+      )}
       {children}
     </MenuPrimitive.CheckboxItem>
   );
@@ -134,21 +175,35 @@ function DropdownMenuRadioItem({
   className,
   children,
   icon,
+  indicator = 'start',
   ...props
 }: MenuPrimitive.RadioItem.Props & {
   icon?: ReactNode;
+  /** Where the mark sits: a dot before the label, or a check after it as in a `Select`. */
+  indicator?: 'start' | 'end';
 }) {
   return (
     <MenuPrimitive.RadioItem
       data-slot="dropdown-menu-radio-item"
       className={cn(
-        "relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "relative flex cursor-default items-center gap-2 rounded-sm py-1.5 text-sm outline-hidden select-none data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        itemIndicatorClassName[indicator],
         className
       )}
       {...props}
     >
-      <MenuPrimitive.RadioItemIndicator className="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center">
-        {icon ?? <CircleIcon className="size-2 fill-current" />}
+      <MenuPrimitive.RadioItemIndicator
+        className={cn(
+          'pointer-events-none absolute flex size-3.5 items-center justify-center',
+          indicatorPositionClassName[indicator]
+        )}
+      >
+        {icon ??
+          (indicator === 'end' ? (
+            <CheckIcon className="size-4" />
+          ) : (
+            <CircleIcon className="size-2 fill-current" />
+          ))}
       </MenuPrimitive.RadioItemIndicator>
       {children}
     </MenuPrimitive.RadioItem>

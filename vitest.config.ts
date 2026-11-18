@@ -1,3 +1,4 @@
+import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { playwright } from '@vitest/browser-playwright';
 import path from 'node:path';
@@ -11,6 +12,16 @@ export default defineConfig({
   test: {
     projects: [
       {
+        plugins: [tailwindcss()],
+        // Prebundled before the first spec runs: a dependency found mid-run reloads the page, and two copies of React
+        // then break hooks.
+        optimizeDeps: {
+          include: [
+            '@tanstack/react-router',
+            '@tanstack/react-table',
+            '@tanstack/react-virtual',
+          ],
+        },
         test: {
           name: 'browser',
           browser: {

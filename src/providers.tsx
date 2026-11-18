@@ -1,5 +1,7 @@
+import { DirectionProvider } from '@base-ui/react/direction-provider';
 import { ThemeProvider } from 'next-themes';
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import '@/lib/dayjs/config';
 import '@/lib/i18n';
 import '@fontsource-variable/inter';
@@ -19,18 +21,22 @@ export const Providers = (props: {
   forcedTheme?: string;
 }) => {
   const isDemoModeDrawerVisible = useIsDemoModeDrawerVisible();
+  const { i18n } = useTranslation();
   return (
-    <ThemeProvider
-      attribute="class"
-      storageKey="theme"
-      disableTransitionOnChange
-      forcedTheme={props.forcedTheme}
-    >
-      <QueryClientProvider>
-        {props.children}
-        {!isDemoModeDrawerVisible && <Sonner />}
-        {envClient.VITE_IS_DEMO && <DemoModeDrawer />}
-      </QueryClientProvider>
-    </ThemeProvider>
+    // Base UI reads the direction from this context, not from `dir`: scroll areas, menus and sliders follow it.
+    <DirectionProvider direction={i18n.dir()}>
+      <ThemeProvider
+        attribute="class"
+        storageKey="theme"
+        disableTransitionOnChange
+        forcedTheme={props.forcedTheme}
+      >
+        <QueryClientProvider>
+          {props.children}
+          {!isDemoModeDrawerVisible && <Sonner />}
+          {envClient.VITE_IS_DEMO && <DemoModeDrawer />}
+        </QueryClientProvider>
+      </ThemeProvider>
+    </DirectionProvider>
   );
 };

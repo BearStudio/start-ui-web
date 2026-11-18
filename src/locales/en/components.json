@@ -83,5 +83,63 @@
     "unknown": "Unknown",
     "copyError": "Copy Error",
     "copied": "Copied"
+  },
+  "dataTable": {
+    "addFilter": "Add filter",
+    "filter": "Filter",
+    "filterLabel": "{{title}} filter",
+    "filterTitle": "{{title}}:",
+    "removeFilter": "Remove the {{title}} filter",
+    "select": "Select",
+    "clear": "Clear",
+    "selectedCount_one": "{{count}} selected",
+    "selectedCount_other": "{{count}} selected",
+    "sortAscending": "Ascending",
+    "sortDescending": "Descending",
+    "sortedAscending": "Sorted by {{title}}, ascending",
+    "sortedDescending": "Sorted by {{title}}, descending",
+    "columns": "Columns",
+    "columnsShown": "Columns shown",
+    "pinColumn": "Pin {{title}}",
+    "pageOf": "Page {{page}} of {{pages}}",
+    "pageOfResults": "Page {{page}} of {{pages}}, {{results}}",
+    "page": "Page {{page}}",
+    "previous": "Previous",
+    "next": "Next",
+    "unknownValue": {
+      "loading": "loading",
+      "notAnOption": "not an option",
+      "error": "could not load"
+    },
+    "options": {
+      "error": "Could not load the options",
+      "retrying": "Trying again…",
+      "empty": "No options",
+      "announceLoading": "Loading the options",
+      "announceCount_one": "{{count}} option",
+      "announceCount_other": "{{count}} options"
+    },
+    "states": {
+      "loading": "Loading…",
+      "empty": "No data",
+      "noResults": "No results",
+      "noResultsFor": "No results for “{{searchTerm}}”",
+      "clearFilters": "Clear filters",
+      "error": "Something went wrong",
+      "retry": "Retry",
+      "loadedOf": "{{loaded}} of {{total}}",
+      "loaded_one": "{{count}} loaded",
+      "loaded_other": "{{count}} loaded",
+      "loadMore": "Load more"
+    },
+    "selection": {
+      "selectAll": "Select all rows shown",
+      "selectAllRows": "Select all rows",
+      "selectRow": "Select row",
+      "clear": "Clear selection"
+    },
+    "rowsPerPage": "Rows per page",
+    "rowHint": "Enter opens a row; the arrow keys move between rows.",
+    "rowHintSelectable": "Enter opens a row, Space selects it; the arrow keys move between rows."
   }
 }
