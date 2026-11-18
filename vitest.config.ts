@@ -9,8 +9,30 @@ const resolve = (filePath: string) =>
 export default defineConfig({
   plugins: [react()],
   test: {
+    // Files share one module graph (`isolate: false`), so every file must
+    // leave nothing behind. These options reset mocks, env and globals after
+    // each test. See "Tests" in AGENTS.md.
+    isolate: false,
+    restoreMocks: true,
+    unstubEnvs: true,
+    unstubGlobals: true,
+    // Random order flushes out tests that depend on another one running first.
+    sequence: { shuffle: true },
+    // `--changed` (PR selection) runs everything when one of these changes,
+    // since the module graph cannot see their effect.
+    forceRerunTriggers: [
+      '**/package.json',
+      '**/pnpm-lock.yaml',
+      '**/{vitest,vite}.config.*',
+      '**/tsconfig.json',
+      '**/prisma/schema.prisma',
+      '**/src/tests/**',
+      '**/src/server/routers/test-{setup,utils}.ts',
+      '**/.github/workflows/**',
+    ],
     projects: [
       {
+        extends: true,
         test: {
           name: 'browser',
           browser: {
@@ -34,6 +56,7 @@ export default defineConfig({
         },
       },
       {
+        extends: true,
         test: {
           name: 'unit',
           environment: 'node',

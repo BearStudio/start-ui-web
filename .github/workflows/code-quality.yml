@@ -5,6 +5,8 @@ on:
     branches: [main]
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
+  # The full suite runs in the merge queue before anything reaches main.
+  merge_group:
 
 # A new commit on a PR makes the previous run worthless: cancel it.
 # Pushes to main always run to completion.
@@ -16,7 +18,7 @@ jobs:
   linter:
     name: 🧹 Linter
     if: github.event.pull_request.draft == false
-    timeout-minutes: 10
+    timeout-minutes: 1
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,12 +31,12 @@ jobs:
         uses: ./.github/actions/setup-pnpm
 
       - name: Run oxlint
-        run: pnpm oxlint --deny-warnings .
+        run: .github/scripts/budget.sh 5 node_modules/.bin/oxlint --deny-warnings .
 
   typescriptChecker:
     name: 🟦 TypeScript Checker
     if: github.event.pull_request.draft == false
-    timeout-minutes: 10
+    timeout-minutes: 1
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -49,12 +51,12 @@ jobs:
           node-version: 26
 
       - name: Run Typescript checker
-        run: pnpm run lint:ts
+        run: .github/scripts/budget.sh 5 node_modules/.bin/tsc --noEmit
 
   tests:
     name: 🔬 Tests
     if: github.event.pull_request.draft == false
-    timeout-minutes: 10
+    timeout-minutes: 2
     runs-on: ubuntu-latest
     # Chromium and its system dependencies come baked in the image: no
     # apt-get at run time (see e2e-tests.yml).
@@ -79,5 +81,10 @@ jobs:
       - name: Check Playwright image version
         uses: ./.github/actions/check-playwright-image
 
+      # On PRs, run only the tests the diff can reach through the module
+      # graph. The merge queue and main always run the full suite.
       - name: Run tests
-        run: SKIP_ENV_VALIDATION=true pnpm run test:ci
+        env:
+          SKIP_ENV_VALIDATION: true
+          CHANGED: ${{ github.event_name == 'pull_request' && format('--changed=origin/{0}', github.base_ref) || '' }}
+        run: .github/scripts/budget.sh 60 node_modules/.bin/vitest run $CHANGED

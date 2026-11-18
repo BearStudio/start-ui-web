@@ -8,6 +8,8 @@ on:
       - staging
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
+  # The full suite runs in the merge queue before anything reaches main.
+  merge_group:
 
 # A new commit on a PR makes the previous run worthless: cancel it.
 # Pushes to main always run to completion.
@@ -19,7 +21,7 @@ jobs:
   E2E:
     name: E2E (${{ matrix.browser }})
     if: github.event.pull_request.draft == false
-    timeout-minutes: 30
+    timeout-minutes: 3
     runs-on: ubuntu-latest
     # Browsers and their system dependencies come baked in the image: no
     # apt-get at run time. Ubuntu mirrors made `playwright install-deps`
@@ -46,7 +48,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        browser: [chromium, firefox, webkit]
+        # PRs get chromium feedback; the merge queue and main run every browser.
+        browser: ${{ fromJSON(github.event_name == 'pull_request' && '["chromium"]' || '["chromium","firefox","webkit"]') }}
     env:
       VITE_BASE_URL: http://localhost:3000
       VITE_ENV_NAME: tests
@@ -94,7 +97,7 @@ jobs:
         run: pnpm db:seed
 
       - name: Run Playwright tests
-        run: pnpm exec playwright test --project=${{ matrix.browser }}
+        run: .github/scripts/budget.sh 60 node_modules/.bin/playwright test --project=${{ matrix.browser }}
 
       - uses: actions/upload-artifact@v4
         if: failure()
