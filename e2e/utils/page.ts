@@ -3,10 +3,7 @@ import { CustomFixture } from 'e2e/utils/types';
 
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
-import {
-  AUTH_EMAIL_OTP_MOCKED,
-  AUTH_SIGNUP_ENABLED,
-} from '@/features/auth/config';
+import { AUTH_SIGNUP_ENABLED } from '@/features/auth/config';
 import locales from '@/locales';
 import { FileRouteTypes } from '@/routeTree.gen';
 
@@ -24,6 +21,35 @@ interface PageUtils {
     options?: Parameters<Page['goto']>[1]
   ) => ReturnType<Page['goto']>;
 }
+
+const MAILDEV_URL = `http://localhost:${process.env.DOCKER_MAILDEV_UI_PORT || 1080}`;
+
+type MaildevEmail = { to: { address: string }[]; date: string; text: string };
+
+/**
+ * Read the login code from the email the app sent, through the Maildev API.
+ * The code is only mocked in dev, so this also works against a production
+ * build.
+ */
+const readLoginCode = async (email: string, sentAfter: number) => {
+  let code: string | undefined;
+  await expect
+    .poll(async () => {
+      const response = await fetch(`${MAILDEV_URL}/email`);
+      const emails = (await response.json()) as MaildevEmail[];
+      const latest = emails
+        .filter(
+          (e) =>
+            e.to.some((to) => to.address === email) &&
+            new Date(e.date).getTime() >= sentAfter - 1000
+        )
+        .at(-1);
+      code = latest?.text.match(/\b\d{6}\b/)?.[0];
+      return code;
+    })
+    .toBeTruthy();
+  return code as string;
+};
 
 export type ExtendedPage = { page: PageUtils };
 
@@ -51,6 +77,7 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
       .getByPlaceholder(locales[DEFAULT_LANGUAGE_KEY].auth.common.email.label)
       .fill(input.email);
 
+    const sentAfter = Date.now();
     await page
       .getByRole('button', {
         name: locales[DEFAULT_LANGUAGE_KEY].auth[
@@ -62,7 +89,7 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
     await page.waitForURL(`**${routeLoginVerify}**`);
     await page
       .getByText(locales[DEFAULT_LANGUAGE_KEY].auth.common.otp.label)
-      .fill(input.code ?? AUTH_EMAIL_OTP_MOCKED);
+      .fill(input.code ?? (await readLoginCode(input.email, sentAfter)));
   };
 
   page.to = async function to(url, options) {
