@@ -21,7 +21,7 @@ jobs:
   E2E:
     name: E2E (${{ matrix.browser }})
     if: github.event.pull_request.draft == false
-    timeout-minutes: 30
+    timeout-minutes: 3
     runs-on: ubuntu-latest
     # Browsers and their system dependencies come baked in the image: no
     # apt-get at run time. Ubuntu mirrors made `playwright install-deps`
@@ -97,7 +97,7 @@ jobs:
         run: pnpm db:seed
 
       - name: Run Playwright tests
-        run: pnpm exec playwright test --project=${{ matrix.browser }}
+        run: .github/scripts/budget.sh 60 node_modules/.bin/playwright test --project=${{ matrix.browser }}
 
       - uses: actions/upload-artifact@v4
         if: failure()
