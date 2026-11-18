@@ -70,6 +70,13 @@ export function DataTableColumnVisibility<TData extends RowData>({
     ? []
     : table.hiddenColumns;
   const shown = toggles.filter((toggle) => !hidden.includes(toggle.id));
+  // The ticks sent and not back yet in `hiddenColumns` (a slow store): a quick tick acts on them, not on this render.
+  const sent = React.useRef({ from: '', visible: new Map<string, boolean>() });
+  const pendingVisibility = () => {
+    const from = table.hiddenColumns.join('\n');
+    if (sent.current.from !== from) sent.current = { from, visible: new Map() };
+    return sent.current.visible;
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -99,13 +106,23 @@ export function DataTableColumnVisibility<TData extends RowData>({
                 className="flex-1"
                 checked={checked}
                 disabled={checked && shown.length === 1}
-                onCheckedChange={(next) => {
+                onCheckedChange={() => {
+                  const pending = pendingVisibility();
+                  const isShown = (id: string) =>
+                    pending.get(id) ?? !hidden.includes(id);
+                  const next = !isShown(toggle.id);
+                  // The last column shown stays, even when the hides before it are still on their way.
+                  if (!next && toggles.filter((t) => isShown(t.id)).length <= 1)
+                    return;
                   // From every column hidden in the URL, hiding one shows the others.
                   if (hidden !== table.hiddenColumns)
                     for (const other of toggles)
-                      if (other.id !== toggle.id)
+                      if (other.id !== toggle.id && !pending.has(other.id)) {
                         table.setColumnVisible(other.id, true);
+                        pending.set(other.id, true);
+                      }
                   table.setColumnVisible(toggle.id, next);
+                  pending.set(toggle.id, next);
                 }}
               >
                 {toggle.title}

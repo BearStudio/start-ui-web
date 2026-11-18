@@ -79,12 +79,13 @@ export const multiSelectFilter = <const Value extends string>({
     },
     editor: ({ trigger, value = [], onValueChange, open, onOpenChange }) => {
       // From the value as it is once earlier ticks land, not as this render saw it: quick ticks all count.
-      const toggle = (toggled: string, checked: boolean) =>
+      // The tick of the menu comes from this render too: a second quick tick of one option undoes the first.
+      const toggle = (toggled: string) =>
         onValueChange((current = []) =>
           ordered(
-            checked
-              ? [...current, toggled]
-              : current.filter((other) => other !== toggled)
+            current.includes(toggled)
+              ? current.filter((other) => other !== toggled)
+              : [...current, toggled]
           )
         );
       return (
@@ -98,7 +99,7 @@ export const multiSelectFilter = <const Value extends string>({
                   indicator="checkbox"
                   key={option.value}
                   checked={value.includes(option.value)}
-                  onCheckedChange={(checked) => toggle(option.value, checked)}
+                  onCheckedChange={() => toggle(option.value)}
                 >
                   {option.label}
                   <OptionCount count={option.count} />
@@ -109,7 +110,7 @@ export const multiSelectFilter = <const Value extends string>({
                   indicator="checkbox"
                   key={unknown}
                   checked
-                  onCheckedChange={(checked) => toggle(unknown, checked)}
+                  onCheckedChange={() => toggle(unknown)}
                 >
                   <UnknownValue
                     value={unknown}

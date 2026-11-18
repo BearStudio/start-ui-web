@@ -149,7 +149,7 @@ export const Overview = () => {
         <p className="text-muted-foreground">
           Each part on screen, named as the code names it:{' '}
           <a
-            href="/?path=/story/datatable-anatomy--anatomy"
+            href="./?path=/story/datatable-anatomy--anatomy"
             target="_top"
             className="underline underline-offset-4"
           >
@@ -196,7 +196,7 @@ export const Overview = () => {
                 <TableCell>
                   {/* The page around the preview, which the link leaves for the example. */}
                   <a
-                    href={`/?path=/story/datatable-examples--${storyId(story)}`}
+                    href={`./?path=/story/datatable-examples--${storyId(story)}`}
                     target="_top"
                     className="font-mono text-xs underline underline-offset-4"
                   >

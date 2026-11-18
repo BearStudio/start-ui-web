@@ -277,11 +277,13 @@ describe('DataTableToolbar', () => {
   );
 
   it('keeps an option ticked again before its clearing was applied', async () => {
-    const { last } = await setup({ tags: ['vip'] }, {}, { later: true });
+    const { last } = await setup({ tags: ['vip'] }, {}, { later: 'held' });
 
     await chip('Tags').getByRole('button').first().click();
     await page.getByRole('menuitemcheckbox', { name: 'VIP' }).click();
     await page.getByRole('menuitemcheckbox', { name: 'VIP' }).click();
+    await userEvent.keyboard('{Escape}');
+    await page.getByRole('button', { name: 'Land the changes' }).click();
 
     await expect.element(chipText('Tags')).toHaveTextContent('Tags:VIP');
     await expect.poll(last).toEqual({ tags: ['vip'] });

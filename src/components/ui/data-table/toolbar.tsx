@@ -73,7 +73,7 @@ export function DataTableToolbar({
   const focusOnEmpty = React.useCallback(
     () =>
       controls.current?.querySelector<HTMLElement>(
-        'input, button:not(:disabled)'
+        'input:not(:disabled), button:not(:disabled)'
       ),
     []
   );

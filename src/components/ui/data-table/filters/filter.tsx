@@ -64,8 +64,12 @@ export type AnyDataTableFilter = DataTableFilter<any, any>;
 
 export const isFilterEmpty = <Read,>(
   filter: { readonly isEmpty?: ((value: Read) => boolean) | undefined },
-  value: Read | undefined
-) => value === undefined || (filter.isEmpty ?? isEmptyValue)(value);
+  value: Read | null | undefined
+) =>
+  // `null` too: a nullable field of the state holds it, and a filter's own `isEmpty` reads only its values.
+  value === undefined ||
+  value === null ||
+  (filter.isEmpty ?? isEmptyValue)(value);
 
 /** The popup of a filter whose editor is a form rather than a list of options: a range, an operator... */
 export function DataTableFilterPopover({

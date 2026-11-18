@@ -101,12 +101,13 @@ export function useDataTable<
 
   const state = dataTableState(store, defaultSorting, {
     filterKeys: keys,
-    isEmpty: (key, value) => isFilterEmpty(filterOf(key as Key), value),
+    // A key no longer among `filters` (the map changed while the table stays) filters nothing.
+    isEmpty: (key, value) => !isKey(key) || isFilterEmpty(filterOf(key), value),
     history,
     ...(defaultPageSize !== undefined && { defaultPageSize }),
   });
   const added = useAddedFilters(
-    (key: Key) => !isFilterEmpty(filterOf(key), store.state[key])
+    (key: Key) => isKey(key) && !isFilterEmpty(filterOf(key), store.state[key])
   );
 
   // "Add filter" may come back only a render after the last filter shown goes: the request waits for it.

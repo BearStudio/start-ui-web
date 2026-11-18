@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { describe, expect, it } from 'vitest';
-import { page } from 'vitest/browser';
+import { page, userEvent } from 'vitest/browser';
 
 import { DataTableColumnVisibility } from '@/components/ui/data-table/column-visibility';
 import {
@@ -35,14 +35,31 @@ const columns: ReadonlyArray<DataTableColumnFor<Product, State>> = [
   },
 ];
 
-function Products({ initial = { page: 2 } }: { initial?: State }) {
+function Products({
+  initial = { page: 2 },
+  held = false,
+}: {
+  initial?: State;
+  /** A slow store: the changes wait for "Land the changes". */
+  held?: boolean;
+}) {
   const [state, setState] = useState<State>(initial);
+  const [waiting] = useState<Array<(state: State) => State>>([]);
   const table = useDataTable({
-    store: { state, update: (next) => setState(next) },
+    store: {
+      state,
+      update: (next) => (held ? waiting.push(next) : setState(next)),
+    },
     defaultSorting: { column: 'name', direction: 'asc' },
   });
   return (
     <>
+      <button
+        type="button"
+        onClick={() => waiting.splice(0).forEach((next) => setState(next))}
+      >
+        Land the changes
+      </button>
       <DataTableColumnVisibility table={table} columns={columns} />
       <output aria-label="State">{JSON.stringify(table.state)}</output>
       <DataTable
@@ -82,6 +99,22 @@ describe('DataTableColumnVisibility', () => {
     await expect
       .element(page.getByRole('status', { name: 'State' }))
       .toHaveTextContent(JSON.stringify({ page: 2 }));
+  });
+
+  it('never hides the last column shown, though the hides before it have not landed yet', async () => {
+    await render(<Products held />);
+
+    await page.getByRole('button', { name: 'Columns' }).click();
+    await toggle('Name').click();
+    await toggle('Price · Excl. VAT').click();
+    await toggle('Price · Incl. VAT').click();
+    await userEvent.keyboard('{Escape}');
+    await page.getByRole('button', { name: 'Land the changes' }).click();
+
+    await expect
+      .element(page.getByRole('status', { name: 'State' }))
+      .toHaveTextContent(JSON.stringify({ page: 2, hidden: ['name', 'net'] }));
+    await expect.element(header('Incl. VAT')).toBeVisible();
   });
 
   it('shows every column checked when the URL hides them all, and hides only the one unticked from there', async () => {

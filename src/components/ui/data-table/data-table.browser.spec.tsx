@@ -1656,6 +1656,34 @@ describe('DataTable focus on rows that go', () => {
       .toBe(slot('data-table-viewport'));
   });
 
+  it('gives the focus to the scroll area when the row of a focused action is removed, rows that open nothing too', async () => {
+    const table = (names: ReadonlyArray<string>) => (
+      <DataTable
+        columns={[
+          { id: 'name', accessorKey: 'name', title: 'Name' },
+          {
+            id: 'actions',
+            cell: ({ row }) => (
+              <button type="button">Delete {row.original.name}</button>
+            ),
+          },
+        ]}
+        data={names.map((name) => ({ name }))}
+        getRowId={(row) => row.name}
+      />
+    );
+    const screen = await render(table(['Ada', 'Alan', 'Grace']));
+    const remove = page.getByRole('button', { name: 'Delete Alan' });
+    (remove.element() as HTMLElement).focus();
+    await expect.element(remove).toHaveFocus();
+
+    await screen.rerender(table(['Ada', 'Grace']));
+
+    await expect
+      .poll(() => document.activeElement)
+      .toBe(slot('data-table-viewport'));
+  });
+
   it('makes the first row the stop of the Tab key again on another page, rows keyed by their index', async () => {
     function Table() {
       const store = useMemoryDataTableStore<Paged>();

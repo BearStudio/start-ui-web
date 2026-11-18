@@ -560,11 +560,15 @@ export function DataTable<
   // More rows of the same list, loaded at its end, keep their place.
   const rowsKey = headers?.rowsKey ?? rows[0]?.id;
   const lastRowsKey = React.useRef(rowsKey);
+  // A row asked for and not rendered yet: a new request, other rows, or the table gone, gives up on it.
+  const focusFrame = React.useRef(0);
+  React.useEffect(() => () => cancelAnimationFrame(focusFrame.current), []);
   const [activeRow, setActiveRow] = React.useState<string | null>(null);
   // Before paint: the new rows never show at the old scroll.
   React.useLayoutEffect(() => {
     if (lastRowsKey.current === rowsKey) return;
     lastRowsKey.current = rowsKey;
+    cancelAnimationFrame(focusFrame.current);
     viewport.current?.scrollTo({ top: 0 });
     // Other rows start from the first: a row keyed by its index would carry the Tab stop over from the last page.
     setActiveRow(null);
@@ -650,9 +654,6 @@ export function DataTable<
       ? activeRow
       : firstInView?.id;
   const hintId = React.useId();
-  // A row asked for and not rendered yet: a new request, or the table gone, gives up on it.
-  const focusFrame = React.useRef(0);
-  React.useEffect(() => () => cancelAnimationFrame(focusFrame.current), []);
   const focusRow = (index: number) => {
     cancelAnimationFrame(focusFrame.current);
     const target = Math.min(Math.max(index, 0), rows.length - 1);
@@ -686,10 +687,10 @@ export function DataTable<
         viewport.current?.focus({ preventScroll: true });
     };
   }, []);
-  // A focused row that goes (deleted, filtered out) leaves the focus to the scroll area rather than the page.
+  // A row that goes (deleted, filtered out) with the focus, on it or on a control of its own (an action), leaves the focus to the scroll area rather than the page.
   const keepRowFocus = React.useCallback(
     (node: HTMLTableRowElement | null) => () => {
-      if (node !== null && document.activeElement === node)
+      if (node !== null && node.contains(document.activeElement))
         viewport.current?.focus({ preventScroll: true });
     },
     []
@@ -699,7 +700,7 @@ export function DataTable<
     (node: HTMLTableRowElement | null) => {
       virtualizer.measureElement(node);
       return () => {
-        if (node !== null && document.activeElement === node)
+        if (node !== null && node.contains(document.activeElement))
           viewport.current?.focus({ preventScroll: true });
         // Lets the virtualizer forget the rows gone from the page.
         virtualizer.measureElement(null);
@@ -714,8 +715,8 @@ export function DataTable<
       data-row-index={index}
       data-state={selected?.has(row.id) ? 'selected' : undefined}
       interactive={onRowClick !== undefined}
+      {...(virtual === undefined && { ref: keepRowFocus })}
       {...(onRowClick && {
-        ...(virtual === undefined && { ref: keepRowFocus }),
         tabIndex: row.id === tabbableRow ? 0 : -1,
         // Said when the focus enters the rows, not again on every row it moves to.
         'aria-describedby': row.id === tabbableRow ? hintId : undefined,
