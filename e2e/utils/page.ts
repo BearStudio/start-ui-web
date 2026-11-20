@@ -23,7 +23,9 @@ interface PageUtils {
   ) => ReturnType<Page['goto']>;
 }
 
-const MAILDEV_URL = `http://localhost:${process.env.DOCKER_MAILDEV_UI_PORT || 1080}`;
+const MAILDEV_URL =
+  process.env.MAILDEV_API_URL ??
+  `http://localhost:${process.env.DOCKER_MAILDEV_UI_PORT || 1080}`;
 
 type MaildevEmail = { to: { address: string }[]; date: string; text: string };
 

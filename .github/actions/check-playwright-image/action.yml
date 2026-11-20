@@ -1,0 +1,28 @@
+name: Check Playwright image
+description: Fail fast when the Playwright container image does not hold the browsers of the installed playwright package
+
+inputs:
+  browsers:
+    description: Space-separated list of browsers the job uses
+    required: false
+    default: 'chromium'
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        BROWSERS: ${{ inputs.browsers }}
+      run: |
+        node -e '
+          const fs = require("node:fs");
+          const pw = require("playwright");
+          const version = require("playwright/package.json").version;
+          for (const name of process.env.BROWSERS.split(" ")) {
+            const path = pw[name].executablePath();
+            if (!fs.existsSync(path)) {
+              console.error(`::error::${name} is missing at ${path}. Set the Playwright image tag to v${version} in .github/workflows.`);
+              process.exit(1);
+            }
+          }
+        '
