@@ -17,16 +17,54 @@ const authBaseUrl = new URL('/api/auth', envClient.VITE_BASE_URL)
   .toString()
   .replace(/\/$/, '');
 
+const CORS_ALLOWED_METHODS = ['GET', 'POST', 'DELETE'];
+const CORS_REQUIRED_HEADERS = ['authorization', 'content-type'];
+
+/**
+ * Returns the request origin when CORS allows it (same rules as the oRPC
+ * routes, see src/server/cors.ts, plus any localhost port in dev for local
+ * MCP clients such as the MCP Inspector), `null` otherwise.
+ */
+const getCorsOrigin = async (request: Request) => {
+  const origin = request.headers.get('origin');
+  if (!origin) return null;
+  if (
+    import.meta.env.DEV &&
+    !originValidationResponse(request, localhostAllowedOrigins())
+  ) {
+    return origin;
+  }
+  return corsAllowedOrigins(origin);
+};
+
+/**
+ * Adds CORS headers to a response (including 401 challenges) so browser
+ * clients can read it, and exposes `WWW-Authenticate` so they can start the
+ * OAuth flow.
+ */
+const withCorsHeaders = (response: Response, corsOrigin: string | null) => {
+  const headers = new Headers(response.headers);
+  headers.append('vary', 'Origin');
+  if (corsOrigin) {
+    headers.set('access-control-allow-origin', corsOrigin);
+    headers.set('access-control-expose-headers', 'WWW-Authenticate');
+  }
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+};
+
 // Browser-based MCP clients must come from an origin allowed by CORS (DNS
 // rebinding protection), requests without Origin header (server-side clients)
 // pass
-const originRejectionResponse = async (request: Request) => {
-  const origin = request.headers.get('origin');
-  if (origin && (await corsAllowedOrigins(origin))) return undefined;
-  return originValidationResponse(
-    request,
-    import.meta.env.DEV ? localhostAllowedOrigins() : []
-  );
+const originRejectionResponse = (
+  request: Request,
+  corsOrigin: string | null
+) => {
+  if (corsOrigin) return undefined;
+  return originValidationResponse(request, []);
 };
 
 /**
@@ -59,10 +97,38 @@ async function handle({ request }: { request: Request }) {
   if (!envServer.MCP_ENABLED) {
     return new Response('Not Found', { status: 404 });
   }
-  return (
-    (await originRejectionResponse(request)) ??
-    (await handleAuthenticatedRequest(request))
-  );
+  const corsOrigin = await getCorsOrigin(request);
+  const response =
+    originRejectionResponse(request, corsOrigin) ??
+    (await handleAuthenticatedRequest(request));
+  return withCorsHeaders(response, corsOrigin);
+}
+
+async function handlePreflight({ request }: { request: Request }) {
+  if (!envServer.MCP_ENABLED) {
+    return new Response('Not Found', { status: 404 });
+  }
+  const corsOrigin = await getCorsOrigin(request);
+  if (!corsOrigin) {
+    return new Response(null, { status: 403, headers: { vary: 'Origin' } });
+  }
+  const requestedHeaders = (
+    request.headers.get('access-control-request-headers') ?? ''
+  )
+    .split(',')
+    .map((header) => header.trim().toLowerCase())
+    .filter(Boolean);
+  return new Response(null, {
+    status: 204,
+    headers: {
+      'access-control-allow-origin': corsOrigin,
+      'access-control-allow-methods': CORS_ALLOWED_METHODS.join(', '),
+      'access-control-allow-headers': [
+        ...new Set([...CORS_REQUIRED_HEADERS, ...requestedHeaders]),
+      ].join(', '),
+      vary: 'Origin, Access-Control-Request-Headers',
+    },
+  });
 }
 
 export const Route = createFileRoute('/api/mcp')({
@@ -73,6 +139,8 @@ export const Route = createFileRoute('/api/mcp')({
       // the stateless handler answers 405
       GET: handle,
       DELETE: handle,
+      // CORS preflight
+      OPTIONS: handlePreflight,
     },
   },
 });
