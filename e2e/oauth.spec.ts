@@ -14,7 +14,7 @@ import locales from '@/locales';
 // `invalid_signature` error as an expired query (the signature covers `exp`,
 // so a validly signed expired query cannot be forged without the secret).
 const INVALID_OAUTH_QUERY =
-  'client_id=abc&ba_param=ba_param&ba_param=client_id&exp=1&sig=invalid';
+  'client_id=abc&ba_param=ba_param&ba_param=client_id&ba_param=exp&exp=1&sig=invalid';
 
 const i18n = locales[DEFAULT_LANGUAGE_KEY].auth;
 

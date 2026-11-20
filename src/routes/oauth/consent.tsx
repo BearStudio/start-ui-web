@@ -21,7 +21,7 @@ export const Route = createFileRoute('/oauth/consent')({
 const noopSubscribe = () => () => {};
 
 function RouteComponent() {
-  // The signature covers the exact query string, so read it from the browser:
+  // The signature covers the raw param values, so read them from the browser:
   // the router search state re-serializes repeated params (`ba_param`)
   const oauthQuery = useSyncExternalStore(
     noopSubscribe,

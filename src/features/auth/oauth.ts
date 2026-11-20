@@ -1,11 +1,22 @@
 /**
  * Better Auth OAuth provider (used by MCP clients) redirects to the login and
  * consent pages with a signed authorization query (`sig` param).
- * The query must be kept untouched to continue the authorization flow.
+ * The signature covers every param except `sig`, so keep only the signed ones
+ * (listed in `ba_param`) as Better Auth's own client does: a param added to the
+ * URL afterwards (`utm_*`, by a proxy…) would invalidate it.
  */
 export const getSignedOAuthQuery = (search: string) => {
   const params = new URLSearchParams(search);
-  return params.has('sig') ? params.toString() : undefined;
+  if (!params.has('sig')) return undefined;
+
+  const signedNames = new Set(params.getAll('ba_param'));
+  const signedParams = new URLSearchParams();
+  for (const [key, value] of params) {
+    if (key === 'sig' || key === 'ba_param' || signedNames.has(key)) {
+      signedParams.append(key, value);
+    }
+  }
+  return signedParams.toString();
 };
 
 /**
