@@ -4,6 +4,7 @@ import { expo } from '@better-auth/expo';
 import { mcp } from '@better-auth/mcp';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
+import { APIError } from 'better-auth/api';
 import { admin, emailOTP, jwt, openAPI } from 'better-auth/plugins';
 import { match } from 'ts-pattern';
 
@@ -39,9 +40,34 @@ export const auth = betterAuth({
   // The jwt plugin /token endpoint would mint session JWTs signed with the
   // same key as OAuth access tokens, so it is disabled
   disabledPaths: ['/token'],
-  database: prismaAdapter(db, {
-    provider: 'postgresql',
-  }),
+  database: prismaAdapter(
+    db.$extends({
+      query: {
+        oauthRefreshToken: {
+          // A ban sets `banned` then revokes the user's grants (see the user
+          // update hook). Checking `banned` after the grant is written means
+          // either this check sees the ban or the ban revokes this grant, so
+          // an in-flight refresh cannot outlive a ban. The OAuth plugin writes
+          // grants outside transactions, so the insert is committed here.
+          async create({ args, query }) {
+            const refreshToken = await query(args);
+            const { count } = await db.oauthRefreshToken.updateMany({
+              where: { token: args.data.token, user: { banned: true } },
+              data: { revoked: new Date() },
+            });
+            if (count > 0) {
+              throw new APIError('BAD_REQUEST', {
+                error: 'invalid_grant',
+                error_description: 'user is banned',
+              });
+            }
+            return refreshToken;
+          },
+        },
+      },
+    }),
+    { provider: 'postgresql' }
+  ),
   user: {
     additionalFields: {
       onboardedAt: {
@@ -176,6 +202,15 @@ export const auth = betterAuth({
         before: async (user) => {
           if (envClient.VITE_IS_DEMO) throw new Error('DEMO MODE');
           return { data: user };
+        },
+        // Runs once `banned` is committed. Revokes by user, not session:
+        // offline_access grants outlive the sessions deleted by the ban.
+        after: async (user) => {
+          if (!user.banned) return;
+          await db.oauthRefreshToken.updateMany({
+            where: { userId: user.id, revoked: null },
+            data: { revoked: new Date() },
+          });
         },
       },
     },
