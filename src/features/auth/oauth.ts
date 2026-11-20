@@ -11,7 +11,8 @@ export const getSignedOAuthQuery = (search: string) => {
 /**
  * The signed query expires `codeExpiresIn` after the redirect (10 minutes by
  * default). Better Auth then rejects every request carrying it with this error
- * (no `code` nor `message`): the flow must be restarted from the client.
+ * (no `code` nor `message`), as it does for a tampered query: the flow must be
+ * restarted from the client.
  */
 export const isInvalidOAuthQueryError = (error: unknown) =>
   typeof error === 'object' &&
