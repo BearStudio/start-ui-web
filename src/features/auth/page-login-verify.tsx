@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
@@ -20,6 +21,7 @@ import {
   AUTH_SIGNUP_ENABLED,
 } from '@/features/auth/config';
 import { useMascot } from '@/features/auth/mascot';
+import { isInvalidOAuthQueryError } from '@/features/auth/oauth';
 import {
   FormFieldsLoginVerify,
   zFormFieldsLoginVerify,
@@ -34,9 +36,10 @@ const I18N_KEY_PAGE_PREFIX = AUTH_SIGNUP_ENABLED
 export default function PageLoginVerify({
   search,
 }: {
-  search: { redirect?: string; email: string };
+  search: { redirect?: string; email: string; oauthQuery?: string };
 }) {
   const { t } = useTranslation(['auth', 'common']);
+  const router = useRouter();
   const session = useSession();
 
   const form = useForm({
@@ -49,13 +52,36 @@ export default function PageLoginVerify({
   const { isValid, isSubmitted } = form.formState;
   useMascot({ isError: !isValid && isSubmitted });
 
+  // With an OAuth query (MCP clients), back to the login page as a raw href:
+  // the router would re-serialize its repeated `ba_param` keys
+  const oauthLoginHref = search.oauthQuery
+    ? `/login?${[
+        search.oauthQuery,
+        search.redirect && `redirect=${encodeURIComponent(search.redirect)}`,
+      ]
+        .filter(Boolean)
+        .join('&')}`
+    : undefined;
+
   const submitHandler: SubmitHandler<FormFieldsLoginVerify> = async ({
     otp,
   }) => {
-    const { error } = await authClient.signIn.emailOtp({
+    const { data, error } = await authClient.signIn.emailOtp({
       email: search.email,
       otp,
+      // Continue the OAuth authorization flow (MCP clients) after sign-in
+      ...(search.oauthQuery ? { oauth_query: search.oauthQuery } : {}),
     });
+
+    // The OAuth flow expired: the OTP is not checked, retrying cannot succeed
+    if (isInvalidOAuthQueryError(error)) {
+      router.navigate({
+        replace: true,
+        to: '/login/error',
+        search: { error: 'invalid_signature' },
+      });
+      return;
+    }
 
     if (error) {
       toast.error(
@@ -71,6 +97,9 @@ export default function PageLoginVerify({
       return;
     }
 
+    // OAuth flow: the auth client follows the returned redirect URL
+    if (data && 'redirect' in data && data.redirect) return;
+
     // Refetch session to update guards and redirect
     session.refetch();
   };
@@ -82,10 +111,25 @@ export default function PageLoginVerify({
       className="flex flex-col gap-4 pb-12"
     >
       <div className="flex flex-col gap-1">
-        <ButtonLink variant="link" to="/login">
-          <ArrowLeftIcon />
-          {t('common:actions.back')}
-        </ButtonLink>
+        {oauthLoginHref ? (
+          <Button
+            variant="link"
+            render={<a href={oauthLoginHref} />}
+            nativeButton={false}
+          >
+            <ArrowLeftIcon />
+            {t('common:actions.back')}
+          </Button>
+        ) : (
+          <ButtonLink
+            variant="link"
+            to="/login"
+            search={{ redirect: search.redirect }}
+          >
+            <ArrowLeftIcon />
+            {t('common:actions.back')}
+          </ButtonLink>
+        )}
         <h1 className="text-lg font-bold text-balance">
           {t(`${I18N_KEY_PAGE_PREFIX}.title`)}
         </h1>

@@ -17,6 +17,10 @@ import { envClient } from '@/env/client';
 import { authClient } from '@/features/auth/client';
 import { AUTH_SIGNUP_ENABLED } from '@/features/auth/config';
 import { useMascot } from '@/features/auth/mascot';
+import {
+  getSignedOAuthQuery,
+  isInvalidOAuthQueryError,
+} from '@/features/auth/oauth';
 import { FormFieldsLogin, zFormFieldsLogin } from '@/features/auth/schema';
 import { LoginEmailHint } from '@/features/devtools/login-hint';
 
@@ -31,6 +35,15 @@ export default function PageLogin({
 }) {
   const { t } = useTranslation(['auth', 'common']);
   const router = useRouter();
+
+  // The OAuth flow (MCP clients) expired and must be restarted from the client
+  const navigateToInvalidOAuthQuery = () =>
+    router.navigate({
+      replace: true,
+      to: '/login/error',
+      search: { error: 'invalid_signature' },
+    });
+
   const social = useMutation({
     mutationFn: async (
       provider: Parameters<typeof authClient.signIn.social>[0]['provider']
@@ -47,6 +60,10 @@ export default function PageLogin({
         throw error instanceof Error
           ? error
           : new Error(t('auth:errorCode.UNKNOWN_ERROR'));
+      }
+      if (isInvalidOAuthQueryError(response.error)) {
+        await navigateToInvalidOAuthQuery();
+        return;
       }
       if (response.error) {
         throw new Error(response.error.message);
@@ -82,6 +99,11 @@ export default function PageLogin({
       return;
     }
 
+    if (isInvalidOAuthQueryError(result.error)) {
+      navigateToInvalidOAuthQuery();
+      return;
+    }
+
     if (result.error) {
       const errorMessage = result.error.code
         ? t(
@@ -99,6 +121,8 @@ export default function PageLogin({
       search: {
         redirect: search.redirect,
         email,
+        // Keep the OAuth authorization flow (MCP clients) across pages
+        oauthQuery: getSignedOAuthQuery(window.location.search),
       },
     });
   };

@@ -1,7 +1,11 @@
+import { cimd } from '@better-auth/cimd';
+import { fetchClientMetadataResource } from '@better-auth/cimd/node';
 import { expo } from '@better-auth/expo';
+import { mcp } from '@better-auth/mcp';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
-import { admin, emailOTP, openAPI } from 'better-auth/plugins';
+import { APIError } from 'better-auth/api';
+import { admin, emailOTP, jwt, openAPI } from 'better-auth/plugins';
 import { match } from 'ts-pattern';
 
 import i18n from '@/lib/i18n';
@@ -17,6 +21,7 @@ import {
 import { permissions } from '@/features/auth/permissions';
 import { db } from '@/server/db';
 import { sendEmail } from '@/server/email';
+import { MCP_RESOURCE, MCP_SCOPES_LIST } from '@/server/mcp/config';
 import { getUserLanguage } from '@/server/utils';
 
 export type Auth = typeof auth;
@@ -32,9 +37,37 @@ export const auth = betterAuth({
     updateAge: envServer.AUTH_SESSION_UPDATE_AGE_IN_SECONDS,
   },
   trustedOrigins: envServer.AUTH_TRUSTED_ORIGINS,
-  database: prismaAdapter(db, {
-    provider: 'postgresql',
-  }),
+  // The jwt plugin /token endpoint would mint session JWTs signed with the
+  // same key as OAuth access tokens, so it is disabled
+  disabledPaths: ['/token'],
+  database: prismaAdapter(
+    db.$extends({
+      query: {
+        oauthRefreshToken: {
+          // A ban sets `banned` then revokes the user's grants (see the user
+          // update hook). Checking `banned` after the grant is written means
+          // either this check sees the ban or the ban revokes this grant, so
+          // an in-flight refresh cannot outlive a ban. The OAuth plugin writes
+          // grants outside transactions, so the insert is committed here.
+          async create({ args, query }) {
+            const refreshToken = await query(args);
+            const { count } = await db.oauthRefreshToken.updateMany({
+              where: { token: args.data.token, user: { banned: true } },
+              data: { revoked: new Date() },
+            });
+            if (count > 0) {
+              throw new APIError('BAD_REQUEST', {
+                error: 'invalid_grant',
+                error_description: 'user is banned',
+              });
+            }
+            return refreshToken;
+          },
+        },
+      },
+    }),
+    { provider: 'postgresql' }
+  ),
   user: {
     additionalFields: {
       onboardedAt: {
@@ -106,6 +139,56 @@ export const auth = betterAuth({
           .exhaustive();
       },
     }),
+    /**
+     * OAuth 2.1 authorization server for MCP clients (Claude, Cursor...).
+     * Signs access tokens with the jwt plugin keys (exposed at /api/auth/jwks).
+     * Learn more: https://better-auth.com/docs/plugins/mcp
+     */
+    jwt({ disableSettingJwtHeader: true }),
+    mcp({
+      loginPage: '/login',
+      consentPage: '/oauth/consent',
+      resource: MCP_RESOURCE,
+      scopes: [
+        'openid',
+        'profile',
+        'email',
+        'offline_access',
+        ...MCP_SCOPES_LIST,
+      ],
+      // Required with Prisma on PostgreSQL: declare the MCP resource scopes.
+      // offline_access is needed for refresh tokens to be rotated
+      resources: [
+        {
+          identifier: MCP_RESOURCE,
+          allowedScopes: [...MCP_SCOPES_LIST, 'offline_access'],
+        },
+      ],
+      // Apply resources config changes to the already seeded database rows
+      resourceSeedMode: 'merge',
+      // Do not allow replaying a rotated refresh token
+      refreshTokenReuseInterval: 0,
+      // Never in demo mode: anyone could create clients on the public instance
+      ...(envServer.MCP_ALLOW_DYNAMIC_CLIENT_REGISTRATION &&
+      !envClient.VITE_IS_DEMO
+        ? {
+            allowDynamicClientRegistration: true,
+            allowUnauthenticatedClientRegistration: true,
+            clientRegistrationDefaultApplicationType: 'infer',
+            clientRegistrationDefaultScopes: [
+              'openid',
+              'offline_access',
+              ...MCP_SCOPES_LIST,
+            ],
+          }
+        : undefined),
+    }),
+    // Client ID Metadata Documents: MCP clients identify themselves with an
+    // HTTPS URL instead of registering (preferred by the MCP spec)
+    cimd({
+      fetchClientMetadataResource,
+      metadataProfile: 'mcp-2026-07-28',
+    }),
   ],
   databaseHooks: {
     user: {
@@ -119,6 +202,15 @@ export const auth = betterAuth({
         before: async (user) => {
           if (envClient.VITE_IS_DEMO) throw new Error('DEMO MODE');
           return { data: user };
+        },
+        // Runs once `banned` is committed. Revokes by user, not session:
+        // offline_access grants outlive the sessions deleted by the ban.
+        after: async (user) => {
+          if (!user.banned) return;
+          await db.oauthRefreshToken.updateMany({
+            where: { userId: user.id, revoked: null },
+            data: { revoked: new Date() },
+          });
         },
       },
     },
