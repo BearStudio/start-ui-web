@@ -29,6 +29,20 @@ export default function PageLoginError({
       </Wrapper>
     );
   }
+  // Expired OAuth authorization flow (MCP clients), see `isInvalidOAuthQueryError`
+  if (search.error === 'invalid_signature') {
+    return (
+      <Wrapper>
+        <Alert variant="destructive">
+          <AlertCircleIcon />
+          <AlertTitle>{t('auth:pageOAuthConsent.invalid.title')}</AlertTitle>
+          <AlertDescription>
+            {t('auth:pageOAuthConsent.invalid.description')}
+          </AlertDescription>
+        </Alert>
+      </Wrapper>
+    );
+  }
   if (search.error === 'access_denied') {
     return (
       <Wrapper>

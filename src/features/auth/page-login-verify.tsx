@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
@@ -20,6 +21,7 @@ import {
   AUTH_SIGNUP_ENABLED,
 } from '@/features/auth/config';
 import { useMascot } from '@/features/auth/mascot';
+import { isInvalidOAuthQueryError } from '@/features/auth/oauth';
 import {
   FormFieldsLoginVerify,
   zFormFieldsLoginVerify,
@@ -37,6 +39,7 @@ export default function PageLoginVerify({
   search: { redirect?: string; email: string; oauthQuery?: string };
 }) {
   const { t } = useTranslation(['auth', 'common']);
+  const router = useRouter();
   const session = useSession();
 
   const form = useForm({
@@ -58,6 +61,16 @@ export default function PageLoginVerify({
       // Continue the OAuth authorization flow (MCP clients) after sign-in
       ...(search.oauthQuery ? { oauth_query: search.oauthQuery } : {}),
     });
+
+    // The OAuth flow expired: the OTP is not checked, retrying cannot succeed
+    if (isInvalidOAuthQueryError(error)) {
+      router.navigate({
+        replace: true,
+        to: '/login/error',
+        search: { error: 'invalid_signature' },
+      });
+      return;
+    }
 
     if (error) {
       toast.error(

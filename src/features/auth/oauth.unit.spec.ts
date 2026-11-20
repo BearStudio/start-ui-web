@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { getSignedOAuthQuery, isOAuthFlowSearch } from '@/features/auth/oauth';
+import {
+  getSignedOAuthQuery,
+  isInvalidOAuthQueryError,
+  isOAuthFlowSearch,
+} from '@/features/auth/oauth';
 
 const signedSearch =
   '?client_id=abc&scope=openid+mcp%3Aread&ba_param=client_id&ba_param=scope&exp=1&sig=s%2Fig%3D';
@@ -19,6 +23,33 @@ describe('getSignedOAuthQuery', () => {
   it('returns undefined when the query is not signed', () => {
     expect(getSignedOAuthQuery('?redirect=%2Fmanager')).toBeUndefined();
     expect(getSignedOAuthQuery('')).toBeUndefined();
+  });
+});
+
+describe('isInvalidOAuthQueryError', () => {
+  it('detects the expired signed query error of the auth client', () => {
+    expect(
+      isInvalidOAuthQueryError({
+        error: 'invalid_signature',
+        status: 400,
+        statusText: 'BAD_REQUEST',
+      })
+    ).toBe(true);
+  });
+
+  it('ignores other errors', () => {
+    expect(
+      isInvalidOAuthQueryError({
+        code: 'INVALID_OTP',
+        message: 'Invalid OTP',
+        status: 400,
+      })
+    ).toBe(false);
+    expect(isInvalidOAuthQueryError(new Error('invalid_signature'))).toBe(
+      false
+    );
+    expect(isInvalidOAuthQueryError(null)).toBe(false);
+    expect(isInvalidOAuthQueryError(undefined)).toBe(false);
   });
 });
 

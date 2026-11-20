@@ -9,7 +9,10 @@ import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 
 import { authClient } from '@/features/auth/client';
-import { OAUTH_SCOPES_I18N_KEYS } from '@/features/auth/oauth';
+import {
+  isInvalidOAuthQueryError,
+  OAUTH_SCOPES_I18N_KEYS,
+} from '@/features/auth/oauth';
 import { getOAuthConsent } from '@/features/auth/oauth-consent';
 
 const oauthConsentQueryOptions = (oauthQuery: string) =>
@@ -34,16 +37,25 @@ export default function PageOAuthConsent({
       // The signed query of the page is sent by the oauthProviderClient plugin
       // and the response redirects back to the client
       const { error } = await authClient.oauth2.consent({ accept });
-      if (error) throw new Error(error.message);
+      if (error) throw new Error(error.message, { cause: error });
     },
-    onError: () => toast.error(t('auth:pageOAuthConsent.error')),
+    onError: (error) => {
+      // Displayed as an invalid request below
+      if (isInvalidOAuthQueryError(error.cause)) return;
+      toast.error(t('auth:pageOAuthConsent.error'));
+    },
   });
 
   if (consent.isPending) {
     return <Spinner full />;
   }
 
-  if (consent.isError || !consent.data.isValid) {
+  if (
+    consent.isError ||
+    !consent.data.isValid ||
+    // The signed query expired while the page was open
+    isInvalidOAuthQueryError(submit.error?.cause)
+  ) {
     return (
       <Alert variant="destructive">
         <AlertCircleIcon />

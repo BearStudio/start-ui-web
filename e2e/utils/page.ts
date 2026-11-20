@@ -18,9 +18,10 @@ interface PageUtils {
 
   /**
    * Override of the `page.goto` method with typed routes from the app
+   * (optionally followed by a query string)
    */
   to: (
-    url: FileRouteTypes['to'],
+    url: FileRouteTypes['to'] | `${FileRouteTypes['to']}?${string}`,
     options?: Parameters<Page['goto']>[1]
   ) => ReturnType<Page['goto']>;
 }

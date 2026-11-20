@@ -8,6 +8,17 @@ export const getSignedOAuthQuery = (search: string) => {
   return params.has('sig') ? params.toString() : undefined;
 };
 
+/**
+ * The signed query expires `codeExpiresIn` after the redirect (10 minutes by
+ * default). Better Auth then rejects every request carrying it with this error
+ * (no `code` nor `message`): the flow must be restarted from the client.
+ */
+export const isInvalidOAuthQueryError = (error: unknown) =>
+  typeof error === 'object' &&
+  error !== null &&
+  'error' in error &&
+  error.error === 'invalid_signature';
+
 /** Is the user in the middle of an OAuth authorization flow? */
 export const isOAuthFlowSearch = (search: Record<string, unknown>) =>
   'sig' in search || !!search.oauthQuery;
