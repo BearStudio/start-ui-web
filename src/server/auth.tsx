@@ -142,7 +142,9 @@ export const auth = betterAuth({
       resourceSeedMode: 'merge',
       // Do not allow replaying a rotated refresh token
       refreshTokenReuseInterval: 0,
-      ...(envServer.MCP_ALLOW_DYNAMIC_CLIENT_REGISTRATION
+      // Never in demo mode: anyone could create clients on the public instance
+      ...(envServer.MCP_ALLOW_DYNAMIC_CLIENT_REGISTRATION &&
+      !envClient.VITE_IS_DEMO
         ? {
             allowDynamicClientRegistration: true,
             allowUnauthenticatedClientRegistration: true,
