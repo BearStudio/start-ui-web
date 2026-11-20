@@ -9,7 +9,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { envClient } from '@/env/client';
 import { envServer } from '@/env/server';
 import { corsAllowedOrigins } from '@/server/cors';
-import { MCP_SCOPES } from '@/server/mcp/config';
+import { MCP_SCOPES, MCP_SCOPES_LIST } from '@/server/mcp/config';
 import { MCP_RESOURCE } from '@/server/mcp/resource';
 import { mcpHandler } from '@/server/mcp/server';
 
@@ -25,7 +25,7 @@ const CORS_REQUIRED_HEADERS = ['authorization', 'content-type'];
  * routes, see src/server/cors.ts, plus any localhost port in dev for local
  * MCP clients such as the MCP Inspector), `null` otherwise.
  */
-const getCorsOrigin = async (request: Request) => {
+const getCorsOrigin = (request: Request) => {
   const origin = request.headers.get('origin');
   if (!origin) return null;
   if (
@@ -79,6 +79,12 @@ const handleAuthenticatedRequest = createMcpProtectedRequestHandler(
     jwksUrl: `${authBaseUrl}/jwks`,
     jwtVerifyOptions: { typ: 'at+jwt', requiredClaims: ['azp'] },
     requiredScopes: [MCP_SCOPES.read],
+    // Any MCP scope grants access to the endpoint, each tool then checks its
+    // own scope (see src/server/orpc.ts)
+    isScopeSatisfied: (requiredScope, grantedScopes) =>
+      requiredScope === MCP_SCOPES.read
+        ? MCP_SCOPES_LIST.some((scope) => grantedScopes.has(scope))
+        : grantedScopes.has(requiredScope),
   },
   (request, claims) => {
     const authInfo: AuthInfo = {
