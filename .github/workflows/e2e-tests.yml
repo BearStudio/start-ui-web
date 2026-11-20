@@ -78,6 +78,9 @@ jobs:
         with:
           browsers: chromium ${{ matrix.browser }}
 
+      - name: Build
+        run: pnpm build
+
       - name: Wait for services
         run: |
           for c in postgres maildev; do
@@ -99,8 +102,8 @@ jobs:
         run: pnpm exec playwright test --project=${{ matrix.browser }}
 
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: failure()
         with:
-          name: playwright-report-${{ matrix.browser }}
-          path: playwright-report/
+          name: playwright-traces-${{ matrix.browser }}
+          path: test-results/
           retention-days: 30
