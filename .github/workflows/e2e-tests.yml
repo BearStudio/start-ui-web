@@ -9,6 +9,12 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
+# A new commit on a PR makes the previous run worthless: cancel it.
+# Pushes to main always run to completion.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   E2E:
     name: E2E (${{ matrix.browser }})
