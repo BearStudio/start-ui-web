@@ -17,7 +17,8 @@ const getHttpsUrl = (value?: string | null) => {
 const getHost = (value?: string | null) => {
   if (!value) return undefined;
   try {
-    return new URL(value).host;
+    // Private-use URIs (com.example.app:/oauth/callback) have no host
+    return new URL(value).host || undefined;
   } catch {
     return undefined;
   }
@@ -37,6 +38,7 @@ export const getOAuthConsent = createServerFn({ method: 'GET' })
 
     const query = new URLSearchParams(data.oauthQuery);
     const clientId = query.get('client_id');
+    const redirectUri = query.get('redirect_uri');
     if (!clientId) return { isValid: false } as const;
 
     const client = await auth.api.getOAuthClientPublic({
@@ -61,7 +63,9 @@ export const getOAuthConsent = createServerFn({ method: 'GET' })
         logoUrl: getHttpsUrl(client.logo_uri),
         host: clientIdHost,
       },
-      redirectHost: getHost(query.get('redirect_uri')),
+      // Private-use redirect URIs have no host: display the whole URI so the
+      // user still sees which app receives the authorization code
+      redirectHost: getHost(redirectUri) ?? redirectUri ?? undefined,
       scopes: (query.get('scope') ?? '').split(' ').filter(Boolean),
     } as const;
   });
