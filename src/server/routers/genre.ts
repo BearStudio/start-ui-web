@@ -1,3 +1,4 @@
+import { mcp } from '@orpc/mcp';
 import { openapi } from '@orpc/openapi';
 import { z } from 'zod';
 
@@ -18,8 +19,13 @@ export default {
         method: 'GET',
         path: '/genres',
         tags,
+        summary: 'List genres',
+        description:
+          'List book genres, 20 per page by default. Use a genre id as `genreId` when creating or updating a book.',
       })
     )
+    // Expose as a tool of the MCP server (/api/mcp)
+    .meta(mcp.tool({}))
     .input(
       z
         .object({
