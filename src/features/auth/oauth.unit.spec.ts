@@ -16,7 +16,7 @@ const signQuery = async (entries: Record<string, string>) => {
   for (const name of [...params.keys(), 'ba_param'].sort()) {
     params.append('ba_param', name);
   }
-  // Canonical form: sorted by key, then by value (`ba_param` values are)
+  // Canonical form: sorted by key then value. sort() is stable and the ba_param values are appended already sorted
   const canonical = new URLSearchParams(params);
   canonical.sort();
   params.set('sig', await makeSignature(canonical.toString(), SECRET));
