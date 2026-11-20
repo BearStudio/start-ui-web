@@ -95,4 +95,35 @@ test.describe('Invalid OAuth authorization request', () => {
       page.getByText(i18n.pageOAuthConsent.invalid.title)
     ).toBeVisible();
   });
+
+  test('Back from the verify page keeps the OAuth query', async ({ page }) => {
+    const search = new URLSearchParams({
+      email: ADMIN_EMAIL,
+      oauthQuery: INVALID_OAUTH_QUERY,
+    });
+    await page.to(`/login/verify?${search}`);
+    await page
+      .getByRole('button', {
+        name: locales[DEFAULT_LANGUAGE_KEY].common.actions.back,
+      })
+      .click();
+
+    // Repeated `ba_param` keys must stay as is, the signature covers them
+    await page.waitForURL((url) => url.pathname === '/login');
+    expect(new URL(page.url()).search).toBe(`?${INVALID_OAUTH_QUERY}`);
+
+    // The login page still continues the OAuth flow
+    await page.getByPlaceholder(i18n.common.email.label).fill(ADMIN_EMAIL);
+    await page
+      .getByRole('button', {
+        name: i18n[AUTH_SIGNUP_ENABLED ? 'pageLoginWithSignUp' : 'pageLogin']
+          .loginWithEmail,
+      })
+      .click();
+
+    await page.waitForURL('**/login/error**');
+    await expect(
+      page.getByText(i18n.pageOAuthConsent.invalid.title)
+    ).toBeVisible();
+  });
 });

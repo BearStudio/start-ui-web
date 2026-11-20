@@ -13,7 +13,6 @@ import {
   FormFieldLabel,
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
-import { ButtonLink } from '@/components/ui/button-link';
 
 import { authClient } from '@/features/auth/client';
 import {
@@ -51,6 +50,16 @@ export default function PageLoginVerify({
   });
   const { isValid, isSubmitted } = form.formState;
   useMascot({ isError: !isValid && isSubmitted });
+
+  // Back to the login page with its search, as a raw href: the router would
+  // re-serialize the repeated `ba_param` keys of the OAuth query (MCP clients)
+  const loginQuery = [
+    search.oauthQuery,
+    search.redirect && `redirect=${encodeURIComponent(search.redirect)}`,
+  ]
+    .filter(Boolean)
+    .join('&');
+  const loginHref = loginQuery ? `/login?${loginQuery}` : '/login';
 
   const submitHandler: SubmitHandler<FormFieldsLoginVerify> = async ({
     otp,
@@ -100,10 +109,14 @@ export default function PageLoginVerify({
       className="flex flex-col gap-4 pb-12"
     >
       <div className="flex flex-col gap-1">
-        <ButtonLink variant="link" to="/login">
+        <Button
+          variant="link"
+          render={<a href={loginHref} />}
+          nativeButton={false}
+        >
           <ArrowLeftIcon />
           {t('common:actions.back')}
-        </ButtonLink>
+        </Button>
         <h1 className="text-lg font-bold text-balance">
           {t(`${I18N_KEY_PAGE_PREFIX}.title`)}
         </h1>
