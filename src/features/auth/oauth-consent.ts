@@ -44,13 +44,22 @@ export const getOAuthConsent = createServerFn({ method: 'GET' })
       headers: getRequestHeaders(),
     });
 
+    // With CIMD, the client_id is the URL of the metadata document fetched by
+    // the server: its host is the only verified identity of the client
+    const clientIdHost = getHost(getHttpsUrl(clientId));
+
     return {
       isValid: true,
       client: {
         // Clients registered with CIMD or DCR choose their own name and logo,
-        // so the redirect host is always displayed to the user
-        name: client.client_name ?? getHost(client.client_uri) ?? clientId,
+        // so the client_id host and the redirect host are displayed to the user
+        name:
+          client.client_name ??
+          clientIdHost ??
+          getHost(client.client_uri) ??
+          clientId,
         logoUrl: getHttpsUrl(client.logo_uri),
+        host: clientIdHost,
       },
       redirectHost: getHost(query.get('redirect_uri')),
       scopes: (query.get('scope') ?? '').split(' ').filter(Boolean),

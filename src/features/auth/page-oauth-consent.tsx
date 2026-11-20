@@ -68,6 +68,16 @@ export default function PageOAuthConsent({
         <h1 className="text-2xl font-bold">
           {t('auth:pageOAuthConsent.title', { client: client.name })}
         </h1>
+        {!!client.host && client.host !== client.name && (
+          <p className="text-sm wrap-break-word text-muted-foreground">
+            <Trans
+              t={t}
+              i18nKey="auth:pageOAuthConsent.clientHost"
+              values={{ host: client.host }}
+              components={{ b: <strong className="text-foreground" /> }}
+            />
+          </p>
+        )}
         <p className="text-sm text-balance text-muted-foreground">
           {t('auth:pageOAuthConsent.description', { client: client.name })}
         </p>
