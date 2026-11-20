@@ -6,7 +6,8 @@ import { auth } from '@/server/auth';
  * OAuth discovery documents for MCP clients, served by Better Auth:
  * - /.well-known/oauth-protected-resource[/api/mcp] (RFC 9728)
  * - /.well-known/oauth-authorization-server/api/auth (RFC 8414)
- * - /.well-known/openid-configuration/api/auth
+ * The OpenID configuration is only served by the Better Auth handler, at
+ * /api/auth/.well-known/openid-configuration.
  * Public metadata, readable from any origin (without credentials).
  */
 const corsHeaders = {
