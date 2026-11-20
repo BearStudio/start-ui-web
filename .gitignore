@@ -9,6 +9,7 @@
 /coverage
 **/__screenshots__/**
 /.vitest
+.vitest-attachments
 
 # production
 .output
