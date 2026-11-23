@@ -25,7 +25,6 @@ export default {
           'List books, 20 per page by default. Filter with `searchTerm` (matches title or author). Use the returned `nextCursor` as `cursor` to get the next page.',
       })
     )
-    // Expose as a tool of the MCP server (/api/mcp)
     .meta(mcp.tool({}))
     .input(
       z
@@ -106,7 +105,6 @@ export default {
         description: 'Get a book by its id, with its genre.',
       })
     )
-    // Expose as a tool of the MCP server (/api/mcp)
     .meta(mcp.tool({}))
     .input(
       z.object({
@@ -144,7 +142,6 @@ export default {
           'Create a book. `genreId` must be the id of a genre returned by `genre_getAll`. Titles are unique.',
       })
     )
-    // Expose as a tool of the MCP server (/api/mcp)
     .meta(mcp.tool({}))
     .input(zFormFieldsBook())
     .output(zBook())
@@ -176,7 +173,6 @@ export default {
           'Update a book by its id. All fields are replaced: send the current values for the fields you do not want to change.',
       })
     )
-    // Expose as a tool of the MCP server (/api/mcp)
     .meta(mcp.tool({}))
     .input(zFormFieldsBook().extend({ id: z.string() }))
     .output(zBook())
@@ -208,7 +204,6 @@ export default {
         description: 'Delete a book by its id. This cannot be undone.',
       })
     )
-    // Expose as a tool of the MCP server (/api/mcp)
     .meta(mcp.tool({ annotations: { destructiveHint: true } }))
     .input(
       zBook().pick({
