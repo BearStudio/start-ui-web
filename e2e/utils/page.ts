@@ -3,7 +3,11 @@ import { CustomFixture } from 'e2e/utils/types';
 
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
-import { AUTH_SIGNUP_ENABLED } from '@/features/auth/config';
+import { envClient } from '@/env/client';
+import {
+  AUTH_EMAIL_OTP_MOCKED,
+  AUTH_SIGNUP_ENABLED,
+} from '@/features/auth/config';
 import locales from '@/locales';
 import { FileRouteTypes } from '@/routeTree.gen';
 
@@ -88,9 +92,15 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
       .click();
 
     await page.waitForURL(`**${routeLoginVerify}**`);
+    // Demo builds use the mocked code, no need to read the email
+    const code =
+      input.code ??
+      (envClient.VITE_IS_DEMO
+        ? AUTH_EMAIL_OTP_MOCKED
+        : await readLoginCode(input.email, sentAfter));
     await page
       .getByText(locales[DEFAULT_LANGUAGE_KEY].auth.common.otp.label)
-      .fill(input.code ?? (await readLoginCode(input.email, sentAfter)));
+      .fill(code);
   };
 
   page.to = async function to(url, options) {
