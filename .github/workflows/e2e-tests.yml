@@ -49,9 +49,18 @@ jobs:
       # both are pulled and healthy.
       - name: Start services
         run: |
+          # The step runs under `bash -e`, inherited by the subshell: a bare
+          # failing `docker run` would exit before writing the status file and
+          # leave "Wait for services" polling forever. An `if` is exempt.
           start() {
             name=$1; shift
-            (docker run -d --name "$name" "$@" > "/tmp/$name.log" 2>&1; echo $? > "/tmp/$name.status") &
+            (
+              if docker run -d --name "$name" "$@" > "/tmp/$name.log" 2>&1; then
+                echo 0 > "/tmp/$name.status"
+              else
+                echo $? > "/tmp/$name.status"
+              fi
+            ) &
           }
           start postgres -p 5432:5432 \
             -e POSTGRES_PASSWORD=startui -e POSTGRES_USER=startui -e POSTGRES_DB=startui \
@@ -83,8 +92,16 @@ jobs:
           for c in postgres maildev; do
             until [ -f "/tmp/$c.status" ]; do sleep 0.2; done
             if [ "$(cat /tmp/$c.status)" != 0 ]; then cat "/tmp/$c.log"; exit 1; fi
+            # Failed probes are retried until the deadline, then the job fails
+            # instead of hanging until the job timeout.
+            deadline=$((SECONDS + 60))
             until [ "$(docker inspect -f '{{.State.Health.Status}}' $c)" = healthy ]; do
-              if [ "$(docker inspect -f '{{.State.Running}}' $c)" != true ]; then docker logs $c; exit 1; fi
+              if [ "$(docker inspect -f '{{.State.Running}}' $c)" != true ] || [ "$SECONDS" -ge "$deadline" ]; then
+                echo "$c did not become healthy"
+                docker logs $c
+                docker inspect -f '{{json .State.Health}}' $c
+                exit 1
+              fi
               sleep 0.2
             done
           done
