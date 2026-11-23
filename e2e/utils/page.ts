@@ -38,13 +38,13 @@ const readLoginCode = async (email: string, sentAfter: number) => {
     .poll(async () => {
       const response = await fetch(`${MAILDEV_URL}/email`);
       const emails = (await response.json()) as MaildevEmail[];
-      const latest = emails
-        .filter(
-          (e) =>
-            e.to.some((to) => to.address === email) &&
-            new Date(e.date).getTime() >= sentAfter - 1000
-        )
-        .at(-1);
+      // Better Auth lowercases the address before sending the code
+      const recipient = email.toLowerCase();
+      const latest = emails.findLast(
+        (e) =>
+          e.to.some((to) => to.address.toLowerCase() === recipient) &&
+          new Date(e.date).getTime() >= sentAfter - 1000
+      );
       code = latest?.text.match(/\b\d{6}\b/)?.[0];
       return code;
     })
