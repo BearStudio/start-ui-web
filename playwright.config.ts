@@ -57,8 +57,11 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    // Skip the react-email preview server (dev:email) in CI
-    command: process.env.CI ? 'pnpm run-p env dev:app' : 'pnpm dev',
+    // CI tests the production build (`pnpm build` runs in a previous step).
+    // The dev server turns requests the browser aborts into an error overlay
+    // that intercepts clicks on the next page.
+    command: process.env.CI ? 'pnpm start' : 'pnpm dev',
+    env: { PORT: process.env.VITE_PORT ?? '3000' },
     url: process.env.VITE_BASE_URL,
     reuseExistingServer: !process.env.CI,
   },

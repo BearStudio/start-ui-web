@@ -3,6 +3,7 @@ import { CustomFixture } from 'e2e/utils/types';
 
 import { DEFAULT_LANGUAGE_KEY } from '@/lib/i18n/constants';
 
+import { envClient } from '@/env/client';
 import {
   AUTH_EMAIL_OTP_MOCKED,
   AUTH_SIGNUP_ENABLED,
@@ -25,6 +26,35 @@ interface PageUtils {
     options?: Parameters<Page['goto']>[1]
   ) => ReturnType<Page['goto']>;
 }
+
+const MAILDEV_URL = `http://localhost:${process.env.DOCKER_MAILDEV_UI_PORT || 1080}`;
+
+type MaildevEmail = { to: { address: string }[]; date: string; text: string };
+
+/**
+ * Read the login code from the email the app sent, through the Maildev API.
+ * The code is only mocked in dev, so this also works against a production
+ * build.
+ */
+const readLoginCode = async (email: string, sentAfter: number) => {
+  let code: string | undefined;
+  await expect
+    .poll(async () => {
+      const response = await fetch(`${MAILDEV_URL}/email`);
+      const emails = (await response.json()) as MaildevEmail[];
+      // Better Auth lowercases the address before sending the code
+      const recipient = email.toLowerCase();
+      const latest = emails.findLast(
+        (e) =>
+          e.to.some((to) => to.address.toLowerCase() === recipient) &&
+          new Date(e.date).getTime() >= sentAfter - 1000
+      );
+      code = latest?.text.match(/\b\d{6}\b/)?.[0];
+      return code;
+    })
+    .toBeTruthy();
+  return code as string;
+};
 
 export type ExtendedPage = { page: PageUtils };
 
@@ -52,6 +82,7 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
       .getByPlaceholder(locales[DEFAULT_LANGUAGE_KEY].auth.common.email.label)
       .fill(input.email);
 
+    const sentAfter = Date.now();
     await page
       .getByRole('button', {
         name: locales[DEFAULT_LANGUAGE_KEY].auth[
@@ -61,9 +92,15 @@ export const pageWithUtils: CustomFixture<Page & PageUtils> = async (
       .click();
 
     await page.waitForURL(`**${routeLoginVerify}**`);
+    // Demo builds use the mocked code, no need to read the email
+    const code =
+      input.code ??
+      (envClient.VITE_IS_DEMO
+        ? AUTH_EMAIL_OTP_MOCKED
+        : await readLoginCode(input.email, sentAfter));
     await page
       .getByText(locales[DEFAULT_LANGUAGE_KEY].auth.common.otp.label)
-      .fill(input.code ?? AUTH_EMAIL_OTP_MOCKED);
+      .fill(code);
   };
 
   page.to = async function to(url, options) {
