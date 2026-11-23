@@ -34,19 +34,22 @@ describe('SearchInput', () => {
   });
 
   it('should call onChange once with the debounced value', async () => {
+    // `expect.element` advances fake timers by its poll interval on each retry,
+    // so the debounce must outlast the whole poll timeout to stay pending.
+    const LONG_DELAY = 60_000;
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
     const user = setupUser();
     const onChange = vi.fn();
-    await render(<SearchInput value="" onChange={onChange} delay={DELAY} />);
+    await render(
+      <SearchInput value="" onChange={onChange} delay={LONG_DELAY} />
+    );
 
     const textbox = page.getByRole('textbox');
     await user.fill(textbox, 'abc');
     await expect.element(textbox).toHaveValue('abc');
-
-    vi.advanceTimersByTime(DELAY - 1);
     expect(onChange).not.toHaveBeenCalled();
 
-    vi.advanceTimersByTime(1);
+    vi.runOnlyPendingTimers();
     expect(onChange).toHaveBeenCalledExactlyOnceWith('abc');
   });
 
