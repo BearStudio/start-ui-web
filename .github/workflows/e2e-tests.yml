@@ -21,6 +21,28 @@ jobs:
     if: github.event.pull_request.draft == false
     timeout-minutes: 30
     runs-on: ubuntu-latest
+    # Browsers and their system dependencies come baked in the image: no
+    # apt-get at run time. Ubuntu mirrors made `playwright install-deps`
+    # take from 13s to over 4 minutes. Keep the tag equal to the
+    # `playwright` version in package.json (checked below).
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --user 1001
+    services:
+      postgres:
+        image: postgres:16.1
+        env:
+          POSTGRES_PASSWORD: startui
+          POSTGRES_USER: startui
+          POSTGRES_DB: startui
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 1s
+      maildev:
+        image: maildev/maildev:2.2.1
+        options: >-
+          --health-cmd "wget --spider --no-verbose --tries=1 -T 3 http://localhost:1080/healthz"
+          --health-interval 1s
     strategy:
       fail-fast: false
       matrix:
@@ -28,11 +50,12 @@ jobs:
     env:
       VITE_BASE_URL: http://localhost:3000
       VITE_ENV_NAME: tests
-      DATABASE_URL: postgres://startui:startui@localhost:5432/startui
+      DATABASE_URL: postgres://startui:startui@postgres:5432/startui
       VITE_IS_DEMO: false
       AUTH_SECRET: fyXjLxjXJowjicI2BAjxOaUsQd1QafdegZDciJE/xM8=
-      EMAIL_SERVER: smtp://username:password@localhost:1025
+      EMAIL_SERVER: smtp://username:password@maildev:1025
       EMAIL_FROM: Start UI <noreply@example.com>
+      MAILDEV_API_URL: http://maildev:1080
       # No object storage runs in CI: the e2e suite never uploads files.
       # These values only satisfy env validation. If an upload e2e test is
       # added, start an S3-compatible service here (see docker-compose.yml).
@@ -44,33 +67,6 @@ jobs:
       S3_FORCE_PATH_STYLE: true
       VITE_S3_BUCKET_PUBLIC_URL: http://localhost:7070/default
     steps:
-      # Start services in the background so image pulls and boot overlap
-      # with checkout and install. `services:` would block the job until
-      # both are pulled and healthy.
-      - name: Start services
-        run: |
-          # The step runs under `bash -e`, inherited by the subshell: a bare
-          # failing `docker run` would exit before writing the status file and
-          # leave "Wait for services" polling forever. An `if` is exempt.
-          start() {
-            name=$1; shift
-            (
-              if docker run -d --name "$name" "$@" > "/tmp/$name.log" 2>&1; then
-                echo 0 > "/tmp/$name.status"
-              else
-                echo $? > "/tmp/$name.status"
-              fi
-            ) &
-          }
-          start postgres -p 5432:5432 \
-            -e POSTGRES_PASSWORD=startui -e POSTGRES_USER=startui -e POSTGRES_DB=startui \
-            --health-cmd pg_isready --health-interval 1s \
-            postgres:16.1
-          start maildev -p 1025:1025 -p 1080:1080 \
-            --health-cmd "wget --spider --no-verbose --tries=1 -T 3 http://localhost:1080/healthz" \
-            --health-interval 1s \
-            maildev/maildev:2.2.1
-
       - uses: actions/checkout@v4
         with:
           # Blobless, not shallow: full history for merge-base, blobs on demand.
@@ -82,32 +78,14 @@ jobs:
         with:
           node-version: 26
 
-      - name: Setup Playwright
-        uses: ./.github/actions/setup-playwright
+      - name: Check Playwright image version
+        uses: ./.github/actions/check-playwright-image
         with:
+          # The setup project logs in with chromium.
           browsers: chromium ${{ matrix.browser }}
 
       - name: Build
         run: pnpm build
-
-      - name: Wait for services
-        run: |
-          for c in postgres maildev; do
-            until [ -f "/tmp/$c.status" ]; do sleep 0.2; done
-            if [ "$(cat /tmp/$c.status)" != 0 ]; then cat "/tmp/$c.log"; exit 1; fi
-            # Failed probes are retried until the deadline, then the job fails
-            # instead of hanging until the job timeout.
-            deadline=$((SECONDS + 60))
-            until [ "$(docker inspect -f '{{.State.Health.Status}}' $c)" = healthy ]; do
-              if [ "$(docker inspect -f '{{.State.Running}}' $c)" != true ] || [ "$SECONDS" -ge "$deadline" ]; then
-                echo "$c did not become healthy"
-                docker logs $c
-                docker inspect -f '{{json .State.Health}}' $c
-                exit 1
-              fi
-              sleep 0.2
-            done
-          done
 
       - name: Migrate database
         run: pnpm db:push
