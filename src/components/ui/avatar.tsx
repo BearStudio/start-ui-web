@@ -1,4 +1,8 @@
-import { Avatar as AvatarPrimitive } from '@base-ui/react/avatar';
+import {
+  Avatar as AvatarPrimitive,
+  AvatarFallback as AvatarFallbackPrimitive,
+  AvatarImage as AvatarImagePrimitive,
+} from '@ui-sdk/react/avatar';
 import BoringAvatarComponent from 'boring-avatars';
 import * as React from 'react';
 
@@ -8,12 +12,12 @@ function Avatar({
   className,
   size = 'default',
   ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Root> & {
+}: Omit<React.ComponentProps<typeof AvatarPrimitive>, 'className'> & {
+  className?: string;
   size?: 'default' | 'sm' | 'lg';
 }) {
   return (
-    <AvatarPrimitive.Root
-      data-slot="avatar"
+    <AvatarPrimitive
       data-size={size}
       className={cn(
         'group/avatar relative flex size-8 shrink-0 rounded-full select-none after:absolute after:inset-0 after:rounded-full after:border after:border-border after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten',
@@ -27,10 +31,11 @@ function Avatar({
 function AvatarImage({
   className,
   ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Image>) {
+}: Omit<React.ComponentProps<typeof AvatarImagePrimitive>, 'className'> & {
+  className?: string;
+}) {
   return (
-    <AvatarPrimitive.Image
-      data-slot="avatar-image"
+    <AvatarImagePrimitive
       className={cn(
         'aspect-square size-full rounded-full object-cover',
         className
@@ -42,10 +47,9 @@ function AvatarImage({
 
 function AvatarFallback(
   props: Omit<
-    React.ComponentProps<typeof AvatarPrimitive.Fallback>,
-    'children'
-  > &
-    StrictUnion<
+    React.ComponentProps<typeof AvatarFallbackPrimitive>,
+    'children' | 'className'
+  > & { className?: string } & StrictUnion<
       | {
           name: string;
           variant: 'initials';
@@ -64,8 +68,7 @@ function AvatarFallback(
     const { variant: _, children, className, ...rest } = props;
 
     return (
-      <AvatarPrimitive.Fallback
-        data-slot="avatar-fallback"
+      <AvatarFallbackPrimitive
         className={cn(
           'flex size-full items-center justify-center rounded-full bg-muted text-sm text-muted-foreground group-data-[size=sm]/avatar:text-2xs',
           className
@@ -73,15 +76,14 @@ function AvatarFallback(
         {...rest}
       >
         {children}
-      </AvatarPrimitive.Fallback>
+      </AvatarFallbackPrimitive>
     );
   }
 
   if (props.variant === 'initials') {
     const { variant: _, name, className, ...rest } = props;
     return (
-      <AvatarPrimitive.Fallback
-        data-slot="avatar-fallback"
+      <AvatarFallbackPrimitive
         className={cn(
           'flex size-full items-center justify-center rounded-full bg-muted text-sm text-muted-foreground uppercase group-data-[size=sm]/avatar:text-2xs',
           className
@@ -93,14 +95,13 @@ function AvatarFallback(
           .slice(0, 2)
           .map((s) => s[0])
           .join('')}
-      </AvatarPrimitive.Fallback>
+      </AvatarFallbackPrimitive>
     );
   }
 
   const { variant: _, name, className, ...rest } = props;
   return (
-    <AvatarPrimitive.Fallback
-      data-slot="avatar-fallback"
+    <AvatarFallbackPrimitive
       className={cn(
         'flex size-full items-center justify-center rounded-full',
         className
@@ -131,7 +132,7 @@ function AvatarFallback(
             .join('')}
         </span>
       </div>
-    </AvatarPrimitive.Fallback>
+    </AvatarFallbackPrimitive>
   );
 }
 

@@ -1,5 +1,5 @@
-import { useRender } from '@base-ui/react/use-render';
 import { useRouter } from '@tanstack/react-router';
+import { type PartProps, renderElement } from '@ui-sdk/react/primitive';
 import { cva, VariantProps } from 'class-variance-authority';
 import { PanelLeftIcon } from 'lucide-react';
 import * as React from 'react';
@@ -33,6 +33,11 @@ const SIDEBAR_WIDTH = '16rem';
 const SIDEBAR_WIDTH_MOBILE = '18rem';
 const SIDEBAR_WIDTH_ICON = '3rem';
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
+
+type ElementProps<Tag extends keyof React.JSX.IntrinsicElements> = Omit<
+  PartProps<Tag>,
+  'className'
+> & { className?: string };
 
 type SidebarContextProps = {
   state: 'expanded' | 'collapsed';
@@ -291,8 +296,8 @@ function SidebarTrigger({
       variant="ghost"
       size="icon-sm"
       className={className}
-      onClick={(event) => {
-        onClick?.(event);
+      onClick={(event, details) => {
+        onClick?.(event, details);
         toggleSidebar();
       }}
       {...props}
@@ -422,10 +427,10 @@ function SidebarGroupLabel({
   className,
   render,
   ...props
-}: useRender.ComponentProps<'div'>) {
-  return useRender({
-    render,
-    props: {
+}: ElementProps<'div'>) {
+  return renderElement(
+    'div',
+    {
       ...props,
       'data-slot': 'sidebar-group-label',
       'data-sidebar': 'group-label',
@@ -435,19 +440,18 @@ function SidebarGroupLabel({
         className
       ),
     },
-    state: {},
-    defaultTagName: 'div',
-  });
+    render
+  );
 }
 
 function SidebarGroupAction({
   className,
   render,
   ...props
-}: useRender.ComponentProps<'button'>) {
-  return useRender({
-    render,
-    props: {
+}: ElementProps<'button'>) {
+  return renderElement(
+    'button',
+    {
       ...props,
       'data-slot': 'sidebar-group-action',
       'data-sidebar': 'group-action',
@@ -459,9 +463,8 @@ function SidebarGroupAction({
         className
       ),
     },
-    state: {},
-    defaultTagName: 'button',
-  });
+    render
+  );
 }
 
 function SidebarGroupContent({
@@ -530,15 +533,15 @@ function SidebarMenuButton({
   tooltip,
   className,
   ...props
-}: useRender.ComponentProps<'button'> & {
+}: ElementProps<'button'> & {
   isActive?: boolean;
   tooltip?: string | React.ComponentProps<typeof TooltipContent>;
 } & VariantProps<typeof sidebarMenuButtonVariants>) {
   const { isMobile, state } = useSidebar();
 
-  const button = useRender({
-    render,
-    props: {
+  const button = renderElement(
+    'button',
+    {
       ...props,
       'data-slot': 'sidebar-menu-button',
       'data-sidebar': 'menu-button',
@@ -546,9 +549,8 @@ function SidebarMenuButton({
       'data-active': isActive,
       className: cn(sidebarMenuButtonVariants({ variant, size }), className),
     },
-    state: {},
-    defaultTagName: 'button',
-  });
+    render
+  );
 
   if (!tooltip) {
     return button;
@@ -578,12 +580,12 @@ function SidebarMenuAction({
   render,
   showOnHover = false,
   ...props
-}: useRender.ComponentProps<'button'> & {
+}: ElementProps<'button'> & {
   showOnHover?: boolean;
 }) {
-  return useRender({
-    render,
-    props: {
+  return renderElement(
+    'button',
+    {
       ...props,
       'data-slot': 'sidebar-menu-action',
       'data-sidebar': 'menu-action',
@@ -600,9 +602,8 @@ function SidebarMenuAction({
         className
       ),
     },
-    state: {},
-    defaultTagName: 'button',
-  });
+    render
+  );
 }
 
 function SidebarMenuBadge({
@@ -701,13 +702,13 @@ function SidebarMenuSubButton({
   isActive = false,
   className,
   ...props
-}: useRender.ComponentProps<'a'> & {
+}: ElementProps<'a'> & {
   size?: 'sm' | 'md';
   isActive?: boolean;
 }) {
-  return useRender({
-    render,
-    props: {
+  return renderElement(
+    'a',
+    {
       ...props,
       'data-slot': 'sidebar-menu-sub-button',
       'data-sidebar': 'menu-sub-button',
@@ -722,9 +723,8 @@ function SidebarMenuSubButton({
         className
       ),
     },
-    state: {},
-    defaultTagName: 'a',
-  });
+    render
+  );
 }
 
 export {
