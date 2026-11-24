@@ -54,9 +54,6 @@ export default defineConfig({
         resolve: {
           tsconfigPaths: true,
         },
-        optimizeDeps: {
-          entries: ['src/**/*.browser.{test,spec}.?(c|m)[jt]s?(x)'],
-        },
       },
       {
         extends: true,
