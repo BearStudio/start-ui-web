@@ -1,5 +1,5 @@
 import type { Meta } from '@storybook/react-vite';
-import * as React from 'react';
+import type * as React from 'react';
 
 import {
   Combobox,
@@ -21,22 +21,26 @@ export default {
 } satisfies Meta<typeof Combobox>;
 
 const options = [
-  { id: 1, label: 'Apple' },
-  { id: 2, label: 'Banana' },
-  { id: 3, label: 'Blueberry' },
-  { id: 4, label: 'Grapes' },
-  { id: 5, label: 'Pineapple' },
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'blueberry', label: 'Blueberry' },
+  { value: 'grapes', label: 'Grapes' },
+  { value: 'pineapple', label: 'Pineapple' },
 ];
 
 export function Default() {
   return (
-    <Combobox items={options} defaultValue={options[0]}>
-      <ComboboxInput placeholder="Select a fruit" showClear />
+    <Combobox items={options} defaultValue={options[0]?.value}>
+      <ComboboxInput
+        aria-label="Fruit"
+        placeholder="Select a fruit"
+        showClear
+      />
       <ComboboxContent>
         <ComboboxEmpty>No items found.</ComboboxEmpty>
         <ComboboxList>
           {(item: (typeof options)[number]) => (
-            <ComboboxItem value={item} key={item.id}>
+            <ComboboxItem value={item.value} key={item.value}>
               {item.label}
             </ComboboxItem>
           )}
@@ -48,8 +52,9 @@ export function Default() {
 
 export function Invalid() {
   return (
-    <Combobox items={options} defaultValue={options[0]}>
+    <Combobox items={options} defaultValue={options[0]?.value}>
       <ComboboxInput
+        aria-label="Fruit"
         aria-invalid={true}
         placeholder="Select a fruit"
         showClear
@@ -58,7 +63,7 @@ export function Invalid() {
         <ComboboxEmpty>No items found.</ComboboxEmpty>
         <ComboboxList>
           {(item: (typeof options)[number]) => (
-            <ComboboxItem value={item} key={item.id}>
+            <ComboboxItem value={item.value} key={item.value}>
               {item.label}
             </ComboboxItem>
           )}
@@ -70,13 +75,18 @@ export function Invalid() {
 
 export function Disabled() {
   return (
-    <Combobox items={options} defaultValue={options[0]}>
-      <ComboboxInput disabled placeholder="Select a fruit" showClear />
+    <Combobox items={options} defaultValue={options[0]?.value}>
+      <ComboboxInput
+        aria-label="Fruit"
+        disabled
+        placeholder="Select a fruit"
+        showClear
+      />
       <ComboboxContent>
         <ComboboxEmpty>No items found.</ComboboxEmpty>
         <ComboboxList>
           {(item: (typeof options)[number]) => (
-            <ComboboxItem value={item} key={item.id}>
+            <ComboboxItem value={item.value} key={item.value}>
               {item.label}
             </ComboboxItem>
           )}
@@ -89,39 +99,53 @@ export function Disabled() {
 export function Sizes() {
   return (
     <div className="flex gap-4">
-      <Combobox items={options} defaultValue={options[0]}>
-        <ComboboxInput size="sm" placeholder="Select a fruit" showClear />
+      <Combobox items={options} defaultValue={options[0]?.value}>
+        <ComboboxInput
+          aria-label="Fruit"
+          size="sm"
+          placeholder="Select a fruit"
+          showClear
+        />
         <ComboboxContent>
           <ComboboxEmpty>No items found.</ComboboxEmpty>
           <ComboboxList>
             {(item: (typeof options)[number]) => (
-              <ComboboxItem value={item} key={item.id}>
+              <ComboboxItem value={item.value} key={item.value}>
                 {item.label}
               </ComboboxItem>
             )}
           </ComboboxList>
         </ComboboxContent>
       </Combobox>
-      <Combobox items={options} defaultValue={options[0]}>
-        <ComboboxInput placeholder="Select a fruit" showClear />
+      <Combobox items={options} defaultValue={options[0]?.value}>
+        <ComboboxInput
+          aria-label="Fruit"
+          placeholder="Select a fruit"
+          showClear
+        />
         <ComboboxContent>
           <ComboboxEmpty>No items found.</ComboboxEmpty>
           <ComboboxList>
             {(item: (typeof options)[number]) => (
-              <ComboboxItem value={item} key={item.id}>
+              <ComboboxItem value={item.value} key={item.value}>
                 {item.label}
               </ComboboxItem>
             )}
           </ComboboxList>
         </ComboboxContent>
       </Combobox>
-      <Combobox items={options} defaultValue={options[0]}>
-        <ComboboxInput size="lg" placeholder="Select a fruit" showClear />
+      <Combobox items={options} defaultValue={options[0]?.value}>
+        <ComboboxInput
+          aria-label="Fruit"
+          size="lg"
+          placeholder="Select a fruit"
+          showClear
+        />
         <ComboboxContent>
           <ComboboxEmpty>No items found.</ComboboxEmpty>
           <ComboboxList>
             {(item: (typeof options)[number]) => (
-              <ComboboxItem value={item} key={item.id}>
+              <ComboboxItem value={item.value} key={item.value}>
                 {item.label}
               </ComboboxItem>
             )}
@@ -132,29 +156,46 @@ export function Sizes() {
   );
 }
 
-export function Multiple() {
+function MultipleCombobox({
+  size,
+  invalid,
+  disabled,
+}: {
+  size?: React.ComponentProps<typeof ComboboxChips>['size'];
+  invalid?: boolean;
+  disabled?: boolean;
+}) {
   const anchor = useComboboxAnchor();
   return (
-    <Combobox items={options} defaultValue={[options[0]]} multiple>
-      <ComboboxChips ref={anchor}>
+    <Combobox
+      items={options}
+      defaultValue={['apple']}
+      multiple
+      disabled={disabled}
+    >
+      <ComboboxChips className="flex-1" size={size} ref={anchor}>
         <ComboboxValue>
-          {(items) => (
-            <React.Fragment>
-              {items.map((item: (typeof options)[number]) => (
-                <ComboboxChip key={item.id}>{item.label}</ComboboxChip>
-              ))}
-              <ComboboxChipsInput placeholder="Add..." />
-              <ComboboxClear />
-            </React.Fragment>
-          )}
+          {(values: string[], { labels }) =>
+            values.map((value, index) => (
+              <ComboboxChip key={value} value={value}>
+                {labels[index]}
+              </ComboboxChip>
+            ))
+          }
         </ComboboxValue>
+        <ComboboxChipsInput
+          aria-label="Fruits"
+          aria-invalid={invalid}
+          placeholder="Add..."
+        />
+        <ComboboxClear />
       </ComboboxChips>
 
       <ComboboxContent anchor={anchor}>
         <ComboboxEmpty>No items found.</ComboboxEmpty>
         <ComboboxList>
           {(item: (typeof options)[number]) => (
-            <ComboboxItem value={item} key={item.id}>
+            <ComboboxItem value={item.value} key={item.value}>
               {item.label}
             </ComboboxItem>
           )}
@@ -162,158 +203,26 @@ export function Multiple() {
       </ComboboxContent>
     </Combobox>
   );
+}
+
+export function Multiple() {
+  return <MultipleCombobox />;
 }
 
 export function MultipleDisabled() {
-  const anchor = useComboboxAnchor();
-  return (
-    <Combobox disabled items={options} defaultValue={[options[0]]} multiple>
-      <ComboboxChips ref={anchor}>
-        <ComboboxValue>
-          {(items) => (
-            <React.Fragment>
-              {items.map((item: (typeof options)[number]) => (
-                <ComboboxChip key={item.id}>{item.label}</ComboboxChip>
-              ))}
-              <ComboboxChipsInput placeholder="Add..." />
-              <ComboboxClear />
-            </React.Fragment>
-          )}
-        </ComboboxValue>
-      </ComboboxChips>
-
-      <ComboboxContent anchor={anchor}>
-        <ComboboxEmpty>No items found.</ComboboxEmpty>
-        <ComboboxList>
-          {(item: (typeof options)[number]) => (
-            <ComboboxItem value={item} key={item.id}>
-              {item.label}
-            </ComboboxItem>
-          )}
-        </ComboboxList>
-      </ComboboxContent>
-    </Combobox>
-  );
+  return <MultipleCombobox disabled />;
 }
 
 export function MultipleInvalid() {
-  const anchor = useComboboxAnchor();
-  return (
-    <Combobox items={options} defaultValue={[options[0]]} multiple>
-      <ComboboxChips ref={anchor}>
-        <ComboboxValue>
-          {(items) => (
-            <React.Fragment>
-              {items.map((item: (typeof options)[number]) => (
-                <ComboboxChip key={item.id}>{item.label}</ComboboxChip>
-              ))}
-              <ComboboxChipsInput aria-invalid={true} placeholder="Add..." />
-              <ComboboxClear />
-            </React.Fragment>
-          )}
-        </ComboboxValue>
-      </ComboboxChips>
-
-      <ComboboxContent anchor={anchor}>
-        <ComboboxEmpty>No items found.</ComboboxEmpty>
-        <ComboboxList>
-          {(item: (typeof options)[number]) => (
-            <ComboboxItem value={item} key={item.id}>
-              {item.label}
-            </ComboboxItem>
-          )}
-        </ComboboxList>
-      </ComboboxContent>
-    </Combobox>
-  );
+  return <MultipleCombobox invalid />;
 }
 
 export function MultipleSizes() {
-  const anchorSm = useComboboxAnchor();
-  const anchorDefault = useComboboxAnchor();
-  const anchorLg = useComboboxAnchor();
   return (
     <div className="flex items-start gap-4">
-      <Combobox items={options} defaultValue={[options[0]]} multiple>
-        <ComboboxChips className="flex-1" size="sm" ref={anchorSm}>
-          <ComboboxValue>
-            {(items) => (
-              <React.Fragment>
-                {items.map((item: (typeof options)[number]) => (
-                  <ComboboxChip key={item.id}>{item.label}</ComboboxChip>
-                ))}
-                <ComboboxChipsInput placeholder="Add..." />
-                <ComboboxClear />
-              </React.Fragment>
-            )}
-          </ComboboxValue>
-        </ComboboxChips>
-
-        <ComboboxContent anchor={anchorSm}>
-          <ComboboxEmpty>No items found.</ComboboxEmpty>
-          <ComboboxList>
-            {(item: (typeof options)[number]) => (
-              <ComboboxItem value={item} key={item.id}>
-                {item.label}
-              </ComboboxItem>
-            )}
-          </ComboboxList>
-        </ComboboxContent>
-      </Combobox>
-
-      <Combobox items={options} defaultValue={[options[0]]} multiple>
-        <ComboboxChips className="flex-1" ref={anchorDefault}>
-          <ComboboxValue>
-            {(items) => (
-              <React.Fragment>
-                {items.map((item: (typeof options)[number]) => (
-                  <ComboboxChip key={item.id}>{item.label}</ComboboxChip>
-                ))}
-                <ComboboxChipsInput placeholder="Add..." />
-                <ComboboxClear />
-              </React.Fragment>
-            )}
-          </ComboboxValue>
-        </ComboboxChips>
-
-        <ComboboxContent anchor={anchorDefault}>
-          <ComboboxEmpty>No items found.</ComboboxEmpty>
-          <ComboboxList>
-            {(item: (typeof options)[number]) => (
-              <ComboboxItem value={item} key={item.id}>
-                {item.label}
-              </ComboboxItem>
-            )}
-          </ComboboxList>
-        </ComboboxContent>
-      </Combobox>
-
-      <Combobox items={options} defaultValue={[options[0]]} multiple>
-        <ComboboxChips className="flex-1" size="lg" ref={anchorLg}>
-          <ComboboxValue>
-            {(items) => (
-              <React.Fragment>
-                {items.map((item: (typeof options)[number]) => (
-                  <ComboboxChip key={item.id}>{item.label}</ComboboxChip>
-                ))}
-                <ComboboxChipsInput placeholder="Add..." />
-                <ComboboxClear />
-              </React.Fragment>
-            )}
-          </ComboboxValue>
-        </ComboboxChips>
-
-        <ComboboxContent anchor={anchorLg}>
-          <ComboboxEmpty>No items found.</ComboboxEmpty>
-          <ComboboxList>
-            {(item: (typeof options)[number]) => (
-              <ComboboxItem value={item} key={item.id}>
-                {item.label}
-              </ComboboxItem>
-            )}
-          </ComboboxList>
-        </ComboboxContent>
-      </Combobox>
+      <MultipleCombobox size="sm" />
+      <MultipleCombobox />
+      <MultipleCombobox size="lg" />
     </div>
   );
 }

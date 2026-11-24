@@ -157,3 +157,56 @@ test('disabled option', async () => {
   await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ bear: '' });
 });
+
+test('shows the error, submits natively under its name and follows a reset', async () => {
+  const user = setupUser();
+  const mockedSubmit = vi.fn();
+
+  await render(
+    <FormMocked
+      schema={z.object({ bear: z.string({ error: 'Required' }) })}
+      useFormOptions={{ defaultValues: { bear: undefined } }}
+      onSubmit={mockedSubmit}
+    >
+      {({ form }) => (
+        <>
+          <FormField>
+            <FormFieldLabel>Bearstronaut</FormFieldLabel>
+            <FormFieldController
+              type="select"
+              control={form.control}
+              name="bear"
+              items={options}
+            />
+          </FormField>
+          <button type="button" onClick={() => form.reset()}>
+            Reset
+          </button>
+        </>
+      )}
+    </FormMocked>
+  );
+
+  const trigger = page.getByRole('combobox', { name: 'Bearstronaut' });
+  await expect.element(trigger).toHaveAttribute('data-placeholder');
+
+  await user.click(page.getByRole('button', { name: 'Submit' }));
+  expect(mockedSubmit).not.toHaveBeenCalled();
+  await expect.element(trigger).toHaveAttribute('aria-invalid', 'true');
+  await expect.element(page.getByText('Required')).toBeVisible();
+
+  await user.click(trigger);
+  await user.click(page.getByRole('option', { name: 'Yuri Grizzlyrin' }));
+  await expect.element(trigger).toHaveTextContent('Yuri Grizzlyrin');
+  await expect.element(trigger).not.toHaveAttribute('data-placeholder');
+  const formElement = trigger.element().closest('form');
+  expect(formElement && [...new FormData(formElement)]).toEqual([
+    ['bear', 'grizzlyrin'],
+  ]);
+
+  await user.click(page.getByRole('button', { name: 'Submit' }));
+  expect(mockedSubmit).toHaveBeenCalledWith({ bear: 'grizzlyrin' });
+
+  await user.click(page.getByRole('button', { name: 'Reset' }));
+  await expect.element(trigger).toHaveAttribute('data-placeholder');
+});

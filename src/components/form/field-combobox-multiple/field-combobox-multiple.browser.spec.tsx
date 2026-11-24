@@ -195,3 +195,61 @@ test('disabled option', async () => {
   await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ bears: [] });
 });
+
+test('removes a chip, submits natively under its name and follows a reset', async () => {
+  const user = setupUser();
+  const mockedSubmit = vi.fn();
+
+  await render(
+    <FormMocked
+      schema={z.object({ bears: z.array(z.string()) })}
+      useFormOptions={{ defaultValues: { bears: ['bearstrong', 'pawdrin'] } }}
+      onSubmit={mockedSubmit}
+    >
+      {({ form }) => (
+        <>
+          <FormField>
+            <FormFieldLabel>Bearstronaut</FormFieldLabel>
+            <FormFieldController
+              type="combobox-multiple"
+              control={form.control}
+              name="bears"
+              items={options}
+            />
+          </FormField>
+          <button type="button" onClick={() => form.reset()}>
+            Reset
+          </button>
+        </>
+      )}
+    </FormMocked>
+  );
+
+  const input = page.getByRole('combobox', { name: 'Bearstronaut' });
+  const formElement = input.element().closest('form');
+  expect(formElement && [...new FormData(formElement)]).toEqual([
+    ['bears', 'bearstrong'],
+    ['bears', 'pawdrin'],
+  ]);
+
+  await user.click(
+    page
+      .getByRole('group', { name: 'Bearstrong' })
+      .getByRole('button', { name: 'Remove' })
+  );
+  await expect
+    .element(page.getByRole('group', { name: 'Bearstrong' }))
+    .not.toBeInTheDocument();
+  await user.click(page.getByRole('button', { name: 'Submit' }));
+  expect(mockedSubmit).toHaveBeenLastCalledWith({ bears: ['pawdrin'] });
+
+  await user.click(page.getByRole('button', { name: 'Clear' }));
+  await user.click(page.getByRole('button', { name: 'Submit' }));
+  expect(mockedSubmit).toHaveBeenLastCalledWith({ bears: [] });
+
+  await user.click(page.getByRole('button', { name: 'Reset' }));
+  await expect
+    .element(page.getByRole('group', { name: 'Bearstrong' }))
+    .toBeInTheDocument();
+  await expect.element(page.getByText('Buzz Pawdrin')).toBeVisible();
+});

@@ -74,7 +74,10 @@
   },
   "combobox": {
     "placeholder": "Chagua...",
-    "noItemsFound": "Hakuna vitu vilivyopatikana."
+    "noItemsFound": "Hakuna vitu vilivyopatikana.",
+    "clear": "Futa",
+    "toggle": "Onyesha chaguo",
+    "removeItem": "Ondoa"
   },
   "uploadInput": {
     "placeholder": "Buruta na udondoshe faili yako hapa, au bofya kuvinjari",

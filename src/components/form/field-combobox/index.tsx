@@ -29,7 +29,7 @@ export const FieldCombobox = <TItem extends Item>(
       containerProps?: ComponentProps<typeof FormFieldContainer>;
       inputProps?: ComponentProps<typeof ComboboxInput>;
     } & Omit<
-      ComboboxProps<TItem>,
+      ComboboxProps<TItem['value']>,
       | 'items'
       | 'value'
       | 'multiple'
@@ -64,27 +64,24 @@ export const FieldCombobox = <TItem extends Item>(
   const { t } = useTranslation(['components']);
   const ctx = useFormField();
   const { field, fieldState } = useFormFieldController();
+  const { ref: setControlElement } = field;
 
   return (
     <FormFieldContainer {...containerProps}>
       <Combobox
         {...rest}
         items={items}
+        name={field.name}
         disabled={field.disabled}
-        value={items.find((item) => item.value === field.value) ?? null}
-        isItemEqualToValue={(item, selectedValue) =>
-          item.value === selectedValue.value
-        }
-        itemToStringLabel={(item) => item.label?.toString() ?? ''}
-        itemToStringValue={(item) => item.value}
-        onValueChange={(item, event) => {
-          field.onChange(item?.value ?? null, event);
-          rest.onValueChange?.(item?.value ?? null, event);
+        value={field.value ?? null}
+        onValueChange={(value, event) => {
+          field.onChange(value, event);
+          rest.onValueChange?.(value, event);
         }}
-        inputRef={field.ref}
       >
         <ComboboxInput
           {...inputProps}
+          ref={setControlElement}
           disabled={field.disabled}
           onBlur={field.onBlur}
           placeholder={placeholder}
@@ -103,7 +100,7 @@ export const FieldCombobox = <TItem extends Item>(
             <ComboboxList>
               {(item: TItem) => (
                 <ComboboxItem
-                  value={item}
+                  value={item.value}
                   key={item.value}
                   disabled={item.disabled}
                 >

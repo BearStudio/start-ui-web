@@ -173,7 +173,7 @@ export const CustomOptions = () => {
           >
             {(item) => (
               <ComboboxItem
-                value={item}
+                value={item.value}
                 key={item.value}
                 disabled={item.disabled}
               >

@@ -1,9 +1,4 @@
-import {
-  type ComponentProps,
-  Fragment,
-  type ReactElement,
-  type ReactNode,
-} from 'react';
+import { type ComponentProps, type ReactElement, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useFormField } from '@/components/form/form-field';
@@ -39,7 +34,7 @@ export const FieldComboboxMultiple = <TItem extends Item>(
       containerProps?: ComponentProps<typeof FormFieldContainer>;
       inputProps?: ComponentProps<typeof ComboboxChipsInput>;
     } & Omit<
-      ComboboxProps<TItem, true>,
+      ComboboxProps<TItem['value'], true>,
       | 'items'
       | 'value'
       | 'multiple'
@@ -73,6 +68,7 @@ export const FieldComboboxMultiple = <TItem extends Item>(
   const { t } = useTranslation(['components']);
   const ctx = useFormField();
   const { field, fieldState } = useFormFieldController();
+  const { ref: setControlElement } = field;
 
   return (
     <FormFieldContainer {...containerProps}>
@@ -80,39 +76,34 @@ export const FieldComboboxMultiple = <TItem extends Item>(
         {...rest}
         multiple
         items={items}
+        name={field.name}
         disabled={field.disabled}
-        value={items?.filter((item) => field.value?.includes(item.value)) ?? []}
-        isItemEqualToValue={(item, selectedValue) =>
-          item.value === selectedValue.value
-        }
-        itemToStringLabel={(item) => item.label?.toString() ?? ''}
-        itemToStringValue={(item) => item.value}
-        onValueChange={(items, event) => {
-          const values = items?.map((item) => item.value) ?? [];
+        value={field.value ?? []}
+        onValueChange={(values, event) => {
           field.onChange(values, event);
           rest.onValueChange?.(values, event);
         }}
-        inputRef={field.ref}
       >
         <ComboboxChips ref={anchor}>
           <ComboboxValue>
-            {(items: TItem[]) => (
-              <Fragment>
-                {items?.map((item) => (
-                  <ComboboxChip key={item.value}>{item.label}</ComboboxChip>
-                ))}
-                <ComboboxChipsInput
-                  id={ctx.id}
-                  onBlur={field.onBlur}
-                  aria-invalid={fieldState.invalid ? true : undefined}
-                  aria-describedby={ctx.describedBy(fieldState.invalid)}
-                  placeholder={placeholder}
-                  {...inputProps}
-                />
-                {!!showClear && <ComboboxClear />}
-              </Fragment>
-            )}
+            {(values: Array<TItem['value']>, { labels }) =>
+              values.map((value, index) => (
+                <ComboboxChip key={value} value={value}>
+                  {labels[index]}
+                </ComboboxChip>
+              ))
+            }
           </ComboboxValue>
+          <ComboboxChipsInput
+            ref={setControlElement}
+            id={ctx.id}
+            onBlur={field.onBlur}
+            aria-invalid={fieldState.invalid ? true : undefined}
+            aria-describedby={ctx.describedBy(fieldState.invalid)}
+            placeholder={placeholder}
+            {...inputProps}
+          />
+          {!!showClear && <ComboboxClear />}
         </ComboboxChips>
         <ComboboxContent anchor={anchor}>
           <ComboboxEmpty>
@@ -125,7 +116,7 @@ export const FieldComboboxMultiple = <TItem extends Item>(
             <ComboboxList>
               {(item: TItem) => (
                 <ComboboxItem
-                  value={item}
+                  value={item.value}
                   key={item.value}
                   disabled={item.disabled}
                 >
