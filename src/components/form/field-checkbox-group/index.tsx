@@ -22,7 +22,7 @@ export const FieldCheckboxGroup = (
   const { containerProps, options, ...rest } = props;
   const ctx = useFormField();
   const {
-    field: { value, onChange, ...field },
+    field: { value, onChange, name, disabled, ...field },
     fieldState,
   } = useFormFieldController();
   return (
@@ -32,6 +32,8 @@ export const FieldCheckboxGroup = (
         aria-invalid={fieldState.invalid ? true : undefined}
         aria-labelledby={ctx.labelId}
         aria-describedby={ctx.describedBy(fieldState.invalid)}
+        name={name}
+        disabled={disabled}
         value={value}
         onValueChange={(value, event) => {
           onChange?.(value);

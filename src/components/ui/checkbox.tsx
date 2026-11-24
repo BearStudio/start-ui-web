@@ -1,4 +1,7 @@
-import { Checkbox as CheckboxPrimitive } from '@base-ui/react/checkbox';
+import {
+  Checkbox as CheckboxPrimitive,
+  CheckboxIndicator,
+} from '@ui-sdk/react/checkbox';
 import { cva } from 'class-variance-authority';
 import { CheckIcon, MinusIcon } from 'lucide-react';
 import React, { useId } from 'react';
@@ -37,7 +40,12 @@ const checkboxVariants = cva(
   }
 );
 
-export type CheckboxProps = Omit<CheckboxPrimitive.Root.Props, 'type'> & {
+export type CheckboxProps = Omit<
+  React.ComponentProps<typeof CheckboxPrimitive>,
+  'type' | 'className' | 'children'
+> & {
+  className?: string;
+  children?: React.ReactNode;
   /**
    * By default, the checkbox is wrapped in a `<label>`. Set to `false` if you do not want it.
    */
@@ -68,24 +76,21 @@ export function Checkbox({
 
   return (
     <Comp {...compProps}>
-      <CheckboxPrimitive.Root
+      <CheckboxPrimitive
         className={cn(checkboxVariants({ size }), className)}
         {...props}
-        aria-labelledby={id}
+        aria-labelledby={noLabel ? props['aria-labelledby'] : id}
       >
-        <CheckboxPrimitive.Indicator
-          keepMounted={true}
+        <CheckboxIndicator
+          keepMounted
           className={cn(
             'flex transition-transform duration-150 ease-in-out',
             'data-checked:scale-100 data-unchecked:invisible data-unchecked:scale-75'
           )}
-          render={(props, state) => (
-            <span {...props}>
-              {state.indeterminate ? <MinusIcon /> : <CheckIcon />}
-            </span>
-          )}
-        />
-      </CheckboxPrimitive.Root>
+        >
+          {(state) => (state.indeterminate ? <MinusIcon /> : <CheckIcon />)}
+        </CheckboxIndicator>
+      </CheckboxPrimitive>
       {children}
     </Comp>
   );

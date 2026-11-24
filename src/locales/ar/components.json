@@ -62,6 +62,10 @@
   "backButton": {
     "label": "رجوع"
   },
+  "numberInput": {
+    "increment": "زيادة",
+    "decrement": "تقليل"
+  },
   "select": {
     "placeholder": "اختر..."
   },

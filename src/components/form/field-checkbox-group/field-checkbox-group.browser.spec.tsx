@@ -265,3 +265,45 @@ test('disabled option', async () => {
   await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ bears: [] });
 });
+
+test('follows a form reset and submits natively under its name', async () => {
+  const user = setupUser();
+  await render(
+    <FormMocked
+      schema={z.object({ bears: z.array(z.string()) })}
+      useFormOptions={{ defaultValues: { bears: ['bearstrong'] } }}
+    >
+      {({ form }) => (
+        <>
+          <FormField>
+            <FormFieldLabel>Bearstronaut</FormFieldLabel>
+            <FormFieldController
+              type="checkbox-group"
+              control={form.control}
+              name="bears"
+              options={options}
+            />
+          </FormField>
+          <button type="button" onClick={() => form.reset()}>
+            Reset
+          </button>
+        </>
+      )}
+    </FormMocked>
+  );
+
+  await user.click(page.getByRole('checkbox', { name: 'Buzz Pawdrin' }));
+  const formElement = page
+    .getByRole('group', { name: 'Bearstronaut' })
+    .element()
+    .closest('form');
+  expect(formElement && [...new FormData(formElement)]).toEqual([
+    ['bears', 'bearstrong'],
+    ['bears', 'pawdrin'],
+  ]);
+
+  await user.click(page.getByRole('button', { name: 'Reset' }));
+  await expect
+    .element(page.getByRole('checkbox', { name: 'Buzz Pawdrin' }))
+    .not.toBeChecked();
+});

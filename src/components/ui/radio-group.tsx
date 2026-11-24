@@ -1,5 +1,8 @@
-import { Radio as RadioPrimitive } from '@base-ui/react/radio';
-import { RadioGroup as RadioGroupPrimitive } from '@base-ui/react/radio-group';
+import {
+  Radio as RadioPrimitive,
+  RadioGroup as RadioGroupPrimitive,
+  RadioIndicator,
+} from '@ui-sdk/react/radio';
 import { cva } from 'class-variance-authority';
 import { Circle } from 'lucide-react';
 import { Fragment, useId } from 'react';
@@ -38,18 +41,29 @@ const radioVariants = cva(
   }
 );
 
-export type RadioGroupProps = RadioGroupPrimitive.Props;
+export type RadioGroupProps<T extends string = string> = Omit<
+  React.ComponentProps<typeof RadioGroupPrimitive<T>>,
+  'className'
+> & { className?: string };
 
-export function RadioGroup({ className, ...rest }: RadioGroupProps) {
+export function RadioGroup<T extends string = string>({
+  className,
+  ...rest
+}: RadioGroupProps<T>) {
   return (
-    <RadioGroupPrimitive
+    <RadioGroupPrimitive<T>
       className={cn('flex flex-col gap-2', className)}
       {...rest}
     />
   );
 }
 
-export type RadioProps = RadioPrimitive.Root.Props & {
+export type RadioProps = Omit<
+  React.ComponentProps<typeof RadioPrimitive>,
+  'className' | 'children'
+> & {
+  className?: string;
+  children?: React.ReactNode;
   /**
    * By default, the radio is wrapped in a `<label>`. Set to `false` if you do not want it.
    */
@@ -79,21 +93,21 @@ export function Radio({
 
   return (
     <Comp {...compProps}>
-      <RadioPrimitive.Root
+      <RadioPrimitive
         className={cn(radioVariants({ size }), className)}
-        aria-labelledby={id}
+        aria-labelledby={noLabel ? undefined : id}
         {...rest}
       >
-        <RadioPrimitive.Indicator
-          keepMounted={true}
+        <RadioIndicator
+          keepMounted
           className={cn(
             'flex transition-transform duration-150 ease-in-out',
             'data-checked:scale-100 data-unchecked:invisible data-unchecked:scale-75'
           )}
         >
           <Circle className="fill-current" />
-        </RadioPrimitive.Indicator>
-      </RadioPrimitive.Root>
+        </RadioIndicator>
+      </RadioPrimitive>
       {children}
     </Comp>
   );

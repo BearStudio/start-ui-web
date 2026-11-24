@@ -62,6 +62,10 @@
   "backButton": {
     "label": "Rudi nyuma"
   },
+  "numberInput": {
+    "increment": "Ongeza",
+    "decrement": "Punguza"
+  },
   "select": {
     "placeholder": "Chagua..."
   },

@@ -1,13 +1,18 @@
-import { NumberField } from '@base-ui/react/number-field';
+import {
+  NumberInput as NumberInputPrimitive,
+  NumberInputControl,
+  NumberInputDecrement,
+  NumberInputGroup,
+  NumberInputIncrement,
+} from '@ui-sdk/react/number-input';
 import { ChevronDown, ChevronUp, Minus, Plus } from 'lucide-react';
-import { ComponentProps, useRef } from 'react';
+import { ComponentProps } from 'react';
 import { useTranslation } from 'react-i18next';
-import { mergeRefs } from 'react-merge-refs';
 import { match } from 'ts-pattern';
 
 import { cn } from '@/lib/tailwind/utils';
 
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import type { Input } from '@/components/ui/input';
 import {
   InputGroup,
@@ -16,10 +21,18 @@ import {
 } from '@/components/ui/input-group';
 
 type InputProps = ComponentProps<typeof Input>;
-type InputPropsRoot = Pick<InputProps, 'placeholder' | 'size' | 'aria-invalid'>;
+type InputPropsRoot = Pick<
+  InputProps,
+  'placeholder' | 'size' | 'id' | 'aria-invalid' | 'aria-describedby'
+> &
+  Pick<ComponentProps<'input'>, 'aria-label' | 'aria-labelledby'>;
 
-type NumberInputProps = ComponentProps<typeof NumberField.Root> &
+type NumberInputProps = Omit<
+  ComponentProps<typeof NumberInputPrimitive>,
+  'className' | 'children' | keyof InputPropsRoot
+> &
   InputPropsRoot & {
+    className?: string;
     inputProps?: Omit<RemoveFromType<InputProps, InputPropsRoot>, 'endElement'>;
     buttons?: 'classic' | 'mobile';
     inCents?: boolean;
@@ -34,94 +47,83 @@ export const NumberInput = ({
   locale,
   buttons,
   className,
-  onKeyDown,
   ref,
+  id,
   'aria-invalid': invalid,
+  'aria-describedby': describedBy,
+  'aria-label': label,
+  'aria-labelledby': labelledBy,
   ...props
 }: NumberInputProps) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation(['components']);
   const buttonSize = match(size)
     .with('default', undefined, null, () => 'icon' as const)
     .with('sm', () => 'icon-sm' as const)
     .with('lg', () => 'icon-lg' as const)
     .exhaustive();
 
-  const _locale = locale ?? i18n.language;
-
   return (
-    <NumberField.Root
+    <NumberInputPrimitive
       {...props}
-      locale={_locale}
+      locale={locale ?? i18n.language}
       className={cn(className)}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') {
-          // Make sure that the value is updated when pressing enter
-          inputRef.current?.blur();
-          inputRef.current?.focus();
-        }
-        onKeyDown?.(e);
-      }}
     >
-      <NumberField.Group className="flex gap-2">
+      <NumberInputGroup className="flex gap-2">
         {buttons === 'mobile' && (
-          <NumberField.Decrement
-            render={
-              <Button
-                variant="secondary"
-                size={buttonSize}
-                disabled={props.disabled || props.readOnly}
-              />
-            }
+          <NumberInputDecrement
+            aria-label={t('components:numberInput.decrement')}
+            className={buttonVariants({
+              variant: 'secondary',
+              size: buttonSize,
+            })}
           >
             <Minus />
-          </NumberField.Decrement>
+          </NumberInputDecrement>
         )}
         <InputGroup size={size}>
-          <NumberField.Input
-            render={
-              <InputGroupInput
-                aria-invalid={invalid}
-                ref={mergeRefs([ref, inputRef])}
-                placeholder={placeholder}
-                inputMode="decimal"
-                {...inputProps}
-              />
-            }
+          <NumberInputControl
+            id={id}
+            aria-describedby={describedBy}
+            aria-label={label}
+            aria-labelledby={labelledBy}
+            aria-invalid={invalid}
+            ref={ref}
+            placeholder={placeholder}
+            inputMode="decimal"
+            render={<InputGroupInput />}
+            {...inputProps}
           />
           {buttons === 'classic' && (
-            <NumberField.Group
-              render={
-                <InputGroupAddon
-                  align="inline-end"
-                  className="flex flex-col gap-0 py-0"
-                />
-              }
+            <InputGroupAddon
+              align="inline-end"
+              className="flex flex-col gap-0 py-0"
             >
-              <NumberField.Increment>
+              <NumberInputIncrement
+                aria-label={t('components:numberInput.increment')}
+              >
                 <ChevronUp />
-              </NumberField.Increment>
-              <NumberField.Decrement>
+              </NumberInputIncrement>
+              <NumberInputDecrement
+                aria-label={t('components:numberInput.decrement')}
+              >
                 <ChevronDown />
-              </NumberField.Decrement>
-            </NumberField.Group>
+              </NumberInputDecrement>
+            </InputGroupAddon>
           )}
         </InputGroup>
 
         {buttons === 'mobile' && (
-          <NumberField.Increment
-            render={
-              <Button
-                variant="secondary"
-                size={buttonSize}
-                disabled={props.disabled || props.readOnly}
-              />
-            }
+          <NumberInputIncrement
+            aria-label={t('components:numberInput.increment')}
+            className={buttonVariants({
+              variant: 'secondary',
+              size: buttonSize,
+            })}
           >
             <Plus />
-          </NumberField.Increment>
+          </NumberInputIncrement>
         )}
-      </NumberField.Group>
-    </NumberField.Root>
+      </NumberInputGroup>
+    </NumberInputPrimitive>
   );
 };

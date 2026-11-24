@@ -62,6 +62,10 @@
   "backButton": {
     "label": "Back"
   },
+  "numberInput": {
+    "increment": "Increase",
+    "decrement": "Decrease"
+  },
   "select": {
     "placeholder": "Select..."
   },

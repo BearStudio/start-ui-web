@@ -33,6 +33,11 @@ Checked in the rendered DOM with `@ui-sdk/react@0.1.0-beta.13`, except rows mark
 | `data-starting-style` / `data-ending-style` | same | popups, indicators |
 | `data-side` | same, plus `data-align` | positioned popups |
 | `data-checked` / `data-unchecked` | same (root and indicator) | checkbox, radio, menu items |
+| `data-indeterminate` | same, with `aria-checked="mixed"`; neither `data-checked` nor `data-unchecked` is set | checkbox |
+| `indeterminate` prop | `checked` / `defaultChecked="indeterminate"` | checkbox |
+| `data-readonly` | same, on every number input part | number-input |
+| disabled step button | `data-disabled` and `aria-disabled="true"` (no native `disabled`), also at `min` / `max` | number-input |
+| `data-slot` of a `render` element | the part's slot wins (`number-input-control`, not `input-group-control`) | every part |
 | `data-highlighted` | same | menu, select, combobox items |
 | `data-swiping` | `data-dragging` (docs) | drawer |
 
