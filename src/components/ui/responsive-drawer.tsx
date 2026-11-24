@@ -1,4 +1,10 @@
-import { type ComponentProps, type CSSProperties } from 'react';
+import {
+  type ComponentProps,
+  createContext,
+  type CSSProperties,
+  type ReactElement,
+  use,
+} from 'react';
 
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -11,7 +17,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogOverlay,
-  DialogPortal,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
@@ -24,50 +29,57 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  DrawerPortal,
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
 
 const BREAKPOINT = 640;
 
+// Parts read the breakpoint from the root so they never render a Drawer part
+// inside a Dialog root while media query listeners update one by one.
+const IsMobileContext = createContext(false);
+
 export const ResponsiveDrawer = ({
   ...props
-}: Overwrite<ComponentProps<typeof Dialog>, ComponentProps<typeof Drawer>>) =>
-  useIsMobile(BREAKPOINT) ? <Drawer {...props} /> : <Dialog {...props} />;
+}: Overwrite<ComponentProps<typeof Dialog>, ComponentProps<typeof Drawer>>) => {
+  const isMobile = useIsMobile(BREAKPOINT);
+  return (
+    <IsMobileContext value={isMobile}>
+      {isMobile ? <Drawer {...props} /> : <Dialog {...props} />}
+    </IsMobileContext>
+  );
+};
 
 export const ResponsiveDrawerTrigger = ({
   ...props
-}: Omit<ComponentProps<typeof DrawerTrigger>, 'handle'> &
-  Omit<ComponentProps<typeof DialogTrigger>, 'handle'>) =>
-  useIsMobile(BREAKPOINT) ? (
+}: ComponentProps<typeof DrawerTrigger> &
+  ComponentProps<typeof DialogTrigger>) =>
+  use(IsMobileContext) ? (
     <DrawerTrigger {...props} />
   ) : (
     <DialogTrigger {...props} />
   );
 
-export const ResponsiveDrawerPortal = (
-  props: ComponentProps<typeof DrawerPortal | typeof DialogPortal>
-) =>
-  useIsMobile(BREAKPOINT) ? (
-    <DrawerPortal {...props} />
-  ) : (
-    <DialogPortal {...props} />
-  );
-
 export const ResponsiveDrawerClose = (
   props: ComponentProps<typeof DrawerClose | typeof DialogClose>
 ) =>
-  useIsMobile(BREAKPOINT) ? (
+  use(IsMobileContext) ? (
     <DrawerClose {...props} />
   ) : (
     <DialogClose {...props} />
   );
 
+// The two parts pass different states to `render` and `style` functions, so
+// only their static forms are accepted.
+type SharedPartProps<P> = Omit<P, 'render' | 'style'> & {
+  render?: ReactElement;
+  style?: CSSProperties;
+};
+
 export const ResponsiveDrawerOverlay = (
-  props: ComponentProps<typeof DrawerOverlay | typeof DialogOverlay>
+  props: SharedPartProps<ComponentProps<typeof DrawerOverlay>>
 ) =>
-  useIsMobile(BREAKPOINT) ? (
+  use(IsMobileContext) ? (
     <DrawerOverlay {...props} />
   ) : (
     <DialogOverlay {...props} />
@@ -76,18 +88,11 @@ export const ResponsiveDrawerOverlay = (
 export const ResponsiveDrawerContent = ({
   hideCloseButton,
   ...props
-}: Omit<
-  ComponentProps<typeof DialogContent | typeof DrawerContent>,
-  'render' | 'className' | 'style'
-> & {
-  // `className` and `render` types are not compatible
-  render?: React.ReactElement;
-  className?: string;
-  style?: CSSProperties;
+}: SharedPartProps<ComponentProps<typeof DrawerContent>> & {
   // Only for DialogContent
   hideCloseButton?: boolean;
 }) =>
-  useIsMobile(BREAKPOINT) ? (
+  use(IsMobileContext) ? (
     <DrawerContent {...props} />
   ) : (
     <DialogContent hideCloseButton={hideCloseButton} {...props} />
@@ -96,7 +101,7 @@ export const ResponsiveDrawerContent = ({
 export const ResponsiveDrawerHeader = (
   props: ComponentProps<typeof DrawerHeader | typeof DialogHeader>
 ) =>
-  useIsMobile(BREAKPOINT) ? (
+  use(IsMobileContext) ? (
     <DrawerHeader {...props} />
   ) : (
     <DialogHeader {...props} />
@@ -105,16 +110,12 @@ export const ResponsiveDrawerHeader = (
 export const ResponsiveDrawerBody = (
   props: ComponentProps<typeof DrawerBody | typeof DialogBody>
 ) =>
-  useIsMobile(BREAKPOINT) ? (
-    <DrawerBody {...props} />
-  ) : (
-    <DialogBody {...props} />
-  );
+  use(IsMobileContext) ? <DrawerBody {...props} /> : <DialogBody {...props} />;
 
 export const ResponsiveDrawerFooter = (
   props: ComponentProps<typeof DrawerFooter | typeof DialogFooter>
 ) =>
-  useIsMobile(BREAKPOINT) ? (
+  use(IsMobileContext) ? (
     <DrawerFooter {...props} />
   ) : (
     <DialogFooter {...props} />
@@ -123,7 +124,7 @@ export const ResponsiveDrawerFooter = (
 export const ResponsiveDrawerTitle = (
   props: ComponentProps<typeof DrawerTitle | typeof DialogTitle>
 ) =>
-  useIsMobile(BREAKPOINT) ? (
+  use(IsMobileContext) ? (
     <DrawerTitle {...props} />
   ) : (
     <DialogTitle {...props} />
@@ -132,7 +133,7 @@ export const ResponsiveDrawerTitle = (
 export const ResponsiveDrawerDescription = (
   props: ComponentProps<typeof DrawerDescription | typeof DialogDescription>
 ) =>
-  useIsMobile(BREAKPOINT) ? (
+  use(IsMobileContext) ? (
     <DrawerDescription {...props} />
   ) : (
     <DialogDescription {...props} />

@@ -281,6 +281,7 @@ const ExampleMenu = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
+        aria-label="Actions"
         render={<Button size="icon-sm" variant="ghost" className="-m-1" />}
       >
         <EllipsisIcon />

@@ -30,7 +30,6 @@ export const ConfirmResponsiveDrawer = (props: {
   confirmText?: ReactNode;
   confirmVariant?: ComponentProps<typeof Button>['variant'];
   cancelText?: ReactNode;
-  forceRenderOverlay?: boolean;
 }) => {
   const { t } = useTranslation(['common', 'components']);
   const [isPending, setIsPending] = useState(false);
@@ -83,22 +82,17 @@ export const ConfirmResponsiveDrawer = (props: {
       {childrenWithOnOpen}
       <ResponsiveDrawer
         open={isOpen}
-        onOpenChange={(isOpenChange, eventDetails) => {
-          if (isPending && eventDetails.reason === 'escape-key') {
-            return;
-          }
-
+        onOpenChange={(isOpenChange) => {
           if (isOpenChange) {
             open();
             return;
           }
           handleCancel();
         }}
-        disablePointerDismissal={isPending}
+        dismissible={!isPending}
       >
         <ResponsiveDrawerContent
           hideCloseButton
-          forceRenderOverlay={props.forceRenderOverlay}
           className="sm:max-w-xs"
           onKeyDown={(e) => {
             if (e.key === 'Enter') {

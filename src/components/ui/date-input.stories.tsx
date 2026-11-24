@@ -48,7 +48,10 @@ export const WithPicker = () => {
           open={datePicker.isOpen}
           onOpenChange={(open) => datePicker.toggle(open)}
         >
-          <PopoverTrigger render={<InputGroupButton size="icon-xs" />}>
+          <PopoverTrigger
+            aria-label="Pick a date"
+            render={<InputGroupButton size="icon-xs" />}
+          >
             <CalendarIcon />
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">

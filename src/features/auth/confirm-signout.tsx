@@ -14,7 +14,6 @@ export const ConfirmSignOut = (props: {
   const navigate = useNavigate();
   return (
     <ConfirmResponsiveDrawer
-      forceRenderOverlay
       open={props.open}
       onOpenChange={props.onOpenChange}
       onConfirm={() => {
