@@ -21,7 +21,9 @@ import {
 
 export const ConfirmResponsiveDrawer = (props: {
   enabled?: boolean;
-  children: ReactElement<{ onClick: () => void }>;
+  children?: ReactElement<{ onClick: () => void }>;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   title?: ReactNode;
   description?: ReactNode;
   onConfirm: () => unknown | Promise<unknown>;
@@ -32,7 +34,12 @@ export const ConfirmResponsiveDrawer = (props: {
 }) => {
   const { t } = useTranslation(['common', 'components']);
   const [isPending, setIsPending] = useState(false);
-  const { close, open, isOpen } = useDisclosure();
+  const disclosure = useDisclosure();
+  const isOpen = props.open ?? disclosure.isOpen;
+  const open = () =>
+    props.onOpenChange ? props.onOpenChange(true) : disclosure.open();
+  const close = () =>
+    props.onOpenChange ? props.onOpenChange(false) : disclosure.close();
 
   const displayHeading =
     !props.title && !props.description
@@ -40,6 +47,7 @@ export const ConfirmResponsiveDrawer = (props: {
       : props.title;
 
   if (props.enabled === false) {
+    if (!props.children) return null;
     // eslint-disable-next-line @eslint-react/no-clone-element
     const childrenWithOnConfirm = cloneElement(props.children, {
       onClick: () => {
@@ -49,12 +57,14 @@ export const ConfirmResponsiveDrawer = (props: {
     return <>{childrenWithOnConfirm}</>;
   }
 
-  // eslint-disable-next-line @eslint-react/no-clone-element
-  const childrenWithOnOpen = cloneElement(props.children, {
-    onClick: () => {
-      open();
-    },
-  });
+  const childrenWithOnOpen = props.children
+    ? // eslint-disable-next-line @eslint-react/no-clone-element
+      cloneElement(props.children, {
+        onClick: () => {
+          open();
+        },
+      })
+    : null;
 
   const handleCancel = () => {
     setIsPending(false);

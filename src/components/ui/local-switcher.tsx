@@ -35,7 +35,7 @@ export const LocalSwitcher = (props: { iconOnly?: boolean }) => {
         {AVAILABLE_LANGUAGES.map((language) => (
           <DropdownMenuItem
             key={language.key}
-            onClick={() => {
+            onSelect={() => {
               i18n.changeLanguage(language.key);
             }}
           >
