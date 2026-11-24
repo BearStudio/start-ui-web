@@ -33,7 +33,7 @@ function ScrollArea({
       className={cn('relative', className)}
       {...props}
     >
-      <ScrollAreaViewport className="flex size-full flex-1 flex-col rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1">
+      <ScrollAreaViewport className="size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1">
         <ScrollAreaContent className="flex min-h-full flex-col">
           {children}
         </ScrollAreaContent>

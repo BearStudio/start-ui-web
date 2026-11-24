@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/tailwind/utils';
 
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import {
   Card,
   CardAction,
@@ -67,10 +67,16 @@ export const DemoAppSwitch = () => {
             </div>
             {currentApp !== 'app' && hasAppAccess && (
               <CardAction className="-m-2">
-                <Button variant="ghost" size="sm" render={<div />}>
-                  {t('demo:appSwitch.app.goTo')}
-                  <ArrowRightIcon />
-                </Button>
+                <span
+                  className={cn(
+                    buttonVariants({ variant: 'ghost', size: 'sm' })
+                  )}
+                >
+                  <span className="flex min-w-0 flex-1 items-center justify-center">
+                    {t('demo:appSwitch.app.goTo')}
+                    <ArrowRightIcon />
+                  </span>
+                </span>
               </CardAction>
             )}
           </CardHeader>
@@ -108,10 +114,16 @@ export const DemoAppSwitch = () => {
 
             {currentApp !== 'manager' && hasManagerAccess && (
               <CardAction className="-m-2">
-                <Button variant="ghost" size="sm" render={<div />}>
-                  {t('demo:appSwitch.manager.goTo')}
-                  <ArrowRightIcon />
-                </Button>
+                <span
+                  className={cn(
+                    buttonVariants({ variant: 'ghost', size: 'sm' })
+                  )}
+                >
+                  <span className="flex min-w-0 flex-1 items-center justify-center">
+                    {t('demo:appSwitch.manager.goTo')}
+                    <ArrowRightIcon />
+                  </span>
+                </span>
               </CardAction>
             )}
           </CardHeader>
