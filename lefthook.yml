@@ -9,7 +9,23 @@ pre-commit:
       run: pnpm oxlint --fix {staged_files}
       stage_fixed: true
 
+# Same checks as CI, on the files being pushed only. Runs in parallel and
+# must stay under 9 seconds. A hook, not a line in AGENTS.md: agents skip
+# steps, hooks do not.
 pre-push:
+  parallel: true
   commands:
-    check:
-      run: pnpm lint
+    format:
+      glob: '*.{js,ts,cjs,mjs,jsx,tsx,json,jsonc,css,scss}'
+      run: node_modules/.bin/oxfmt --check {push_files}
+    lint:
+      glob: '*.{js,ts,cjs,mjs,jsx,tsx}'
+      run: node_modules/.bin/oxlint --deny-warnings {push_files}
+    # Types cross files: check the whole project when any TS file or
+    # tsconfig changes. tsrs (Rust port of TypeScript 7) reports the same
+    # errors as tsc, faster.
+    typecheck:
+      glob:
+        - '*.{ts,tsx,mts,cts}'
+        - 'tsconfig*.json'
+      run: node_modules/.bin/tsrs --noEmit
