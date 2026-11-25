@@ -21,8 +21,11 @@ pre-push:
     lint:
       glob: '*.{js,ts,cjs,mjs,jsx,tsx}'
       run: node_modules/.bin/oxlint --deny-warnings {push_files}
-    # Types cross files: check the whole project when any TS file changes.
-    # tsrs (Rust port of TypeScript 7) reports the same errors as tsc, faster.
+    # Types cross files: check the whole project when any TS file or
+    # tsconfig changes. tsrs (Rust port of TypeScript 7) reports the same
+    # errors as tsc, faster.
     typecheck:
-      glob: '*.{ts,tsx,mts,cts}'
+      glob:
+        - '*.{ts,tsx,mts,cts}'
+        - 'tsconfig*.json'
       run: node_modules/.bin/tsrs --noEmit
