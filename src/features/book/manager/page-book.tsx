@@ -3,7 +3,6 @@ import { ORPCError } from '@orpc/client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
 import { useNavigateBack } from '@/hooks/use-navigate-back';
@@ -16,6 +15,7 @@ import { ConfirmResponsiveDrawer } from '@/components/ui/confirm-responsive-draw
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
+import { toast } from '@/components/ui/toast';
 
 import { WithPermissions } from '@/features/auth/with-permissions';
 import { BookCover } from '@/features/book/book-cover';

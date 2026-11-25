@@ -4,7 +4,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -13,6 +12,7 @@ import { Form } from '@/components/form';
 import { PreventNavigation } from '@/components/prevent-navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { toast } from '@/components/ui/toast';
 
 import { FormUser } from '@/features/user/manager/form-user';
 import { zFormFieldsUser } from '@/features/user/schema';

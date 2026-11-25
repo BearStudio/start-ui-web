@@ -19,7 +19,7 @@ Temporary working notes for replacing `@base-ui/react` with `@ui-sdk/react`. Del
 | 2B | Select, Combobox; check every `src/components/form/field-*` with react-hook-form (done) |
 | 3A | Tooltip, Popover, DropdownMenu (→ Menu) (done) |
 | 3B | Dialog, Sheet, Drawer; drop `*Portal`, `nativeButton`, `nativeButtonTrigger` (done) |
-| 4 | Dark mode via ui-sdk color scheme: `createColorScheme` in a `color-scheme` cookie replaces `next-themes`; `dark:` matches `data-color-scheme` (done) |
+| 4 | Dark mode via ui-sdk color scheme: `createColorScheme` in a `color-scheme` cookie replaces `next-themes`; `dark:` matches `data-color-scheme`. Sonner → Toast (done) |
 | 5 | `pnpm remove @base-ui/react`, delete this file |
 
 ## State attributes
@@ -76,3 +76,4 @@ Checked in the rendered DOM with `@ui-sdk/react@0.1.0-beta.13`, except rows mark
 - **No Base UI left in `src`** after phase 3: phase 5 only removes the package.
 - **SSR** works with `renderToString`. Closed content isn't in the server HTML, and ids look like `ui-sdk-_R_0_-trigger`: never target them in CSS or tests.
 - **Color scheme.** Follows the [dark mode guide](https://ui-sdk.dev/docs/guides/dark-mode) for server rendering. `src/lib/preferences` holds the app's preferences: `readColorScheme` reads the choice from the `color-scheme` cookie (`color-scheme.isomorphic.ts` reads it from the request with `createIsomorphicFn`; it stays out of the index because its `@tanstack/react-start/server` import only builds under TanStack Start, not in Vitest or Storybook), `createAppColorScheme` creates the preference, and `PreferencesProvider` mounts `Preferences` and shares it with `useColorScheme`. The root route reads only the choice on the server (never the whole header into the page), creates the preference once and renders `data-color-scheme` on `<html>`. Tests and Storybook create their own. A choice next-themes kept in localStorage isn't carried over, and there's no equivalent of its `disableTransitionOnChange`.
+- **Toast.** `@/components/ui/toast` exports `Toaster` (a styled `ToastRegion`, mounted once in `Providers`) and re-exports ui-sdk's `toast`, so call sites only changed their import. ui-sdk places the region itself (side, alignment, safe-area insets, top layer); the wrapper sets its width and offset and lays out the stack from the `--toast-*` variables. Colors come from the theme tokens, so toasts follow the color scheme without reading it.

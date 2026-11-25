@@ -90,5 +90,8 @@
     "unknown": "Haijulikani",
     "copyError": "Nakili Hitilafu",
     "copied": "Imenakiliwa"
+  },
+  "toast": {
+    "region": "Arifa"
   }
 }

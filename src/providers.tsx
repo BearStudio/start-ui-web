@@ -5,7 +5,7 @@ import '@fontsource-variable/inter';
 
 import { QueryClientProvider } from '@/lib/tanstack-query/provider';
 
-import { Sonner } from '@/components/ui/sonner';
+import { Toaster } from '@/components/ui/toast';
 
 import { envClient } from '@/env/client';
 import {
@@ -18,7 +18,7 @@ export const Providers = (props: { children: ReactNode }) => {
   return (
     <QueryClientProvider>
       {props.children}
-      {!isDemoModeDrawerVisible && <Sonner />}
+      {!isDemoModeDrawerVisible && <Toaster />}
       {envClient.VITE_IS_DEMO && <DemoModeDrawer />}
     </QueryClientProvider>
   );

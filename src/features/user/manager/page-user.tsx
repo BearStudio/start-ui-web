@@ -10,7 +10,6 @@ import { Link } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { AlertCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
 import { cn } from '@/lib/tailwind/utils';
@@ -41,6 +40,7 @@ import {
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
+import { toast } from '@/components/ui/toast';
 
 import { useSession } from '@/features/auth/use-session';
 import { WithPermissions } from '@/features/auth/with-permissions';

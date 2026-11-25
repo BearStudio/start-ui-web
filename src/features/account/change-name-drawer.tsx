@@ -3,7 +3,6 @@ import { useMutation } from '@tanstack/react-query';
 import { ReactElement, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -24,6 +23,7 @@ import {
   ResponsiveDrawerTitle,
   ResponsiveDrawerTrigger,
 } from '@/components/ui/responsive-drawer';
+import { toast } from '@/components/ui/toast';
 
 import {
   FormFieldsAccountUpdateName,
