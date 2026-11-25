@@ -8,6 +8,8 @@ on:
       - staging
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
+  # The full suite runs in the merge queue before anything reaches main.
+  merge_group:
 
 # A new commit on a PR makes the previous run worthless: cancel it.
 # Pushes to main always run to completion.
@@ -46,7 +48,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        browser: [chromium, firefox, webkit]
+        # PRs get chromium feedback; the merge queue and main run every browser.
+        browser: ${{ fromJSON(github.event_name == 'pull_request' && '["chromium"]' || '["chromium","firefox","webkit"]') }}
     env:
       VITE_BASE_URL: http://localhost:3000
       VITE_ENV_NAME: tests
