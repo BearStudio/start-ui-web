@@ -72,10 +72,9 @@ export const NumberInput = ({
         {buttons === 'mobile' && (
           <NumberInputDecrement
             aria-label={t('components:numberInput.decrement')}
-            className={buttonVariants({
-              variant: 'secondary',
-              size: buttonSize,
-            })}
+            className={cn(
+              buttonVariants({ variant: 'secondary', size: buttonSize })
+            )}
           >
             <Minus />
           </NumberInputDecrement>
@@ -115,10 +114,9 @@ export const NumberInput = ({
         {buttons === 'mobile' && (
           <NumberInputIncrement
             aria-label={t('components:numberInput.increment')}
-            className={buttonVariants({
-              variant: 'secondary',
-              size: buttonSize,
-            })}
+            className={cn(
+              buttonVariants({ variant: 'secondary', size: buttonSize })
+            )}
           >
             <Plus />
           </NumberInputIncrement>

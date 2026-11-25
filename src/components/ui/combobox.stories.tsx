@@ -157,10 +157,12 @@ export function Sizes() {
 }
 
 function MultipleCombobox({
+  className,
   size,
   invalid,
   disabled,
 }: {
+  className?: string;
   size?: React.ComponentProps<typeof ComboboxChips>['size'];
   invalid?: boolean;
   disabled?: boolean;
@@ -173,7 +175,7 @@ function MultipleCombobox({
       multiple
       disabled={disabled}
     >
-      <ComboboxChips className="flex-1" size={size} ref={anchor}>
+      <ComboboxChips className={className} size={size} ref={anchor}>
         <ComboboxValue>
           {(values: string[], { labels }) =>
             values.map((value, index) => (
@@ -220,9 +222,9 @@ export function MultipleInvalid() {
 export function MultipleSizes() {
   return (
     <div className="flex items-start gap-4">
-      <MultipleCombobox size="sm" />
-      <MultipleCombobox />
-      <MultipleCombobox size="lg" />
+      <MultipleCombobox className="flex-1" size="sm" />
+      <MultipleCombobox className="flex-1" />
+      <MultipleCombobox className="flex-1" size="lg" />
     </div>
   );
 }

@@ -92,17 +92,26 @@ function ComboboxClear({
   'children'
 >) {
   const { t } = useTranslation(['components']);
+  // ui-sdk unmounts Clear on a disabled combobox: keep it shown, disabled,
+  // while there is a value.
   return (
-    <ComboboxClearPrimitive
-      aria-label={t('components:combobox.clear')}
-      className={cn(
-        buttonVariants({ variant: 'ghost', size: 'icon-xs' }),
-        className
-      )}
-      {...props}
-    >
-      <XIcon aria-hidden="true" className="pointer-events-none" />
-    </ComboboxClearPrimitive>
+    <ComboboxValuePrimitive>
+      {({ value }) =>
+        (Array.isArray(value) ? value.length > 0 : value != null) && (
+          <ComboboxClearPrimitive
+            keepMounted
+            aria-label={t('components:combobox.clear')}
+            className={cn(
+              buttonVariants({ variant: 'ghost', size: 'icon-xs' }),
+              className
+            )}
+            {...props}
+          >
+            <XIcon aria-hidden="true" className="pointer-events-none" />
+          </ComboboxClearPrimitive>
+        )
+      }
+    </ComboboxValuePrimitive>
   );
 }
 
@@ -137,8 +146,7 @@ function ComboboxInput({
             aria-label={t('components:combobox.toggle')}
             disabled={disabled}
             className={cn(
-              buttonVariants({ variant: 'ghost', size: 'icon-xs' }),
-              'group-has-data-[slot=combobox-clear]/input-group:hidden'
+              buttonVariants({ variant: 'ghost', size: 'icon-xs' })
             )}
           >
             <ChevronDownIcon
@@ -191,7 +199,7 @@ function ComboboxContent({
       anchor={virtualAnchor}
       data-chips={!!anchor}
       className={cn(
-        'group/combobox-content max-h-(--available-height) w-(--anchor-width) max-w-(--available-width) min-w-[calc(var(--anchor-width)+--spacing(7))] origin-(--transform-origin) overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 [--list-height:var(--available-height)] data-ending-style:animate-out data-ending-style:fade-out-0 data-ending-style:zoom-out-95 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-[chips=true]:min-w-(--anchor-width) data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+        'group/combobox-content max-h-(--available-height) w-(--anchor-width) max-w-(--available-width) min-w-[calc(var(--anchor-width)+--spacing(7))] origin-(--transform-origin) overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 transition duration-100 [--list-height:var(--available-height)] data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0 data-[chips=true]:min-w-(--anchor-width) data-[side=bottom]:data-starting-style:-translate-y-2 data-[side=left]:data-starting-style:translate-x-2 data-[side=right]:data-starting-style:-translate-x-2 data-[side=top]:data-starting-style:translate-y-2',
         className
       )}
       {...props}
@@ -277,7 +285,7 @@ function ComboboxEmpty({
   return (
     <ComboboxEmptyPrimitive
       className={cn(
-        'flex w-full justify-center py-2 text-center text-sm text-muted-foreground',
+        'hidden w-full justify-center py-2 text-center text-sm text-muted-foreground data-empty:flex',
         className
       )}
       {...props}
