@@ -61,7 +61,6 @@
     "db:seed": "dotenv -- cross-env node ./run-jiti ./prisma/seed/index.ts"
   },
   "dependencies": {
-    "@base-ui/react": "1.8.0",
     "@bearstudio/ui-state": "2.0.0",
     "@better-auth/cimd": "1.7.18",
     "@better-auth/expo": "1.7.18",
