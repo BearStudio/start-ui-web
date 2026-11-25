@@ -1,11 +1,12 @@
-import { useTheme } from 'next-themes';
 import { Toaster, ToasterProps } from 'sonner';
 
+import { useColorScheme } from '@/lib/preferences';
+
 export const Sonner = ({ ...props }: ToasterProps) => {
-  const { theme } = useTheme();
+  const { resolved } = useColorScheme();
   return (
     <Toaster
-      theme={theme === 'dark' ? 'dark' : 'light'}
+      theme={resolved === 'dark' ? 'dark' : 'light'}
       className="toaster group mt-safe-top"
       position="top-center"
       offset={{

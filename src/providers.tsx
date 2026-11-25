@@ -1,4 +1,3 @@
-import { ThemeProvider } from 'next-themes';
 import type { ReactNode } from 'react';
 import '@/lib/dayjs/config';
 import '@/lib/i18n';
@@ -14,23 +13,13 @@ import {
   useIsDemoModeDrawerVisible,
 } from '@/features/demo/demo-mode-drawer';
 
-export const Providers = (props: {
-  children: ReactNode;
-  forcedTheme?: string;
-}) => {
+export const Providers = (props: { children: ReactNode }) => {
   const isDemoModeDrawerVisible = useIsDemoModeDrawerVisible();
   return (
-    <ThemeProvider
-      attribute="class"
-      storageKey="theme"
-      disableTransitionOnChange
-      forcedTheme={props.forcedTheme}
-    >
-      <QueryClientProvider>
-        {props.children}
-        {!isDemoModeDrawerVisible && <Sonner />}
-        {envClient.VITE_IS_DEMO && <DemoModeDrawer />}
-      </QueryClientProvider>
-    </ThemeProvider>
+    <QueryClientProvider>
+      {props.children}
+      {!isDemoModeDrawerVisible && <Sonner />}
+      {envClient.VITE_IS_DEMO && <DemoModeDrawer />}
+    </QueryClientProvider>
   );
 };

@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router';
+import type { ColorSchemeValue } from '@ui-sdk/core';
 import {
   BookOpenIcon,
   ChevronsUpDownIcon,
@@ -9,10 +10,11 @@ import {
   SunIcon,
   SunMoonIcon,
 } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { match } from 'ts-pattern';
+
+import { colorSchemes, useColorScheme } from '@/lib/preferences';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -32,7 +34,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { themes } from '@/components/ui/theme-switcher';
 
 import { ConfirmSignOut } from '@/features/auth/confirm-signout';
 import { useSession } from '@/features/auth/use-session';
@@ -45,7 +46,7 @@ export function NavUser() {
   const { isMobile } = useSidebar();
   const session = useSession();
   const { setOpenMobile } = useSidebar();
-  const { theme, setTheme } = useTheme();
+  const colorScheme = useColorScheme();
   const [isConfirmSignOutOpen, setIsConfirmSignOutOpen] = useState(false);
   const [isBuildInfoOpen, setIsBuildInfoOpen] = useState(false);
 
@@ -107,14 +108,16 @@ export function NavUser() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuRadioGroup
-              value={theme ?? 'system'}
-              onValueChange={setTheme}
+              value={colorScheme.value}
+              onValueChange={(value) =>
+                colorScheme.set(value as ColorSchemeValue)
+              }
             >
-              {themes.map((item) => (
+              {colorSchemes.map((item) => (
                 <DropdownMenuRadioItem
                   key={item}
                   value={item}
-                  icon={match((theme as (typeof themes)[number]) ?? 'system')
+                  icon={match(colorScheme.value)
                     .with('system', () => (
                       <SunMoonIcon className="text-muted-foreground" />
                     ))

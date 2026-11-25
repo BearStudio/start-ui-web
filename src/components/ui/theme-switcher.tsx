@@ -5,10 +5,10 @@ import {
   SunIcon,
   SunMoonIcon,
 } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import { useTranslation } from 'react-i18next';
 import { match } from 'ts-pattern';
 
+import { colorSchemes, useColorScheme } from '@/lib/preferences';
 import { cn } from '@/lib/tailwind/utils';
 
 import { Button } from '@/components/ui/button';
@@ -19,11 +19,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-export const themes = ['system', 'light', 'dark'] as const;
-
 export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
   const { t } = useTranslation(['common']);
-  const { theme, setTheme } = useTheme();
+  const colorScheme = useColorScheme();
 
   return (
     <DropdownMenu>
@@ -35,13 +33,13 @@ export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
           />
         }
       >
-        {match((theme as (typeof themes)[number]) ?? 'system')
+        {match(colorScheme.value)
           .with('system', () => <SunMoonIcon className="opacity-50" />)
           .with('light', () => <SunIcon className="opacity-50" />)
           .with('dark', () => <MoonIcon className="opacity-50" />)
           .exhaustive()}
         <span className={cn(props.iconOnly && 'sr-only')}>
-          {match((theme as (typeof themes)[number]) ?? 'system')
+          {match(colorScheme.value)
             .with('system', () => t('common:themes.values.system'))
             .with('light', () => t('common:themes.values.light'))
             .with('dark', () => t('common:themes.values.dark'))
@@ -50,17 +48,17 @@ export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
         {!props.iconOnly && <ChevronsUpDownIcon className="opacity-50" />}
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        {themes.map((item) => (
+        {colorSchemes.map((item) => (
           <DropdownMenuItem
             key={item}
             onSelect={() => {
-              setTheme(item);
+              colorScheme.set(item);
             }}
           >
             <CheckIcon
               className={cn(
                 'mt-0.5 size-4 self-start text-current',
-                theme === item ? 'opacity-100' : 'opacity-0'
+                colorScheme.value === item ? 'opacity-100' : 'opacity-0'
               )}
             />
             {t(`common:themes.values.${item}`)}

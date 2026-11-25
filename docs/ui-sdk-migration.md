@@ -1,10 +1,10 @@
 # Base UI to ui-sdk migration
 
-Temporary working notes for replacing `@base-ui/react` with `@ui-sdk/react`. Delete this file in phase 4.
+Temporary working notes for replacing `@base-ui/react` with `@ui-sdk/react`. Delete this file in phase 5.
 
 ## Rules
 
-- Base UI and ui-sdk coexist until phase 4. Migrate one group of components per PR.
+- Base UI and ui-sdk coexist until phase 5. Migrate one group of components per PR.
 - Only `src/components/ui` imports Base UI. Keep each wrapper's public API (names, variants, props) so call sites don't change. When a prop has no ui-sdk equivalent, remove it and update its call sites in the same PR.
 - Before migrating a component, read `node_modules/@ui-sdk/react/docs/components/<name>.md` and follow the `ui-sdk` skill.
 - Every migrated component keeps its Storybook story working and gets the tests from the `ui-sdk` skill (agent test, keyboard, ARIA).
@@ -19,7 +19,8 @@ Temporary working notes for replacing `@base-ui/react` with `@ui-sdk/react`. Del
 | 2B | Select, Combobox; check every `src/components/form/field-*` with react-hook-form (done) |
 | 3A | Tooltip, Popover, DropdownMenu (→ Menu) (done) |
 | 3B | Dialog, Sheet, Drawer; drop `*Portal`, `nativeButton`, `nativeButtonTrigger` (done) |
-| 4 | `pnpm remove @base-ui/react`, delete this file |
+| 4 | Dark mode via ui-sdk color scheme: `createColorScheme` in a `color-scheme` cookie replaces `next-themes`; `dark:` matches `data-color-scheme` (done) |
+| 5 | `pnpm remove @base-ui/react`, delete this file |
 
 ## State attributes
 
@@ -72,5 +73,6 @@ Checked in the rendered DOM with `@ui-sdk/react@0.1.0-beta.13`, except rows mark
 - **No `duration-*` without a `transition-*` on popups.** `transition-property` defaults to `all`, so `duration-100` alone animates the `inset` and `--transform-origin` ui-sdk writes inline after the first frame: the popup flies in from the top left. Use `transition` (opacity, scale, translate) with `data-starting-style:` / `data-ending-style:` instead of tw-animate's `animate-in` / `animate-out`. Popover, DropdownMenu and Dialog have the same classes: fix them in phase 3.
 - **`buttonVariants()` on a ui-sdk part needs `cn()`**: without tailwind-merge, `w-fit` wins over the `size-*` of icon sizes.
 - **Wrappers name their own buttons.** Number input step buttons and the combobox trigger, clear and chip remove buttons take an `aria-label` from `components:numberInput.*` / `components:combobox.*`.
-- **No Base UI left in `src`** after phase 3: phase 4 only removes the package.
+- **No Base UI left in `src`** after phase 3: phase 5 only removes the package.
 - **SSR** works with `renderToString`. Closed content isn't in the server HTML, and ids look like `ui-sdk-_R_0_-trigger`: never target them in CSS or tests.
+- **Color scheme.** Follows the [dark mode guide](https://ui-sdk.dev/docs/guides/dark-mode) for server rendering. `src/lib/preferences` holds the app's preferences: `readColorScheme` reads the choice from the `color-scheme` cookie (`color-scheme.isomorphic.ts` reads it from the request with `createIsomorphicFn`; it stays out of the index because its `@tanstack/react-start/server` import only builds under TanStack Start, not in Vitest or Storybook), `createAppColorScheme` creates the preference, and `PreferencesProvider` mounts `Preferences` and shares it with `useColorScheme`. The root route reads only the choice on the server (never the whole header into the page), creates the preference once and renders `data-color-scheme` on `<html>`. Tests and Storybook create their own. A choice next-themes kept in localStorage isn't carried over, and there's no equivalent of its `disableTransitionOnChange`.
