@@ -18,7 +18,7 @@ jobs:
   linter:
     name: 🧹 Linter
     if: github.event.pull_request.draft == false
-    timeout-minutes: 10
+    timeout-minutes: 1
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,12 +31,12 @@ jobs:
         uses: ./.github/actions/setup-pnpm
 
       - name: Run oxlint
-        run: pnpm oxlint --deny-warnings .
+        run: .github/scripts/budget.sh 5 node_modules/.bin/oxlint --deny-warnings .
 
   typescriptChecker:
     name: 🟦 TypeScript Checker
     if: github.event.pull_request.draft == false
-    timeout-minutes: 10
+    timeout-minutes: 1
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -50,13 +50,15 @@ jobs:
         with:
           node-version: 26
 
+      # Target is 5s. tsc takes 4.7s on GitHub's 4-vCPU runners, too close
+      # to hold reliably: 8s until the job runs on 8 cores.
       - name: Run Typescript checker
-        run: pnpm run lint:ts
+        run: .github/scripts/budget.sh 8 node_modules/.bin/tsc --noEmit
 
   tests:
     name: 🔬 Tests
     if: github.event.pull_request.draft == false
-    timeout-minutes: 10
+    timeout-minutes: 2
     runs-on: ubuntu-latest
     # Chromium and its system dependencies come baked in the image: no
     # apt-get at run time (see e2e-tests.yml).
@@ -87,4 +89,4 @@ jobs:
         env:
           SKIP_ENV_VALIDATION: true
           CHANGED: ${{ github.event_name == 'pull_request' && format('--changed=origin/{0}', github.base_ref) || '' }}
-        run: pnpm run test:ci $CHANGED
+        run: .github/scripts/budget.sh 60 node_modules/.bin/vitest run $CHANGED
