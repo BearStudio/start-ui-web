@@ -171,12 +171,6 @@
       }
     },
     {
-      "files": ["src/server/openapi.ts"],
-      "rules": {
-        "node-security/require-dependency-integrity": "off"
-      }
-    },
-    {
       "files": ["src/components/ui/**"],
       "rules": {
         "shadcn/no-restyle": "off",
