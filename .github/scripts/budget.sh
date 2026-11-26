@@ -9,7 +9,7 @@ start=$(date +%s%N)
 timeout --kill-after=5 "$budget" "$@"
 status=$?
 elapsed_ms=$(( ($(date +%s%N) - start) / 1000000 ))
-if [ "$status" -eq 124 ] || [ "$status" -eq 137 ]; then
+if [[ $status -eq 124 || $status -eq 137 ]]; then
   echo "::error::Over budget: '$*' took more than ${budget}s. Make it faster, do not raise the budget."
   exit 1
 fi
