@@ -7,7 +7,8 @@
     "eslint-plugin-simple-import-sort",
     "eslint-plugin-sonarjs",
     "eslint-plugin-storybook",
-    "@shadcn/lint"
+    "@shadcn/lint",
+    "oxlint-plugin-node-security"
   ],
   "categories": {
     "correctness": "error"
@@ -103,7 +104,38 @@
         "allow": ["toaster"]
       }
     ],
-    "shadcn/require-static-classes": "error"
+    "shadcn/require-static-classes": "error",
+    "node-security/detect-child-process": "error",
+    "node-security/detect-eval-with-expression": "error",
+    "node-security/detect-non-literal-fs-filename": "warn",
+    "node-security/no-unsafe-dynamic-require": "error",
+    "node-security/no-buffer-overread": "warn",
+    "node-security/no-deprecated-buffer": "error",
+    "node-security/no-unsafe-buffer-alloc": "warn",
+    "node-security/no-toctou-vulnerability": "error",
+    "node-security/no-zip-slip": "error",
+    "node-security/no-arbitrary-file-access": "error",
+    "node-security/no-data-in-temp-storage": "error",
+    "node-security/no-ssrf": "warn",
+    "node-security/no-shell-injection": "error",
+    "node-security/no-dynamic-command-string": "error",
+    "node-security/no-env-injection": "error",
+    "node-security/no-dynamic-algorithm-selection": "error",
+    "node-security/no-timing-unsafe-compare": "warn",
+    "node-security/detect-suspicious-dependencies": "warn",
+    "node-security/require-dependency-integrity": "error",
+    "node-security/no-weak-hash-algorithm": "error",
+    "node-security/no-weak-cipher-algorithm": "error",
+    "node-security/no-weak-dh-parameters": "error",
+    "node-security/no-static-iv": "error",
+    "node-security/no-ecb-mode": "error",
+    "node-security/no-math-random-crypto": "error",
+    "node-security/no-cryptojs": "error",
+    "node-security/no-self-signed-certs": "error",
+    "node-security/require-aead-tag-verification": "error",
+    "node-security/no-unbounded-decompression": "error",
+    "node-security/no-insecure-http-parser": "error",
+    "node-security/require-stream-error-handler": "error"
   },
   "overrides": [
     {

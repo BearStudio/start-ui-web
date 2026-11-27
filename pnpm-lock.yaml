@@ -282,6 +282,9 @@ importers:
       oxlint:
         specifier: 1.86.0
         version: 1.86.0
+      oxlint-plugin-node-security:
+        specifier: 6.3.3
+        version: 6.3.3(eslint@9.39.5(jiti@2.6.1))(typescript@7.0.2)
       playwright:
         specifier: 1.64.1
         version: 1.64.1
@@ -1187,6 +1190,21 @@ packages:
     engines: {node: '>=20.9.0'}
     cpu: [x64]
     os: [win32]
+
+  '@interlace/eslint-devkit@2.5.0':
+    resolution: {integrity: sha512-ZpYDA26+Rh9MHstXuK2TX/7j866+YzfMUmd7knV31DCI9IWVycinzoKghzrMKCAnrS0v0ExLCdSH9ak3+ES7tw==}
+    engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+    peerDependencies:
+      eslint: ^8.40.0 || ^9.0.0 || ^10.0.0
+      oxc-resolver: ^11.24.2
+      typescript: '>=4.8.4'
+    peerDependenciesMeta:
+      eslint:
+        optional: true
+      oxc-resolver:
+        optional: true
+      typescript:
+        optional: true
 
   '@internationalized/number@3.6.8':
     resolution: {integrity: sha512-8UmMFia46DUt+k97zKd9fKWXcWHR+k8ae3eYzILETuT2KbIvLyOfac7zesw+sJdRAAZ7Q9pM1Mk22aXp2LD0Ig==}
@@ -4646,6 +4664,15 @@ packages:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
 
+  eslint-plugin-node-security@6.3.3:
+    resolution: {integrity: sha512-Ojvr28Nfo/YQ17bKoeh4T3whbtd3KGfyh/6YImpkWwHzLI+6dgVRdRjbQ2KrHhYJyOyI0w6kGbI+ALbzDKfmPg==}
+    engines: {node: '>=22.13.0'}
+    peerDependencies:
+      eslint: ^8.40.0 || ^9.0.0 || ^10.0.0
+    peerDependenciesMeta:
+      eslint:
+        optional: true
+
   eslint-plugin-simple-import-sort@12.1.1:
     resolution: {integrity: sha512-6nuzu4xwQtE3332Uz0to+TxDQYRLTKRESSc2hefVT48Zc8JthmN23Gx9lnYhu0FtkRSL1oxny3kJ2aveVhmOVA==}
     peerDependencies:
@@ -5745,6 +5772,10 @@ packages:
     resolution: {integrity: sha512-/ejJ+KoSW6J9bcNT9a9UtJSJNWhJ3yOLSBLbkoFHJs/8CZjmaZVZAJe4YgO1KMJlKpNQasrn/G9JQUEZI3p0EQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
+
+  oxlint-plugin-node-security@6.3.3:
+    resolution: {integrity: sha512-DmFi29I+YARjCTSnYIQ3afgJn19wdvPQIeOR+Fa9oiL6o45o5Q6Rg/XmiNuRtDc2NnlDYKORcykvYfONuoCEQw==}
+    engines: {node: '>=22.13.0'}
 
   oxlint@1.86.0:
     resolution: {integrity: sha512-og0lhgvZfgGF//gOOmZXvtr+GmBbAGEnbEhv/QUg7UW2Wi4wHMnJbnMD+zuHgPdJxdklfgpPupdlAaAySyxrZg==}
@@ -7687,6 +7718,11 @@ snapshots:
 
   '@img/sharp-win32-x64@0.35.5':
     optional: true
+
+  '@interlace/eslint-devkit@2.5.0(eslint@9.39.5(jiti@2.6.1))(typescript@7.0.2)':
+    optionalDependencies:
+      eslint: 9.39.5(jiti@2.6.1)
+      typescript: 7.0.2
 
   '@internationalized/number@3.6.8':
     dependencies:
@@ -10820,6 +10856,15 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
+  eslint-plugin-node-security@6.3.3(eslint@9.39.5(jiti@2.6.1))(typescript@7.0.2):
+    dependencies:
+      '@interlace/eslint-devkit': 2.5.0(eslint@9.39.5(jiti@2.6.1))(typescript@7.0.2)
+    optionalDependencies:
+      eslint: 9.39.5(jiti@2.6.1)
+    transitivePeerDependencies:
+      - oxc-resolver
+      - typescript
+
   eslint-plugin-simple-import-sort@12.1.1(eslint@9.39.5(jiti@2.6.1)):
     dependencies:
       eslint: 9.39.5(jiti@2.6.1)
@@ -11967,6 +12012,14 @@ snapshots:
       '@oxfmt/binding-win32-arm64-msvc': 0.36.0
       '@oxfmt/binding-win32-ia32-msvc': 0.36.0
       '@oxfmt/binding-win32-x64-msvc': 0.36.0
+
+  oxlint-plugin-node-security@6.3.3(eslint@9.39.5(jiti@2.6.1))(typescript@7.0.2):
+    dependencies:
+      eslint-plugin-node-security: 6.3.3(eslint@9.39.5(jiti@2.6.1))(typescript@7.0.2)
+    transitivePeerDependencies:
+      - eslint
+      - oxc-resolver
+      - typescript
 
   oxlint@1.86.0:
     optionalDependencies:
