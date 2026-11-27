@@ -23,3 +23,7 @@ Vitest runs every file in one shared module graph (`isolate: false`) and in rand
 - Never add retries or raise a timeout to make a test pass. A test that needs one has a bug: find it.
 
 Replay a failing order with `vitest run --sequence.seed=<seed shown in the output>`.
+
+## ui-sdk
+
+Before using ui-sdk (`@ui-sdk/react`, `@ui-sdk/core`), follow the `ui-sdk` skill if it is installed, and read `node_modules/@ui-sdk/react/docs/llms.txt`. To build a new component, also search `node_modules/@ui-sdk/react/docs/core.md` by heading, and read `rendering.md` in the same folder.
