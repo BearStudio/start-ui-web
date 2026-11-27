@@ -1,5 +1,8 @@
-import { mergeProps } from '@base-ui/react/merge-props';
-import { useRender } from '@base-ui/react/use-render';
+import {
+  mergeProps,
+  type PartProps,
+  renderElement,
+} from '@ui-sdk/react/primitive';
 import { ChevronRight, MoreHorizontal } from 'lucide-react';
 import * as React from 'react';
 
@@ -43,20 +46,18 @@ function BreadcrumbLink({
   className,
   render,
   ...props
-}: useRender.ComponentProps<'a'>) {
-  return useRender({
-    defaultTagName: 'a',
-    props: mergeProps<'a'>(
+}: Omit<PartProps<'a'>, 'className'> & { className?: string }) {
+  return renderElement(
+    'a',
+    mergeProps(
       {
+        'data-slot': 'breadcrumb-link',
         className: cn('transition-colors hover:text-foreground', className),
       },
       props
     ),
-    render,
-    state: {
-      slot: 'breadcrumb-link',
-    },
-  });
+    render
+  );
 }
 
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<'span'>) {

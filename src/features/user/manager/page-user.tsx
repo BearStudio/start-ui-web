@@ -13,13 +13,14 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
+import { cn } from '@/lib/tailwind/utils';
 import { useNavigateBack } from '@/hooks/use-navigate-back';
 
 import { BackButton } from '@/components/back-button';
 import { PageError } from '@/components/errors/page-error';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -179,17 +180,19 @@ export const PageUser = (props: { params: { id: string } }) => {
                         params={props.params}
                         className="-m-2 self-start"
                       >
-                        <Button
-                          size="icon-sm"
-                          variant="ghost"
-                          render={<span />}
-                          nativeButton={false}
+                        <span
+                          className={cn(
+                            buttonVariants({
+                              size: 'icon-sm',
+                              variant: 'ghost',
+                            })
+                          )}
                         >
                           <PencilLineIcon />
                           <span className="sr-only">
                             {t('user:manager.detail.editUser')}
                           </span>
-                        </Button>
+                        </span>
                         <span className="absolute inset-0" />
                       </Link>
                     </WithPermissions>

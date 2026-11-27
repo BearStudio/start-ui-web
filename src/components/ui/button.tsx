@@ -1,5 +1,6 @@
-import { Button as ButtonPrimitive } from '@base-ui/react/button';
+import { Button as ButtonPrimitive } from '@ui-sdk/react/button';
 import { cva, type VariantProps } from 'class-variance-authority';
+import type * as React from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
@@ -49,8 +50,13 @@ const buttonVariants = cva(
   }
 );
 
-type ButtonProps = ButtonPrimitive.Props &
+type ButtonProps = Omit<
+  React.ComponentProps<typeof ButtonPrimitive>,
+  'className' | 'children'
+> &
   VariantProps<typeof buttonVariants> & {
+    className?: string;
+    children?: React.ReactNode;
     loading?: boolean;
   };
 
@@ -65,7 +71,6 @@ function Button({
 }: ButtonProps) {
   return (
     <ButtonPrimitive
-      data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
       disabled={loading || disabled}
       {...props}

@@ -45,7 +45,6 @@ export const Render = () => {
           rel="noopener noreferrer"
         />
       }
-      nativeButton={false}
     >
       Render as Anchor
     </Button>

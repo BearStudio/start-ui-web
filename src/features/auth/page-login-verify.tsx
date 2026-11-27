@@ -112,11 +112,7 @@ export default function PageLoginVerify({
     >
       <div className="flex flex-col gap-1">
         {oauthLoginHref ? (
-          <Button
-            variant="link"
-            render={<a href={oauthLoginHref} />}
-            nativeButton={false}
-          >
+          <Button variant="link" render={<a href={oauthLoginHref} />}>
             <ArrowLeftIcon />
             {t('common:actions.back')}
           </Button>
