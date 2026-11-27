@@ -3,7 +3,6 @@ import { useRouter } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 
 import {
   Form,
@@ -14,6 +13,7 @@ import {
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
 import { ButtonLink } from '@/components/ui/button-link';
+import { toast } from '@/components/ui/toast';
 
 import { authClient } from '@/features/auth/client';
 import {

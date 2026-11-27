@@ -3,7 +3,6 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 
 import {
   Form,
@@ -12,6 +11,7 @@ import {
   FormFieldLabel,
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
+import { toast } from '@/components/ui/toast';
 
 import { envClient } from '@/env/client';
 import { authClient } from '@/features/auth/client';

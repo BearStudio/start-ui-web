@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import { z } from 'zod';
 
 import {
@@ -11,6 +10,7 @@ import {
 } from '@/components/form';
 import { onSubmit } from '@/components/form/docs.utils';
 import { Button } from '@/components/ui/button';
+import { toast } from '@/components/ui/toast';
 
 export default {
   title: 'Form/FieldUploadInput',

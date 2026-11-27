@@ -1,12 +1,12 @@
 import { queryOptions, useMutation, useQuery } from '@tanstack/react-query';
 import { AlertCircleIcon, CheckIcon } from 'lucide-react';
 import { Trans, useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import { toast } from '@/components/ui/toast';
 
 import { authClient } from '@/features/auth/client';
 import {

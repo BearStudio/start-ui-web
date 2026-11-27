@@ -2,10 +2,18 @@ import { ReactElement } from 'react';
 import { userEvent } from 'vitest/browser';
 import { ComponentRenderOptions, render } from 'vitest-browser-react';
 
+import { createAppColorScheme, PreferencesProvider } from '@/lib/preferences';
+
 import { Providers } from '@/providers';
 
+const colorScheme = createAppColorScheme('light');
+
 const WithProviders = ({ children }: { children: React.ReactNode }) => {
-  return <Providers>{children}</Providers>;
+  return (
+    <PreferencesProvider colorScheme={colorScheme}>
+      <Providers>{children}</Providers>
+    </PreferencesProvider>
+  );
 };
 
 const customRender = (

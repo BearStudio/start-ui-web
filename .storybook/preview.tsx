@@ -1,6 +1,6 @@
 import type { Preview } from '@storybook/react-vite';
 import { useDarkMode } from '@vueless/storybook-dark-mode';
-import { StrictMode, useEffect } from 'react';
+import { StrictMode, useEffect, useLayoutEffect } from 'react';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StoryContext } from 'storybook/internal/csf';
@@ -13,6 +13,10 @@ import {
   DEFAULT_LANGUAGE_KEY,
 } from '../src/lib/i18n/constants';
 import i18nGlobal from '../src/lib/i18n/index';
+import {
+  createAppColorScheme,
+  PreferencesProvider,
+} from '../src/lib/preferences';
 import { Providers } from '../src/providers';
 
 const DocumentationWrapper = ({
@@ -39,6 +43,8 @@ const DocumentationWrapper = ({
 
   return <div id="preview-container">{children}</div>;
 };
+
+const colorScheme = createAppColorScheme('light');
 
 const preview: Preview = {
   parameters: {
@@ -74,17 +80,22 @@ const preview: Preview = {
   decorators: [
     (story, context) => {
       const isDarkMode = useDarkMode();
+      useLayoutEffect(() => {
+        colorScheme.set(isDarkMode ? 'dark' : 'light');
+      }, [isDarkMode]);
       return (
-        <Providers forcedTheme={isDarkMode ? 'dark' : 'light'}>
-          <StrictMode>
-            <DocumentationWrapper context={context}>
-              {/* Calling as a function to avoid errors. Learn more at:
-               * https://github.com/storybookjs/storybook/issues/15223#issuecomment-1092837912
-               */}
-              {story(context)}
-            </DocumentationWrapper>
-          </StrictMode>
-        </Providers>
+        <PreferencesProvider colorScheme={colorScheme}>
+          <Providers>
+            <StrictMode>
+              <DocumentationWrapper context={context}>
+                {/* Calling as a function to avoid errors. Learn more at:
+                 * https://github.com/storybookjs/storybook/issues/15223#issuecomment-1092837912
+                 */}
+                {story(context)}
+              </DocumentationWrapper>
+            </StrictMode>
+          </Providers>
+        </PreferencesProvider>
       );
     },
   ],

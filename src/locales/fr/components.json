@@ -90,5 +90,8 @@
     "unknown": "Inconnu",
     "copyError": "Copier l'erreur",
     "copied": "Copié"
+  },
+  "toast": {
+    "region": "Notifications"
   }
 }

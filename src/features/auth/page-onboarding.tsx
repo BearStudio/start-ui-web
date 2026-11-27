@@ -3,7 +3,6 @@ import { useMutation } from '@tanstack/react-query';
 import { LogOutIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -14,6 +13,7 @@ import {
   FormFieldLabel,
 } from '@/components/form';
 import { Button } from '@/components/ui/button';
+import { toast } from '@/components/ui/toast';
 
 import { ConfirmSignOut } from '@/features/auth/confirm-signout';
 import { LayoutLogin } from '@/features/auth/layout-login';

@@ -1,5 +1,6 @@
 import type { Meta } from '@storybook/react-vite';
-import { toast } from 'sonner';
+
+import { toast } from '@/components/ui/toast';
 
 import { UploadInput } from './upload-input';
 

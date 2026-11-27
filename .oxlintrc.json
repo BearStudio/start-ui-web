@@ -97,12 +97,7 @@
       }
     ],
     "shadcn/no-inline-styles": "error",
-    "shadcn/no-unknown-classes": [
-      "error",
-      {
-        "allow": ["toaster"]
-      }
-    ],
+    "shadcn/no-unknown-classes": "error",
     "shadcn/require-static-classes": "error"
   },
   "overrides": [

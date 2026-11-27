@@ -11,12 +11,14 @@ import {
 } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { createServerFn } from '@tanstack/react-start';
-import { type ReactNode } from 'react';
+import { type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getPageTitle } from '@/lib/get-page-title';
 import i18n, { syncLanguage } from '@/lib/i18n';
 import { AVAILABLE_LANGUAGES } from '@/lib/i18n/constants';
+import { createAppColorScheme, PreferencesProvider } from '@/lib/preferences';
+import { getColorScheme } from '@/lib/preferences/color-scheme.isomorphic';
 
 import { PageError } from '@/components/errors/page-error';
 
@@ -51,7 +53,7 @@ export const Route = createRootRouteWithContext<{
     }
   },
   loader: async () => {
-    // Setup language and theme in SSR to prevent hydratation errors
+    // Setup language in SSR to prevent hydratation errors
     if (import.meta.env.SSR) {
       const { language } = await initSsrApp();
       i18n.changeLanguage(language);
@@ -146,6 +148,8 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   const { i18n } = useTranslation();
   syncLanguage(i18n.language);
 
+  const [colorScheme] = useState(() => createAppColorScheme(getColorScheme()));
+
   const languageConfig = AVAILABLE_LANGUAGES.find(
     ({ key }) => key === i18n.language
   );
@@ -155,6 +159,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       suppressHydrationWarning
       lang={i18n.language}
       dir={languageConfig?.dir ?? 'ltr'}
+      data-color-scheme={colorScheme.initialState.value}
       style={
         {
           '--font-scale': languageConfig?.fontScale,
@@ -165,8 +170,10 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <HeadContent />
       </head>
       <body className="flex min-h-dvh flex-col">
-        {children}
-        <EnvHint />
+        <PreferencesProvider colorScheme={colorScheme}>
+          {children}
+          <EnvHint />
+        </PreferencesProvider>
         <Scripts />
       </body>
     </html>

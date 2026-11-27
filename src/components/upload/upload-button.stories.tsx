@@ -1,7 +1,7 @@
 import type { Meta } from '@storybook/react-vite';
 import { UploadIcon } from 'lucide-react';
-import { toast } from 'sonner';
 
+import { toast } from '@/components/ui/toast';
 import { UploadButton } from '@/components/upload/upload-button';
 
 export default {
