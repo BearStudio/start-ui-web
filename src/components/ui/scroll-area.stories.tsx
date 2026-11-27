@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { Meta } from '@storybook/tanstack-react';
 import { Fragment } from 'react';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
