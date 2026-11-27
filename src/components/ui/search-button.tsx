@@ -35,7 +35,7 @@ const SearchButtonComponent = ({
 
   return (
     <Drawer
-      swipeDirection="up"
+      side="top"
       open={open}
       onOpenChange={(o) => {
         onChange?.(internalValue ?? '');

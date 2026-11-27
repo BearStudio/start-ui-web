@@ -1,37 +1,40 @@
-import { Drawer as DrawerPrimitive } from '@base-ui/react/drawer';
+import {
+  Drawer as DrawerPrimitive,
+  DrawerBackdrop,
+  DrawerClose as DrawerClosePrimitive,
+  DrawerContent as DrawerContentPrimitive,
+  DrawerDescription as DrawerDescriptionPrimitive,
+  DrawerTitle as DrawerTitlePrimitive,
+  DrawerTrigger as DrawerTriggerPrimitive,
+} from '@ui-sdk/react/drawer';
 import * as React from 'react';
 
 import { cn } from '@/lib/tailwind/utils';
 
-function Drawer({ ...props }: DrawerPrimitive.Root.Props) {
-  return <DrawerPrimitive.Root data-slot="drawer" {...props} />;
+type Narrowed<P> = Omit<P, 'className' | 'children'> & {
+  className?: string;
+  children?: React.ReactNode;
+};
+
+function Drawer({
+  side = 'bottom',
+  ...props
+}: React.ComponentProps<typeof DrawerPrimitive>) {
+  return <DrawerPrimitive side={side} {...props} />;
 }
 
-function DrawerTrigger({ ...props }: DrawerPrimitive.Trigger.Props) {
-  return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />;
-}
+const DrawerTrigger = DrawerTriggerPrimitive;
 
-function DrawerPortal({ ...props }: DrawerPrimitive.Portal.Props) {
-  return <DrawerPrimitive.Portal data-slot="drawer-portal" {...props} />;
-}
-
-function DrawerClose({ ...props }: DrawerPrimitive.Close.Props) {
-  return <DrawerPrimitive.Close data-slot="drawer-close" {...props} />;
-}
+const DrawerClose = DrawerClosePrimitive;
 
 function DrawerOverlay({
   className,
   ...props
-}: DrawerPrimitive.Backdrop.Props) {
+}: Narrowed<React.ComponentProps<typeof DrawerBackdrop>>) {
   return (
-    <DrawerPrimitive.Backdrop
-      data-slot="drawer-overlay"
+    <DrawerBackdrop
       className={cn(
-        'fixed inset-0 z-50 bg-black/30 supports-backdrop-filter:backdrop-blur-xs',
-        'opacity-[calc(1-var(--drawer-swipe-progress,0))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)]',
-        'data-ending-style:opacity-0 data-starting-style:opacity-0',
-        'data-ending-style:duration-[calc(var(--drawer-swipe-strength,1)*400ms)]',
-        'data-swiping:duration-0',
+        'fixed inset-0 bg-black/30 supports-backdrop-filter:backdrop-blur-xs',
         className
       )}
       {...props}
@@ -42,59 +45,29 @@ function DrawerOverlay({
 function DrawerContent({
   className,
   children,
-  forceRenderOverlay,
-  keepMounted,
   ...props
-}: DrawerPrimitive.Popup.Props & {
-  forceRenderOverlay?: boolean;
-  keepMounted?: boolean;
-}) {
+}: Narrowed<React.ComponentProps<typeof DrawerContentPrimitive>>) {
   return (
-    <DrawerPortal data-slot="drawer-portal" keepMounted={keepMounted}>
-      <DrawerOverlay forceRender={forceRenderOverlay} />
-      <DrawerPrimitive.Viewport
-        data-slot="drawer-viewport"
-        className="fixed inset-0 z-50"
+    <>
+      <DrawerOverlay />
+      <DrawerContentPrimitive
+        className={cn(
+          'group/drawer-content flex flex-col bg-background data-dragging:select-none',
+          'data-[side=bottom]:max-h-[80vh] data-[side=bottom]:w-full data-[side=bottom]:rounded-t-xl data-[side=bottom]:border-t data-[side=bottom]:pb-safe-bottom',
+          'data-[side=top]:max-h-[80vh] data-[side=top]:w-full data-[side=top]:rounded-b-xl data-[side=top]:border-b data-[side=top]:pt-safe-top',
+          'data-[side=left]:h-full data-[side=left]:w-3/4 data-[side=left]:rounded-r-xl data-[side=left]:border-r data-[side=left]:ps-safe-left data-[side=left]:sm:max-w-sm',
+          'data-[side=right]:h-full data-[side=right]:w-3/4 data-[side=right]:rounded-l-xl data-[side=right]:border-l data-[side=right]:pe-safe-right data-[side=right]:sm:max-w-sm',
+          className
+        )}
+        {...props}
       >
-        <DrawerPrimitive.Popup
-          data-slot="drawer-content"
-          className={cn(
-            'group/drawer-content absolute flex h-auto flex-col bg-background',
-            'transition-transform duration-450 ease-[cubic-bezier(0.32,0.72,0,1)]',
-            'data-ending-style:duration-[calc(var(--drawer-swipe-strength,1)*400ms)]',
-            'data-swiping:duration-0 data-swiping:select-none',
-            // Down
-            'data-[swipe-direction=down]:inset-x-0 data-[swipe-direction=down]:bottom-0 data-[swipe-direction=down]:mt-24 data-[swipe-direction=down]:max-h-[80vh] data-[swipe-direction=down]:rounded-t-xl data-[swipe-direction=down]:border-t data-[swipe-direction=down]:pb-safe-bottom',
-            'data-[swipe-direction=down]:transform-[translateY(calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y,0px)))]',
-            'data-[swipe-direction=down]:data-starting-style:transform-[translateY(100%)]',
-            'data-[swipe-direction=down]:data-ending-style:transform-[translateY(100%)]',
-            // Up
-            'data-[swipe-direction=up]:inset-x-0 data-[swipe-direction=up]:top-0 data-[swipe-direction=up]:mb-24 data-[swipe-direction=up]:max-h-[80vh] data-[swipe-direction=up]:rounded-b-xl data-[swipe-direction=up]:border-b data-[swipe-direction=up]:pt-safe-top',
-            'data-[swipe-direction=up]:transform-[translateY(calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y,0px)))]',
-            'data-[swipe-direction=up]:data-starting-style:transform-[translateY(-100%)]',
-            'data-[swipe-direction=up]:data-ending-style:transform-[translateY(-100%)]',
-            // Left
-            'data-[swipe-direction=left]:inset-y-0 data-[swipe-direction=left]:left-0 data-[swipe-direction=left]:w-3/4 data-[swipe-direction=left]:rounded-r-xl data-[swipe-direction=left]:border-r data-[swipe-direction=left]:ps-safe-left data-[swipe-direction=left]:sm:max-w-sm',
-            'data-[swipe-direction=left]:transform-[translateX(var(--drawer-swipe-movement-x,0px))]',
-            'data-[swipe-direction=left]:data-starting-style:transform-[translateX(-100%)]',
-            'data-[swipe-direction=left]:data-ending-style:transform-[translateX(-100%)]',
-            // Right
-            'data-[swipe-direction=right]:inset-y-0 data-[swipe-direction=right]:right-0 data-[swipe-direction=right]:w-3/4 data-[swipe-direction=right]:rounded-l-xl data-[swipe-direction=right]:border-l data-[swipe-direction=right]:pe-safe-right data-[swipe-direction=right]:sm:max-w-sm',
-            'data-[swipe-direction=right]:transform-[translateX(var(--drawer-swipe-movement-x,0px))]',
-            'data-[swipe-direction=right]:data-starting-style:transform-[translateX(100%)]',
-            'data-[swipe-direction=right]:data-ending-style:transform-[translateX(100%)]',
-            className
-          )}
-          initialFocus
-          {...props}
-        >
-          <div className="mx-auto mt-4 hidden h-1.5 w-25 shrink-0 rounded-full bg-muted group-data-[swipe-direction=down]/drawer-content:block" />
-          <DrawerPrimitive.Content data-slot="drawer-inner-content">
-            {children}
-          </DrawerPrimitive.Content>
-        </DrawerPrimitive.Popup>
-      </DrawerPrimitive.Viewport>
-    </DrawerPortal>
+        <div
+          aria-hidden="true"
+          className="mx-auto mt-4 hidden h-1.5 w-25 shrink-0 rounded-full bg-muted group-data-[side=bottom]/drawer-content:block"
+        />
+        {children}
+      </DrawerContentPrimitive>
+    </>
   );
 }
 
@@ -103,7 +76,7 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="drawer-header"
       className={cn(
-        'flex flex-col gap-0.5 p-4 group-data-[swipe-direction=up]/drawer-content:text-center md:gap-1.5',
+        'flex flex-col gap-0.5 p-4 group-data-[side=top]/drawer-content:text-center md:gap-1.5',
         className
       )}
       {...props}
@@ -131,10 +104,12 @@ function DrawerFooter({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
-function DrawerTitle({ className, ...props }: DrawerPrimitive.Title.Props) {
+function DrawerTitle({
+  className,
+  ...props
+}: Narrowed<React.ComponentProps<typeof DrawerTitlePrimitive>>) {
   return (
-    <DrawerPrimitive.Title
-      data-slot="drawer-title"
+    <DrawerTitlePrimitive
       className={cn('font-medium text-foreground', className)}
       {...props}
     />
@@ -144,10 +119,9 @@ function DrawerTitle({ className, ...props }: DrawerPrimitive.Title.Props) {
 function DrawerDescription({
   className,
   ...props
-}: DrawerPrimitive.Description.Props) {
+}: Narrowed<React.ComponentProps<typeof DrawerDescriptionPrimitive>>) {
   return (
-    <DrawerPrimitive.Description
-      data-slot="drawer-description"
+    <DrawerDescriptionPrimitive
       className={cn('text-sm text-muted-foreground', className)}
       {...props}
     />
@@ -163,7 +137,6 @@ export {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  DrawerPortal,
   DrawerTitle,
   DrawerTrigger,
 };

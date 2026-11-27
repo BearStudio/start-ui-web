@@ -10,6 +10,7 @@ import {
   SunMoonIcon,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { match } from 'ts-pattern';
 
@@ -45,6 +46,8 @@ export function NavUser() {
   const session = useSession();
   const { setOpenMobile } = useSidebar();
   const { theme, setTheme } = useTheme();
+  const [isConfirmSignOutOpen, setIsConfirmSignOutOpen] = useState(false);
+  const [isBuildInfoOpen, setIsBuildInfoOpen] = useState(false);
 
   const user = {
     avatar: session.data?.user.image ?? undefined,
@@ -71,7 +74,6 @@ export function NavUser() {
             side={isMobile ? 'bottom' : 'right'}
             align="end"
             sideOffset={4}
-            finalFocus={false}
           >
             <DropdownMenuGroup>
               <DropdownMenuLabel>
@@ -156,22 +158,26 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <ConfirmSignOut>
-              <DropdownMenuItem closeOnClick={false}>
-                <LogOutIcon />
-                {t('auth:signOut.action')}
-              </DropdownMenuItem>
-            </ConfirmSignOut>
+            <DropdownMenuItem onSelect={() => setIsConfirmSignOutOpen(true)}>
+              <LogOutIcon />
+              {t('auth:signOut.action')}
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <BuildInfoDrawer nativeButtonTrigger={false}>
-              <DropdownMenuItem closeOnClick={false}>
-                <span className="text-xs text-muted-foreground">
-                  <BuildInfoVersion />
-                </span>
-              </DropdownMenuItem>
-            </BuildInfoDrawer>
+            <DropdownMenuItem onSelect={() => setIsBuildInfoOpen(true)}>
+              <span className="text-xs text-muted-foreground">
+                <BuildInfoVersion />
+              </span>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        <ConfirmSignOut
+          open={isConfirmSignOutOpen}
+          onOpenChange={setIsConfirmSignOutOpen}
+        />
+        <BuildInfoDrawer
+          open={isBuildInfoOpen}
+          onOpenChange={setIsBuildInfoOpen}
+        />
       </SidebarMenuItem>
     </SidebarMenu>
   );

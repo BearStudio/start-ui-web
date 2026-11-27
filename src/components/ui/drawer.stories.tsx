@@ -33,12 +33,12 @@ export const Default = () => (
   </Drawer>
 );
 
-export const SwipeDirections = () => (
+export const Sides = () => (
   <div className="flex flex-wrap gap-4">
-    {(['down', 'up', 'left', 'right'] as const).map((direction) => (
-      <Drawer key={direction} swipeDirection={direction}>
+    {(['bottom', 'top', 'left', 'right'] as const).map((side) => (
+      <Drawer key={side} side={side}>
         <DrawerTrigger render={<Button variant="secondary" />}>
-          Open {direction}
+          Open {side}
         </DrawerTrigger>
         <DrawerContent>
           <DrawerHeader>

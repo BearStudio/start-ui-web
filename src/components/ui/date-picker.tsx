@@ -1,5 +1,6 @@
 import { CalendarIcon } from 'lucide-react';
 import { ComponentProps } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDisclosure } from 'react-use-disclosure';
 
 import { Calendar } from '@/components/ui/calendar';
@@ -24,6 +25,7 @@ export const DatePicker = ({
   noCalendar = false,
   ...props
 }: DatePickerProps) => {
+  const { t } = useTranslation(['components']);
   const datePicker = useDisclosure();
 
   return (
@@ -35,7 +37,10 @@ export const DatePicker = ({
             open={datePicker.isOpen}
             onOpenChange={(open) => datePicker.toggle(open)}
           >
-            <PopoverTrigger render={<InputGroupButton size="icon-xs" />}>
+            <PopoverTrigger
+              aria-label={t('components:datePickerButton.pickADate')}
+              render={<InputGroupButton size="icon-xs" />}
+            >
               <CalendarIcon />
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">

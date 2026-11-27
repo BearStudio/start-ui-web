@@ -98,6 +98,12 @@ const inputGroupAddonVariants = cva(
   }
 );
 
+// ui-sdk popups render in place, so their events bubble through the addon.
+function isFromPopup(event: React.SyntheticEvent<HTMLElement>) {
+  const popup = (event.target as HTMLElement).closest('[popover]');
+  return !!popup && event.currentTarget.contains(popup);
+}
+
 function InputGroupAddon({
   className,
   align = 'inline-start',
@@ -111,7 +117,7 @@ function InputGroupAddon({
       className={cn(inputGroupAddonVariants({ align }), className)}
       {...props}
       onClick={(e) => {
-        if ((e.target as HTMLElement).closest('button')) {
+        if ((e.target as HTMLElement).closest('button') || isFromPopup(e)) {
           return;
         }
         e.currentTarget.parentElement
@@ -121,7 +127,7 @@ function InputGroupAddon({
           ?.focus();
       }}
       onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+        if ((e.key === 'Enter' || e.key === ' ') && !isFromPopup(e)) {
           e.currentTarget.parentElement
             ?.querySelector<HTMLInputElement | HTMLTextAreaElement>(
               'input, textarea'

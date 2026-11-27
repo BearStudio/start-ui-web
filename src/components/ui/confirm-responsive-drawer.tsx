@@ -21,18 +21,24 @@ import {
 
 export const ConfirmResponsiveDrawer = (props: {
   enabled?: boolean;
-  children: ReactElement<{ onClick: () => void }>;
+  children?: ReactElement<{ onClick: () => void }>;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   title?: ReactNode;
   description?: ReactNode;
   onConfirm: () => unknown | Promise<unknown>;
   confirmText?: ReactNode;
   confirmVariant?: ComponentProps<typeof Button>['variant'];
   cancelText?: ReactNode;
-  forceRenderOverlay?: boolean;
 }) => {
   const { t } = useTranslation(['common', 'components']);
   const [isPending, setIsPending] = useState(false);
-  const { close, open, isOpen } = useDisclosure();
+  const disclosure = useDisclosure();
+  const isOpen = props.open ?? disclosure.isOpen;
+  const open = () =>
+    props.onOpenChange ? props.onOpenChange(true) : disclosure.open();
+  const close = () =>
+    props.onOpenChange ? props.onOpenChange(false) : disclosure.close();
 
   const displayHeading =
     !props.title && !props.description
@@ -40,6 +46,7 @@ export const ConfirmResponsiveDrawer = (props: {
       : props.title;
 
   if (props.enabled === false) {
+    if (!props.children) return null;
     // eslint-disable-next-line @eslint-react/no-clone-element
     const childrenWithOnConfirm = cloneElement(props.children, {
       onClick: () => {
@@ -49,12 +56,14 @@ export const ConfirmResponsiveDrawer = (props: {
     return <>{childrenWithOnConfirm}</>;
   }
 
-  // eslint-disable-next-line @eslint-react/no-clone-element
-  const childrenWithOnOpen = cloneElement(props.children, {
-    onClick: () => {
-      open();
-    },
-  });
+  const childrenWithOnOpen = props.children
+    ? // eslint-disable-next-line @eslint-react/no-clone-element
+      cloneElement(props.children, {
+        onClick: () => {
+          open();
+        },
+      })
+    : null;
 
   const handleCancel = () => {
     setIsPending(false);
@@ -73,22 +82,17 @@ export const ConfirmResponsiveDrawer = (props: {
       {childrenWithOnOpen}
       <ResponsiveDrawer
         open={isOpen}
-        onOpenChange={(isOpenChange, eventDetails) => {
-          if (isPending && eventDetails.reason === 'escape-key') {
-            return;
-          }
-
+        onOpenChange={(isOpenChange) => {
           if (isOpenChange) {
             open();
             return;
           }
           handleCancel();
         }}
-        disablePointerDismissal={isPending}
+        dismissible={!isPending}
       >
         <ResponsiveDrawerContent
           hideCloseButton
-          forceRenderOverlay={props.forceRenderOverlay}
           className="sm:max-w-xs"
           onKeyDown={(e) => {
             if (e.key === 'Enter') {

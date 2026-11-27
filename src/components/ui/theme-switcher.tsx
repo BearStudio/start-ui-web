@@ -53,7 +53,7 @@ export const ThemeSwitcher = (props: { iconOnly?: boolean }) => {
         {themes.map((item) => (
           <DropdownMenuItem
             key={item}
-            onClick={() => {
+            onSelect={() => {
               setTheme(item);
             }}
           >

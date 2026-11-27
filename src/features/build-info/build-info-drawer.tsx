@@ -21,23 +21,20 @@ import buildInfo from './build-info.gen.json';
 
 export const BuildInfoDrawer = ({
   children,
-  nativeButtonTrigger = true,
+  open,
+  onOpenChange,
 }: {
   children?: ReactElement;
-  nativeButtonTrigger?: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }) => {
   const { t } = useTranslation(['buildInfo']);
   const { copyToClipboard, isCopied } = useClipboard();
 
   return (
-    <ResponsiveDrawer>
-      {children && (
-        <ResponsiveDrawerTrigger
-          nativeButton={nativeButtonTrigger}
-          render={children}
-        />
-      )}
-      <ResponsiveDrawerContent forceRenderOverlay>
+    <ResponsiveDrawer open={open} onOpenChange={onOpenChange}>
+      {children && <ResponsiveDrawerTrigger render={children} />}
+      <ResponsiveDrawerContent>
         <ResponsiveDrawerHeader className="text-center">
           <ResponsiveDrawerTitle>
             <BuildInfoVersion />
