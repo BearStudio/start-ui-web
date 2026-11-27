@@ -63,7 +63,7 @@ jobs:
     # Chromium and its system dependencies come baked in the image: no
     # apt-get at run time (see e2e-tests.yml).
     container:
-      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      image: mcr.microsoft.com/playwright:v1.65.1-noble
       options: --user 1001
     env:
       VITE_BASE_URL: http://localhost:3000
