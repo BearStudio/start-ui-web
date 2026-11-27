@@ -117,8 +117,8 @@ importers:
         specifier: 1.11.19
         version: 1.11.19
       i18next:
-        specifier: 25.8.0
-        version: 25.8.0(typescript@7.0.2)
+        specifier: 26.3.4
+        version: 26.3.4(typescript@7.0.2)
       i18next-browser-languagedetector:
         specifier: 8.2.0
         version: 8.2.0
@@ -160,7 +160,7 @@ importers:
         version: 7.71.1(react@19.2.4)
       react-i18next:
         specifier: 16.5.4
-        version: 16.5.4(i18next@25.8.0(typescript@7.0.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@7.0.2)
+        version: 16.5.4(i18next@26.3.4(typescript@7.0.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@7.0.2)
       react-merge-refs:
         specifier: 3.0.2
         version: 3.0.2(react@19.2.4)
@@ -4975,10 +4975,10 @@ packages:
   i18next-browser-languagedetector@8.2.0:
     resolution: {integrity: sha512-P+3zEKLnOF0qmiesW383vsLdtQVyKtCNA9cjSoKCppTKPQVfKd2W8hbVo5ZhNJKDqeM7BOcvNoKJOjpHh4Js9g==}
 
-  i18next@25.8.0:
-    resolution: {integrity: sha512-urrg4HMFFMQZ2bbKRK7IZ8/CTE7D8H4JRlAwqA2ZwDRFfdd0K/4cdbNNLgfn9mo+I/h9wJu61qJzH7jCFAhUZQ==}
+  i18next@26.3.4:
+    resolution: {integrity: sha512-pa7m0d7pBDqGHZxljT+WPFeyFgQ7P7SciPPo1tTqYuO0z4sqADYhwnBESmmGp/wEof1inwdls/k8ZgTg8rxFHA==}
     peerDependencies:
-      typescript: ^5
+      typescript: ^5 || ^6
     peerDependenciesMeta:
       typescript:
         optional: true
@@ -11167,9 +11167,7 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.29.7
 
-  i18next@25.8.0(typescript@7.0.2):
-    dependencies:
-      '@babel/runtime': 7.29.7
+  i18next@26.3.4(typescript@7.0.2):
     optionalDependencies:
       typescript: 7.0.2
 
@@ -12293,11 +12291,11 @@ snapshots:
     dependencies:
       react: 19.2.4
 
-  react-i18next@16.5.4(i18next@25.8.0(typescript@7.0.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@7.0.2):
+  react-i18next@16.5.4(i18next@26.3.4(typescript@7.0.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@7.0.2):
     dependencies:
       '@babel/runtime': 7.29.7
       html-parse-stringify: 3.1.0
-      i18next: 25.8.0(typescript@7.0.2)
+      i18next: 26.3.4(typescript@7.0.2)
       react: 19.2.4
       use-sync-external-store: 1.7.0(react@19.2.4)
     optionalDependencies:
