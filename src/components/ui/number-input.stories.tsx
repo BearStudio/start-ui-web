@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react-vite';
+import { Meta } from '@storybook/tanstack-react';
 import { useState } from 'react';
 
 import { NumberInput } from '@/components/ui/number-input';

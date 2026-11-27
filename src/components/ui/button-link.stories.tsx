@@ -1,33 +1,10 @@
-import type { Meta } from '@storybook/react-vite';
-import {
-  createMemoryHistory,
-  createRootRoute,
-  createRouter,
-  RouterProvider,
-} from '@tanstack/react-router';
+import type { Meta } from '@storybook/tanstack-react';
 import { MailIcon } from 'lucide-react';
-import { ReactNode, useMemo } from 'react';
 
 import { ButtonLink } from '@/components/ui/button-link';
 
-const RouterWrapper = ({ children }: { children: ReactNode }) => {
-  const router = useMemo(() => {
-    const rootRoute = createRootRoute({
-      component: () => <>{children}</>,
-    });
-    const routeTree = rootRoute.addChildren([]);
-    return createRouter({
-      routeTree,
-      history: createMemoryHistory({ initialEntries: ['/'] }),
-    });
-  }, [children]);
-
-  return <RouterProvider router={router} />;
-};
-
 export default {
   title: 'ButtonLink',
-  decorators: [(Story) => <RouterWrapper>{Story()}</RouterWrapper>],
 } satisfies Meta<typeof ButtonLink>;
 
 export const Default = () => {

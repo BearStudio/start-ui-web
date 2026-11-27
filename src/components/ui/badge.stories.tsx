@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { Meta } from '@storybook/tanstack-react';
 import { MailIcon } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';

@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { Meta } from '@storybook/tanstack-react';
 import { CheckIcon } from 'lucide-react';
 import { useId } from 'react';
 

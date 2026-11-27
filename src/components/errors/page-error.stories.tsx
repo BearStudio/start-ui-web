@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react-vite';
+import { Meta } from '@storybook/tanstack-react';
 
 import { PageError } from '@/components/errors/page-error';
 
