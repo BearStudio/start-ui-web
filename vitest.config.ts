@@ -1,10 +1,23 @@
 import react from '@vitejs/plugin-react';
 import { playwright } from '@vitest/browser-playwright';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 import { defineConfig } from 'vitest/config';
 
 const resolve = (filePath: string) =>
   path.resolve(import.meta.dirname, filePath);
+
+// Pre-bundle every ui-sdk entry point. Otherwise Vite finds a newly imported
+// subpath during the run, re-optimizes and reloads, and that test file fails.
+const uiSdkReactEntries = Object.keys(
+  (
+    createRequire(import.meta.url)('@ui-sdk/react/package.json') as {
+      exports: Record<string, unknown>;
+    }
+  ).exports
+)
+  .filter((key) => key !== './package.json')
+  .map((key) => path.posix.join('@ui-sdk/react', key));
 
 export default defineConfig({
   plugins: [react()],
@@ -53,6 +66,10 @@ export default defineConfig({
         },
         resolve: {
           tsconfigPaths: true,
+        },
+        optimizeDeps: {
+          entries: ['src/**/*.browser.{test,spec}.?(c|m)[jt]s?(x)'],
+          include: ['@ui-sdk/core', ...uiSdkReactEntries],
         },
       },
       {
