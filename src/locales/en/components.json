@@ -62,6 +62,10 @@
   "backButton": {
     "label": "Back"
   },
+  "numberInput": {
+    "increment": "Increase",
+    "decrement": "Decrease"
+  },
   "select": {
     "placeholder": "Select..."
   },
@@ -70,7 +74,10 @@
   },
   "combobox": {
     "placeholder": "Select...",
-    "noItemsFound": "No items found."
+    "noItemsFound": "No items found.",
+    "clear": "Clear",
+    "toggle": "Show options",
+    "removeItem": "Remove"
   },
   "uploadInput": {
     "placeholder": "Drag & drop your file here, or click to browse",

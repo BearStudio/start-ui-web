@@ -258,3 +258,41 @@ test('disabled option', async () => {
   await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ bear: '' });
 });
+
+test('follows a form reset and submits natively under its name', async () => {
+  const user = setupUser();
+  await render(
+    <FormMocked
+      schema={z.object({ bear: z.string() })}
+      useFormOptions={{ defaultValues: { bear: 'bearstrong' } }}
+    >
+      {({ form }) => (
+        <>
+          <FormField>
+            <FormFieldLabel>Bearstronaut</FormFieldLabel>
+            <FormFieldController
+              type="radio-group"
+              control={form.control}
+              name="bear"
+              options={options}
+            />
+          </FormField>
+          <button type="button" onClick={() => form.reset()}>
+            Reset
+          </button>
+        </>
+      )}
+    </FormMocked>
+  );
+
+  await user.click(page.getByRole('radio', { name: 'Yuri Grizzlyrin' }));
+  const formElement = page.getByRole('radiogroup').element().closest('form');
+  expect(formElement && [...new FormData(formElement)]).toEqual([
+    ['bear', 'grizzlyrin'],
+  ]);
+
+  await user.click(page.getByRole('button', { name: 'Reset' }));
+  await expect
+    .element(page.getByRole('radio', { name: 'Bearstrong' }))
+    .toBeChecked();
+});

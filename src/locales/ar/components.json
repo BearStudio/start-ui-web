@@ -62,6 +62,10 @@
   "backButton": {
     "label": "رجوع"
   },
+  "numberInput": {
+    "increment": "زيادة",
+    "decrement": "تقليل"
+  },
   "select": {
     "placeholder": "اختر..."
   },
@@ -70,7 +74,10 @@
   },
   "combobox": {
     "placeholder": "اختر...",
-    "noItemsFound": "لم يتم العثور على عناصر."
+    "noItemsFound": "لم يتم العثور على عناصر.",
+    "clear": "مسح",
+    "toggle": "عرض الخيارات",
+    "removeItem": "إزالة"
   },
   "uploadInput": {
     "placeholder": "اسحب وأفلت ملفك هنا، أو انقر للتصفح",

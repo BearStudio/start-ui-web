@@ -10,6 +10,7 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
+  type SelectProps,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
@@ -25,7 +26,10 @@ export const FieldSelect = <TItem extends Item>(
     {
       containerProps?: ComponentProps<typeof FormFieldContainer>;
       inputProps?: ComponentProps<typeof SelectValue>;
-    } & Omit<ComponentProps<typeof Select>, 'items'> & {
+    } & Omit<
+      Extract<SelectProps<TItem['value']>, { multiple?: false }>,
+      'items'
+    > & {
         items: TItem[];
       } & Pick<ComponentProps<typeof SelectValue>, 'placeholder'>
   >
@@ -34,12 +38,13 @@ export const FieldSelect = <TItem extends Item>(
 
   const ctx = useFormField();
   const { field, fieldState } = useFormFieldController();
+  const { ref: setControlElement } = field;
 
   return (
     <FormFieldContainer {...containerProps}>
       <Select
         {...rest}
-        inputRef={field.ref}
+        name={field.name}
         disabled={field.disabled}
         value={field.value ?? null}
         onValueChange={(value, event) => {
@@ -48,6 +53,8 @@ export const FieldSelect = <TItem extends Item>(
         }}
       >
         <SelectTrigger
+          ref={setControlElement}
+          onBlur={field.onBlur}
           aria-invalid={fieldState.invalid ? true : undefined}
           aria-describedby={ctx.describedBy(fieldState.invalid)}
           id={ctx.id}

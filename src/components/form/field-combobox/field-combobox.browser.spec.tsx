@@ -158,3 +158,90 @@ test('disabled option', async () => {
   await user.click(page.getByRole('button', { name: 'Submit' }));
   expect(mockedSubmit).toHaveBeenCalledWith({ bear: '' });
 });
+
+test('clears to null, submits natively under its name and follows a reset', async () => {
+  const user = setupUser();
+  const mockedSubmit = vi.fn();
+
+  await render(
+    <FormMocked
+      schema={z.object({ bear: z.string().nullable() })}
+      useFormOptions={{ defaultValues: { bear: 'pawdrin' } }}
+      onSubmit={mockedSubmit}
+    >
+      {({ form }) => (
+        <>
+          <FormField>
+            <FormFieldLabel>Bearstronaut</FormFieldLabel>
+            <FormFieldController
+              type="combobox"
+              control={form.control}
+              name="bear"
+              items={options}
+              showClear
+            />
+          </FormField>
+          <button type="button" onClick={() => form.reset()}>
+            Reset
+          </button>
+        </>
+      )}
+    </FormMocked>
+  );
+
+  const input = page.getByRole('combobox', { name: 'Bearstronaut' });
+  await expect.element(input).toHaveValue('Buzz Pawdrin');
+  const formElement = input.element().closest('form');
+  expect(formElement && [...new FormData(formElement)]).toEqual([
+    ['bear', 'pawdrin'],
+  ]);
+
+  await user.click(page.getByRole('button', { name: 'Clear' }));
+  await expect.element(input).toHaveValue('');
+  await user.click(page.getByRole('button', { name: 'Submit' }));
+  expect(mockedSubmit).toHaveBeenLastCalledWith({ bear: null });
+
+  await user.click(page.getByRole('button', { name: 'Reset' }));
+  await expect.element(input).toHaveValue('Buzz Pawdrin');
+});
+
+test('filters as you type and picks the highlighted item with Enter', async () => {
+  const user = setupUser();
+  const mockedSubmit = vi.fn();
+
+  await render(
+    <FormMocked
+      schema={z.object({ bear: z.string({ error: 'Required' }) })}
+      onSubmit={mockedSubmit}
+    >
+      {({ form }) => (
+        <FormField>
+          <FormFieldLabel>Bearstronaut</FormFieldLabel>
+          <FormFieldController
+            type="combobox"
+            control={form.control}
+            name="bear"
+            items={options}
+          />
+        </FormField>
+      )}
+    </FormMocked>
+  );
+
+  const input = page.getByRole('combobox', { name: 'Bearstronaut' });
+  await user.click(page.getByRole('button', { name: 'Submit' }));
+  await expect.element(input).toHaveAttribute('aria-invalid', 'true');
+
+  await user.type(input, 'yuri');
+  await expect
+    .element(page.getByRole('option', { name: 'Buzz Pawdrin' }))
+    .not.toBeInTheDocument();
+  await expect
+    .element(page.getByRole('option', { name: 'Yuri Grizzlyrin' }))
+    .toHaveAttribute('data-highlighted');
+  await user.keyboard('{Enter}');
+  await expect.element(input).toHaveValue('Yuri Grizzlyrin');
+
+  await user.click(page.getByRole('button', { name: 'Submit' }));
+  expect(mockedSubmit).toHaveBeenCalledWith({ bear: 'grizzlyrin' });
+});

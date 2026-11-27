@@ -32,7 +32,7 @@ export const Disabled = () => {
 };
 
 export const Indeterminate = () => {
-  return <Checkbox indeterminate>I love bears</Checkbox>;
+  return <Checkbox defaultChecked="indeterminate">I love bears</Checkbox>;
 };
 
 export const CustomCheckbox = () => {

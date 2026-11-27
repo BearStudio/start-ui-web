@@ -62,6 +62,10 @@
   "backButton": {
     "label": "Retour"
   },
+  "numberInput": {
+    "increment": "Augmenter",
+    "decrement": "Diminuer"
+  },
   "select": {
     "placeholder": "Sélectionner..."
   },
@@ -70,7 +74,10 @@
   },
   "combobox": {
     "placeholder": "Sélectionner...",
-    "noItemsFound": "Aucun élément trouvé."
+    "noItemsFound": "Aucun élément trouvé.",
+    "clear": "Effacer",
+    "toggle": "Afficher les options",
+    "removeItem": "Retirer"
   },
   "uploadInput": {
     "placeholder": "Glissez-déposez votre fichier ici, ou cliquez pour parcourir",
