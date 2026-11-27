@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { Meta } from '@storybook/tanstack-react';
 import { toast } from 'sonner';
 
 import { UploadInput } from './upload-input';

@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite';
+import type { Meta } from '@storybook/tanstack-react';
 import { UploadIcon } from 'lucide-react';
 import { toast } from 'sonner';
 

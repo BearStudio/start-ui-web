@@ -1,4 +1,4 @@
-import type { Preview } from '@storybook/react-vite';
+import type { Preview } from '@storybook/tanstack-react';
 import { useDarkMode } from '@vueless/storybook-dark-mode';
 import { StrictMode, useEffect } from 'react';
 import { ReactNode } from 'react';
@@ -44,7 +44,7 @@ const preview: Preview = {
   parameters: {
     layout: 'padded',
     backgrounds: {
-      disable: true,
+      disabled: true,
     },
     darkMode: {
       stylePreview: true,
