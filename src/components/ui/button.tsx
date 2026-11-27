@@ -22,6 +22,8 @@ const buttonVariants = cva(
           'border-border bg-background text-negative-600 shadow-xs hover:border-transparent hover:bg-destructive/90 hover:text-destructive-foreground dark:text-negative-400 dark:hover:text-destructive-foreground [a:hover_&]:bg-destructive/90 [a:hover_&]:text-destructive-foreground dark:[a:hover_&]:bg-destructive/90 dark:[a:hover_&]:text-destructive-foreground [button:hover_&]:bg-destructive/90 [button:hover_&]:text-destructive-foreground dark:[button:hover_&]:bg-destructive/90 dark:[button:hover_&]:text-destructive-foreground',
 
         link: 'underline-offset-4 hover:underline [a:hover_&]:underline [button:hover_&]:underline',
+        'link-muted':
+          'text-muted-foreground underline-offset-4 hover:underline [a:hover_&]:underline [button:hover_&]:underline',
       },
       size: {
         default: 'h-9 px-4 has-[>span>svg]:px-3',
@@ -37,7 +39,7 @@ const buttonVariants = cva(
     },
     compoundVariants: [
       {
-        variant: ['link'],
+        variant: ['link', 'link-muted'],
         size: ['xs', 'sm', 'default', 'lg'],
         class: 'px-0 has-[>span>svg]:px-0',
       },
