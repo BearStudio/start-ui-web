@@ -27,9 +27,9 @@ export const BookCover = (props: {
         } as React.CSSProperties
       }
     >
-      <div className="absolute inset-y-0 left-0 z-10 w-[5%] bg-gradient-to-r from-black/0 to-black/10 bg-blend-screen" />
-      <div className="absolute inset-y-0 left-[5%] z-10 w-[2%] bg-gradient-to-r from-white/0 to-white/20 bg-blend-screen" />
-      <div className="absolute inset-y-0 left-[7%] z-10 w-[2%] bg-gradient-to-r from-white/0 to-white/20 bg-blend-screen" />
+      <div className="absolute inset-y-0 left-0 z-10 w-[5%] bg-linear-to-r from-black/0 to-black/10 bg-blend-screen" />
+      <div className="absolute inset-y-0 left-[5%] z-10 w-[2%] bg-linear-to-r from-white/0 to-white/20 bg-blend-screen" />
+      <div className="absolute inset-y-0 left-[7%] z-10 w-[2%] bg-linear-to-r from-white/0 to-white/20 bg-blend-screen" />
       <div className="absolute -top-1/8 -right-1/8 z-10 aspect-square w-3/4 rounded-full bg-white/40 bg-blend-screen blur-xl @6xs:blur-2xl @5xs:blur-3xl" />
       <div className="absolute -bottom-1/8 -left-1/8 z-10 aspect-square w-3/4 rounded-full bg-black/40 bg-blend-screen blur-xl @6xs:blur-2xl @5xs:blur-3xl" />
       {!!props.book.coverId && (

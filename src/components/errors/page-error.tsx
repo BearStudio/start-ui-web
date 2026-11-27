@@ -56,8 +56,7 @@ export const PageErrorButtonBack = () => {
   const { t } = useTranslation(['components']);
   return (
     <Button
-      variant="link"
-      className="text-muted-foreground"
+      variant="link-muted"
       onClick={(e) => {
         e.preventDefault();
         window.history.back();
@@ -73,12 +72,7 @@ export const PageErrorButtonBack = () => {
 export const PageErrorButtonHome = () => {
   const { t } = useTranslation(['components']);
   return (
-    <Button
-      variant="link"
-      className="text-muted-foreground"
-      render={<a href="/" />}
-      nativeButton={false}
-    >
+    <Button variant="link-muted" render={<a href="/" />} nativeButton={false}>
       <HomeIcon className="opacity-60" />
       {t('components:pageError.goHome')}
     </Button>
