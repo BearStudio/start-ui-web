@@ -56,7 +56,7 @@ export const FormFieldError = <
   }
 
   const error = controlled
-    ? get<FieldErrors<TFieldValues>>(errors, name)
+    ? get<FieldErrors<TFieldValues>, FieldError | undefined>(errors, name)
     : controllerCtx?.fieldState.error;
   const errorMessage = error?.root?.message ?? error?.message;
 
